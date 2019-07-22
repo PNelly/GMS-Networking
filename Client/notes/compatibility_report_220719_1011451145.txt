@@ -1,0 +1,486 @@
+Converting GML script: ${project_dir}/scripts/system_message_set/system_message_set.gml
+Converted description /// @description  system_message_set(message_string
+
+Converting GML script: ${project_dir}/scripts/system_message_manage/system_message_manage.gml
+Converted description /// @description  system_message_manage(
+
+Converting GML script: ${project_dir}/scripts/state_independent_updates/state_independent_updates.gml
+Converted description /// @description  state_independent_updates(
+
+Converting GML script: ${project_dir}/scripts/stepwise_behaviors/stepwise_behaviors.gml
+Converted description /// @description  stepwise_behavior
+
+Converting GML script: ${project_dir}/scripts/get_default_input/get_default_input.gml
+Converted description /// @description  get_default_input(
+Converted string - line 6: 'N' -> "N"
+Converted string - line 7: 'I' -> "I"
+Converted string - line 8: 'T' -> "T"
+Converted string - line 9: 'U' -> "U"
+Converted string - line 10: 'M' -> "M"
+Converted string - line 11: 'K' -> "K"
+Converted string - line 12: 'H' -> "H"
+Converted string - line 13: 'J' -> "J"
+Converted string - line 14: 'R' -> "R"
+Converted string - line 15: 'S' -> "S"
+Converted string - line 16: 'L' -> "L"
+Converted string - line 17: 'C' -> "C"
+Converted string - line 18: 'E' -> "E"
+Converted string - line 19: 'Q' -> "Q"
+Converted string - line 20: 'F' -> "F"
+
+Converting GML script: ${project_dir}/scripts/process_input/process_input.gml
+Converted description /// @description  process_input(input_enum
+
+Converting GML script: ${project_dir}/scripts/clear_input/clear_input.gml
+Converted description /// @description  clear_input(
+
+Converting GML script: ${project_dir}/scripts/draw_default_ui/draw_default_ui.gml
+Converted description /// @description  draw_default_ui(
+
+Converting GML script: ${project_dir}/scripts/draw_default_debug/draw_default_debug.gml
+Converted description /// @description  draw_default_debug(
+
+Converting GML script: ${project_dir}/scripts/buffer_checksum/buffer_checksum.gml
+Converted description /// @description  buffer_checksum(offset,buffer
+
+Converting GML script: ${project_dir}/scripts/define_network_peer/define_network_peer.gml
+Converted description /// @description  define_network_peer(network_list, network_map, id, ip, udp_host_port, host_clients, host_max_clients, udp_client_port, game_in_progress
+
+Converting GML script: ${project_dir}/scripts/set_network_username/set_network_username.gml
+Converted description /// @description  set_network_username(username
+
+Converting GML script: ${project_dir}/scripts/handle_network_actions/handle_network_actions.gml
+Converted description /// @description  handle_network_actions(
+
+Converting GML script: ${project_dir}/scripts/tcp_send_packet/tcp_send_packet.gml
+Converted description /// @description  tcp_send_packet(socket,buffer
+
+Converting GML script: ${project_dir}/scripts/udp_send_packet/udp_send_packet.gml
+Converted description /// @description  udp_send_packet(socket, url, port, buffer
+
+Converting GML script: ${project_dir}/scripts/received_packet/received_packet.gml
+Converted description /// @description  received_packet(buffer,size,ip,port,socket
+
+Converting GML script: ${project_dir}/scripts/valid_packet/valid_packet.gml
+Converted description /// @description  valid_packet(source_ip, source_port, related_socket, buffer
+
+Converting GML script: ${project_dir}/scripts/initialize_client/initialize_client.gml
+Converted description /// @description  initialize_client(
+
+Converting GML script: ${project_dir}/scripts/define_states/define_states.gml
+Converted description /// @description  define_states(
+
+Converting GML script: ${project_dir}/scripts/define_messages/define_messages.gml
+Converted description /// @description  define_messages(
+
+Converting GML script: ${project_dir}/scripts/define_inputs/define_inputs.gml
+Converted description /// @description  define_inputs(
+
+Converting GML script: ${project_dir}/scripts/define_debug/define_debug.gml
+Converted description /// @description  define_debu
+
+Converting GML script: ${project_dir}/scripts/debug_stress_test_toggle/debug_stress_test_toggle.gml
+Converted description /// @description  debug_stress_test_toggle(
+
+Converting GML script: ${project_dir}/scripts/debug_stress_test_choice/debug_stress_test_choice.gml
+Converted description /// @description  debug_stress_test_choic
+
+Converting GML script: ${project_dir}/scripts/debug_stress_test_behaviors/debug_stress_test_behaviors.gml
+Converted description /// @description  debug_stress_test_behavior
+
+Converting GML script: ${project_dir}/scripts/rdvz_state_machine/rdvz_state_machine.gml
+Converted description /// @description  rdvz_state_machin
+
+Converting GML script: ${project_dir}/scripts/rdvz_set_ip/rdvz_set_ip.gml
+Converted description /// @description  rdvz_set_ip(ip_string
+
+Converting GML script: ${project_dir}/scripts/rdvz_set_tcp_port/rdvz_set_tcp_port.gml
+Converted description /// @description  rdvz_set_tcp_port(port_string
+
+Converting GML script: ${project_dir}/scripts/rdvz_set_udp_port/rdvz_set_udp_port.gml
+Converted description /// @description  rdvz_set_udp_port(port_string
+
+Converting GML script: ${project_dir}/scripts/rdvz_connect/rdvz_connect.gml
+Converted description /// @description  rdvz_connect(
+
+Converting GML script: ${project_dir}/scripts/rdvz_disconnect/rdvz_disconnect.gml
+Converted description /// @description  rdvz_disconnec
+
+Converting GML script: ${project_dir}/scripts/rdvz_client_setup_reconnect/rdvz_client_setup_reconnect.gml
+Converted description /// @description  rdvz_client_setup_reconnect(
+
+Converting GML script: ${project_dir}/scripts/rdvz_client_manage_reconnect/rdvz_client_manage_reconnect.gml
+Converted description /// @description  rdvz_client_manage_reconnect(
+
+Converting GML script: ${project_dir}/scripts/rdvz_client_write_header/rdvz_client_write_header.gml
+Converted description /// @description  rdvz_client_write_header(message_id, buffer
+
+Converting GML script: ${project_dir}/scripts/rdvz_client_send/rdvz_client_send.gml
+Converted description /// @description  rdvz_client_send(is_udp, message_id, buffer
+
+Converting GML script: ${project_dir}/scripts/rdvz_manage_keep_alive/rdvz_manage_keep_alive.gml
+Converted description /// @description  rdvz_manage_keep_alive(
+
+Converting GML script: ${project_dir}/scripts/rdvz_manage_timeout/rdvz_manage_timeout.gml
+Converted description /// @description  rdvz_manage_timeout(
+
+Converting GML script: ${project_dir}/scripts/rdvz_host_manage_udp_ping/rdvz_host_manage_udp_ping.gml
+Converted description /// @description  rdvz_host_manage_udp_ping(
+
+Converting GML script: ${project_dir}/scripts/rdvz_client_manage_udp_ping/rdvz_client_manage_udp_ping.gml
+Converted description /// @description  rdvz_client_manage_udp_ping(
+
+Converting GML script: ${project_dir}/scripts/rdvz_client_manage_holepunch/rdvz_client_manage_holepunch.gml
+Converted description /// @description  rdvz_client_manage_holepunch(
+
+Converting GML script: ${project_dir}/scripts/rdvz_clear_client_properties/rdvz_clear_client_properties.gml
+Converted description /// @description  rdvz_clear_client_properties(
+
+Converting GML script: ${project_dir}/scripts/rdvz_client_cleanup/rdvz_client_cleanup.gml
+Converted description /// @description  rdvz_client_cleanup(
+
+Converting GML script: ${project_dir}/scripts/rdvz_go_back/rdvz_go_back.gml
+Converted description /// @description  rdvz_go_back(
+
+Converting GML script: ${project_dir}/scripts/rdvz_get_keep_alive_time/rdvz_get_keep_alive_time.gml
+Converted description /// @description  rdvz_get_keep_alive_time(
+
+Converting GML script: ${project_dir}/scripts/lan_manage_broadcast/lan_manage_broadcast.gml
+Converted description /// @description  lan_manage_broadcast(
+
+Converting GML script: ${project_dir}/scripts/lan_sync_locals/lan_sync_locals.gml
+Converted description /// @description  lan_sync_locals(
+
+Converting GML script: ${project_dir}/scripts/lan_sync_rdvz/lan_sync_rdvz.gml
+Converted description /// @description  lan_sync_rdvz(
+
+Converting GML script: ${project_dir}/scripts/udp_host_reset/udp_host_reset.gml
+Converted description /// @description  udp_host_reset(
+
+Converting GML script: ${project_dir}/scripts/udp_host_update_rendevouz/udp_host_update_rendevouz.gml
+Converted description /// @description  udp_host_update_rendevou
+
+Converting GML script: ${project_dir}/scripts/udp_host_disconnect_client/udp_host_disconnect_client.gml
+Converted description /// @description  udp_host_disconnect_client(client_id
+
+Converting GML script: ${project_dir}/scripts/udp_host_send_disconnect_notice/udp_host_send_disconnect_notice.gml
+Converted description /// @description  udp_host_send_disconnect_notice(client_id
+
+Converting GML script: ${project_dir}/scripts/udp_host_pass_disconnect/udp_host_pass_disconnect.gml
+Converted description /// @description  udp_host_pass_ingame_disconnect(client_id
+
+Converting GML script: ${project_dir}/scripts/udp_host_distribute_new_client/udp_host_distribute_new_client.gml
+Converted description /// @description  udp_host_distribute_new_client(new_client_id
+
+Converting GML script: ${project_dir}/scripts/udp_host_cleanup_client_packets/udp_host_cleanup_client_packets.gml
+Converted description /// @description  udp_host_cleanup_client_packets(id
+
+Converting GML script: ${project_dir}/scripts/udp_host_delete_client/udp_host_delete_client.gml
+Converted description /// @description  udp_host_delete_client(id
+
+Converting GML script: ${project_dir}/scripts/udp_host_client_join_in_progress/udp_host_client_join_in_progress.gml
+Converted description /// @description  udp_host_client_join_in_progress(client_id
+
+Converting GML script: ${project_dir}/scripts/udp_host_set_max_clients/udp_host_set_max_clients.gml
+Converted description /// @description  udp_host_set_max_clients(num_clients
+
+Converting GML script: ${project_dir}/scripts/udp_host_accept_client/udp_host_accept_client.gml
+Converted description /// @description  udp_host_accept_client(ip from, port from
+
+Converting GML script: ${project_dir}/scripts/udp_host_refresh_lobby/udp_host_refresh_lobby.gml
+Converted description /// @description  udp_host_refresh_lobb
+
+Converting GML script: ${project_dir}/scripts/udp_host_share_connection_params/udp_host_share_connection_params.gml
+Converted description /// @description  udp_host_share_connection_params(
+
+Converting GML script: ${project_dir}/scripts/udp_host_get_unique_client_id/udp_host_get_unique_client_id.gml
+Converted description /// @description  udp_host_get_unique_client_i
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_holepunch/udp_host_manage_holepunch.gml
+Converted description /// @description  udp_host_manage_holepunch(
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_keep_alive/udp_host_manage_keep_alive.gml
+Converted description /// @description  udp_host_manage_keep_alive(
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_timeouts/udp_host_manage_timeouts.gml
+Converted description /// @description  udp_host_manage_timeouts(
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_pings/udp_host_manage_pings.gml
+Converted description /// @description  udp_host_manage_pings(
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_player_metadata/udp_host_manage_player_metadata.gml
+Converted description /// @description  udp_host_manage_player_metadata(
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_lobby_refresh/udp_host_manage_lobby_refresh.gml
+Converted description /// @description  udp_host_manage_lobby_refresh(
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_migration_stats_request/udp_host_manage_migration_stats_request.gml
+Converted description /// @description  udp_host_manage_migration_stats_request(
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_migration_order/udp_host_manage_migration_order.gml
+Converted description /// @description  udp_host_manage_migration_order(
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_client_game_inits/udp_host_manage_client_game_inits.gml
+Converted description /// @description  udp_host_manage_client_game_inits(sender_udp_id
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_game_ending/udp_host_manage_game_ending.gml
+Converted description /// @description  udp_host_manage_game_ending(
+
+Converting GML script: ${project_dir}/scripts/udp_host_init_timers/udp_host_init_timers.gml
+Converted description /// @description  udp_host_init_timers(
+
+Converting GML script: ${project_dir}/scripts/udp_host_init_self_metadata/udp_host_init_self_metadata.gml
+Converted description /// @description  udp_host_init_self_metadata(
+
+Converting GML script: ${project_dir}/scripts/udp_host_init_client/udp_host_init_client.gml
+Converted description /// @description  udp_host_init_client(id, ip, port, username
+
+Converting GML script: ${project_dir}/scripts/udp_host_unready_all_clients/udp_host_unready_all_clients.gml
+Converted description /// @description  udp_host_unready_all_clients(
+
+Converting GML script: ${project_dir}/scripts/udp_host_generate_session_id/udp_host_generate_session_id.gml
+Converted description /// @description  udp_host_generate_session_id(
+
+Converting GML script: ${project_dir}/scripts/udp_host_become_client/udp_host_become_client.gml
+Converted description /// @description  udp_host_become_client(
+
+Converting GML script: ${project_dir}/scripts/udp_host_attempt_session_create/udp_host_attempt_session_create.gml
+Converted description /// @description  udp_host_attempt_session_create(
+
+Converting GML script: ${project_dir}/scripts/udp_host_init_session/udp_host_init_session.gml
+Converted description /// @description  udp_host_init_session(
+
+Converting GML script: ${project_dir}/scripts/udp_host_cancel_session/udp_host_cancel_session.gml
+Converted description /// @description  udp_host_cancel_session(
+
+Converting GML script: ${project_dir}/scripts/udp_host_begin_game_init/udp_host_begin_game_init.gml
+Converted description /// @description  udp_host_begin_game_init(
+
+Converting GML script: ${project_dir}/scripts/udp_host_game_start/udp_host_game_start.gml
+Converted description /// @description  udp_host_game_start(
+
+Converting GML script: ${project_dir}/scripts/udp_host_game_end/udp_host_game_end.gml
+Converted description /// @description  udp_host_game_end(
+
+Converting GML script: ${project_dir}/scripts/udp_host_lobby_return/udp_host_lobby_return.gml
+Converted description /// @description  udp_host_lobby_return(
+
+Converting GML script: ${project_dir}/scripts/udp_host_write_header/udp_host_write_header.gml
+Converted description /// @description  udp_host_write_header(buffer,client,message_id,is_reliable
+
+Converting GML script: ${project_dir}/scripts/udp_host_send/udp_host_send.gml
+Converted description /// @description  udp_host_send(client_id,message_id,use_reliable,buffer
+
+Converting GML script: ${project_dir}/scripts/udp_host_send_chat/udp_host_send_chat.gml
+Converted description /// @description  udp_host_send_chat(chat_string
+
+Converting GML script: ${project_dir}/scripts/udp_host_send_all/udp_host_send_all.gml
+Converted description /// @description  udp_host_send_all(message_id,use_reliable,buffer
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_sent_reliables/udp_host_manage_sent_reliables.gml
+Converted description /// @description  udp_host_manage_sent_reliables(
+
+Converting GML script: ${project_dir}/scripts/udp_host_manage_received_reliables/udp_host_manage_received_reliables.gml
+Converted description /// @description  udp_host_manage_received_reliables(
+
+Converting GML script: ${project_dir}/scripts/udp_host_next_reliable_id/udp_host_next_reliable_id.gml
+Converted description /// @description  udp_host_next_reliable_id(udp_client
+
+Converting GML script: ${project_dir}/scripts/udp_host_reliable_record/udp_host_reliable_record.gml
+Converted description /// @description  udp_host_reliable_record(client_id,packet_id,buffer
+
+Converting GML script: ${project_dir}/scripts/udp_host_reliable_received/udp_host_reliable_received.gml
+Converted description /// @description  udp_host_reliable_received(client_id,packet_id
+
+Converting GML script: ${project_dir}/scripts/udp_host_reliable_acknowledged/udp_host_reliable_acknowledged.gml
+Converted description /// @description  udp_host_reliable_acknowledged(client_id,packet_id
+
+Converting GML script: ${project_dir}/scripts/udp_host_next_seq_num/udp_host_next_seq_num.gml
+Converted description /// @description  udp_host_next_seq_num(client_id,message_id
+
+Converting GML script: ${project_dir}/scripts/udp_host_valid_seq_num/udp_host_valid_seq_num.gml
+Converted description /// @description  udp_host_valid_seq_num(client,message_id,sequence_number
+
+Converting GML script: ${project_dir}/scripts/udp_client_accept_host/udp_client_accept_host.gml
+Converted description /// @description  udp_client_accept_host(ip, port
+
+Converting GML script: ${project_dir}/scripts/udp_client_init_timers/udp_client_init_timers.gml
+Converted description /// @description  udp_client_init_timers(
+
+Converting GML script: ${project_dir}/scripts/udp_client_game_start/udp_client_game_start.gml
+Converted description /// @description  udp_client_game_start(
+
+Converting GML script: ${project_dir}/scripts/udp_client_define_client/udp_client_define_client.gml
+Converted description /// @description  udp_client_define_client(id, ping, ready, username
+
+Converting GML script: ${project_dir}/scripts/udp_client_reset/udp_client_reset.gml
+Converted description /// @description  udp_client_rese
+
+Converting GML script: ${project_dir}/scripts/udp_client_hole_punch_fail_reset/udp_client_hole_punch_fail_reset.gml
+Converted description /// @description  hole_punch_fail_client_reset(
+
+Converting GML script: ${project_dir}/scripts/udp_client_remove_client/udp_client_remove_client.gml
+Converted description /// @description  udp_client_remove_client(client_id
+
+Converting GML script: ${project_dir}/scripts/udp_client_wipe_clients/udp_client_wipe_clients.gml
+Converted description /// @description  udp_client_wipe_clients(
+
+Converting GML script: ${project_dir}/scripts/udp_client_set_ready/udp_client_set_ready.gml
+Converted description /// @description  udp_client_set_read
+
+Converting GML script: ${project_dir}/scripts/udp_client_manage_game_ending/udp_client_manage_game_ending.gml
+Converted description /// @description  udp_client_manage_game_ending(
+
+Converting GML script: ${project_dir}/scripts/udp_client_cleanup_packets/udp_client_cleanup_packets.gml
+Converted description /// @description  udp_client_cleanup_packet
+
+Converting GML script: ${project_dir}/scripts/udp_client_manage_keep_alive/udp_client_manage_keep_alive.gml
+Converted description /// @description  udp_client_manage_keep_alive(
+
+Converting GML script: ${project_dir}/scripts/udp_client_manage_timeout/udp_client_manage_timeout.gml
+Converted description /// @description  udp_client_manage_timeout(
+
+Converting GML script: ${project_dir}/scripts/udp_client_join_session/udp_client_join_session.gml
+Converted description /// @description  udp_join_session(host_rendevouz_id
+
+Converting GML script: ${project_dir}/scripts/udp_client_cancel_session/udp_client_cancel_session.gml
+Converted description /// @description  udp_client_cancel_session(
+
+Converting GML script: ${project_dir}/scripts/udp_client_begin_game_init/udp_client_begin_game_init.gml
+Converted description /// @description  udp_client_begin_game_init(
+
+Converting GML script: ${project_dir}/scripts/udp_client_write_header/udp_client_write_header.gml
+Converted description /// @description  udp_client_write_header(buffer,message_id,reliable
+
+Converting GML script: ${project_dir}/scripts/udp_client_send/udp_client_send.gml
+Converted description /// @description  udp_client_send(message_id,use_reliable,buffer
+
+Converting GML script: ${project_dir}/scripts/udp_client_send_chat/udp_client_send_chat.gml
+Converted description /// @description  udp_client_send_chat(chat_string
+
+Converting GML script: ${project_dir}/scripts/udp_client_manage_sent_reliables/udp_client_manage_sent_reliables.gml
+Converted description /// @description  udp_client_manage_sent_reliables(
+
+Converting GML script: ${project_dir}/scripts/udp_client_manage_received_reliables/udp_client_manage_received_reliables.gml
+Converted description /// @description  udp_client_manage_received_reliables(
+
+Converting GML script: ${project_dir}/scripts/udp_client_next_reliable_id/udp_client_next_reliable_id.gml
+Converted description /// @description  udp_client_next_reliable_id(
+
+Converting GML script: ${project_dir}/scripts/udp_client_reliable_record/udp_client_reliable_record.gml
+Converted description /// @description  udp_client_reliable_record(packet_id,buffer
+
+Converting GML script: ${project_dir}/scripts/udp_client_reliable_acknowledged/udp_client_reliable_acknowledged.gml
+Converted description /// @description  udp_client_reliable_acknowledged(packet_id
+
+Converting GML script: ${project_dir}/scripts/udp_client_reliable_received/udp_client_reliable_received.gml
+Converted description /// @description  udp_client_reliable_received(packet_id
+
+Converting GML script: ${project_dir}/scripts/udp_client_next_seq_num/udp_client_next_seq_num.gml
+Converted description /// @description  udp_client_next_seq_num(msg_id
+
+Converting GML script: ${project_dir}/scripts/udp_client_valid_seq_num/udp_client_valid_seq_num.gml
+Converted description /// @description  udp_client_valid_seq_num(message_id,sequence_number
+
+Converting GML script: ${project_dir}/scripts/udp_client_manage_peer_timeouts/udp_client_manage_peer_timeouts.gml
+Converted description /// @description  udp_client_manage_peer_timeouts(
+
+Converting GML script: ${project_dir}/scripts/udp_client_all_peers_connected/udp_client_all_peers_connected.gml
+Converted description /// @description  udp_client_all_peers_connected(
+
+Converting GML script: ${project_dir}/scripts/udp_client_share_connection_params/udp_client_share_connection_params.gml
+Converted description /// @description  udp_client_share_connection_params(
+
+Converting GML script: ${project_dir}/scripts/udp_client_share_migration_stats/udp_client_share_migration_stats.gml
+Converted description /// @description  udp_client_share_migration_stats(
+
+Converting GML script: ${project_dir}/scripts/udp_client_is_next_host/udp_client_is_next_host.gml
+Converted description /// @description  udp_client_is_next_host(
+
+Converting GML script: ${project_dir}/scripts/udp_client_migrate_verify/udp_client_migrate_verify.gml
+Converted description /// @description  udp_client_migrate_verif
+
+Converting GML script: ${project_dir}/scripts/udp_client_get_next_host/udp_client_get_next_host.gml
+Converted description /// @description  udp_client_get_next_host(
+
+Converting GML script: ${project_dir}/scripts/udp_client_manage_migrate_timeout/udp_client_manage_migrate_timeout.gml
+Converted description /// @description  udp_client_manage_migrate_timeou
+
+Converting GML script: ${project_dir}/scripts/udp_client_manage_migrate_verify/udp_client_manage_migrate_verify.gml
+Converted description /// @description  udp_client_manage_migrate_verify(
+
+Converting GML script: ${project_dir}/scripts/udp_client_check_takeover/udp_client_check_takeover.gml
+Converted description /// @description  udp_client_check_takeover(
+
+Converting GML script: ${project_dir}/scripts/udp_client_become_host/udp_client_become_host.gml
+Converted description /// @description  udp_client_become_host(
+
+Converting GML script: ${project_dir}/scripts/udp_client_new_host/udp_client_new_host.gml
+Converted description /// @description  udp_client_new_host(new_host_id
+
+Converting GML script: ${project_dir}/scripts/udp_client_demote_host/udp_client_demote_host.gml
+Converted description /// @description  udp_client_demote_host(
+
+Converting GML script: ${project_dir}/scripts/udp_client_shrink_packets/udp_client_shrink_packets.gml
+Converted description /// @description  udp_client_shrink_packets(
+
+Converting GML script: ${project_dir}/scripts/udp_create_sockets/udp_create_sockets.gml
+Converted description /// @description  udp_create_sockets(
+
+macOS icon ${options_dir}/mac/icons/icon512.png written out as 32-bit
+Windows NSIS Installer Script has been set to default due to changes in GameMaker Studio 2
+Converting GML script: ${project_dir}/scripts/udp_sockets_initialized/udp_sockets_initialized.gml
+Converted description /// @description  udp_sockets_initialized(
+
+Converting GML script: ${project_dir}/scripts/udp_cleanup_sockets/udp_cleanup_sockets.gml
+Converted description /// @description  udp_cleanup_play_sockets(
+
+Converting GML script: ${project_dir}/scripts/udp_init_seq_numbers/udp_init_seq_numbers.gml
+Converted description /// @description  udp_init_seq_numbers(seq_numbers_map
+
+Converting GML script: ${project_dir}/scripts/udp_get_keep_alive_time/udp_get_keep_alive_time.gml
+Converted description /// @description  udp_get_keep_alive_tim
+
+Converting GML script: ${project_dir}/scripts/udp_state_machine/udp_state_machine.gml
+Converted description /// @description  udp_state_machine(
+
+Converting GML script: ${project_dir}/scripts/udp_add_chat/udp_add_chat.gml
+Converted description /// @description  udp_add_chat(sender_id,chat_string
+
+Converting GML script: ${project_dir}/scripts/udp_clear_chats/udp_clear_chats.gml
+Converted description /// @description  udp_clear_chats(
+
+Converting GML script: ${project_dir}/scripts/udp_is_host/udp_is_host.gml
+Converted description /// @description  udp_is_host(
+
+Converting GML script: ${project_dir}/scripts/udp_is_client/udp_is_client.gml
+Converted description /// @description  udp_is_client(
+
+Converting GML script: ${project_dir}/scripts/udp_manage_migration_broadcast/udp_manage_migration_broadcast.gml
+Converted description /// @description  udp_manage_migration_broadcast(
+
+Converting GML script: ${project_dir}/scripts/udp_manage_call_response/udp_manage_call_response.gml
+Converted description /// @description  udp_manage_call_response(
+
+Converting GML script: ${project_dir}/scripts/udp_avg_peer_ping/udp_avg_peer_ping.gml
+Converted description /// @description  udp_avg_peer_ping(
+
+Converting GML script: ${project_dir}/objects/obj_rendevouz_client/Create_0.gml
+Converted description /// @description  Initialize Clien
+
+Converting GML script: ${project_dir}/objects/obj_rendevouz_client/Destroy_0.gml
+Converted description /// @description  Cleanu
+
+Converting GML script: ${project_dir}/objects/obj_rendevouz_client/Step_0.gml
+Converted description /// @description  Stepwise Behavior
+
+Converting GML script: ${project_dir}/objects/obj_rendevouz_client/Other_68.gml
+Converted description /// @description  Handle Network Action
+
+Converting GML script: ${project_dir}/objects/obj_rendevouz_client/Other_3.gml
+Converted description /// @description  Cleanu
+
+Converting GML script: ${project_dir}/objects/obj_rendevouz_client/Draw_0.gml
+Converted description /// @description  Draw U
+
+Game speed set to 60

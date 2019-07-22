@@ -1,0 +1,60 @@
+Converting GML script: ${project_dir}/scripts/rdvz_initialization/rdvz_initialization.gml
+Converted description /// @description  rdvz_initialization(
+
+macOS icon ${options_dir}/mac/icons/icon512.png written out as 32-bit
+Windows NSIS Installer Script has been set to default due to changes in GameMaker Studio 2
+Converting GML script: ${project_dir}/scripts/rdvz_add_client_key/rdvz_add_client_key.gml
+Converted description /// @description  rdvz_add_client_key(key
+
+Converting GML script: ${project_dir}/scripts/rdvz_remove_client_key/rdvz_remove_client_key.gml
+Converted description /// @description  rdvz_remove_client_ke
+
+Converting GML script: ${project_dir}/scripts/rdvz_cleanup/rdvz_cleanup.gml
+Converted description /// @description  rdvz_cleanup(
+
+Converting GML script: ${project_dir}/scripts/rdvz_stepwise_behaviors/rdvz_stepwise_behaviors.gml
+Converted description /// @description  stepwise_behaviors(
+
+Converting GML script: ${project_dir}/scripts/rdvz_handle_network_actions/rdvz_handle_network_actions.gml
+Converted description /// @description  rdvz_handle_network_action
+
+Converting GML script: ${project_dir}/scripts/rdvz_default_draw/rdvz_default_draw.gml
+Converted description /// @description  rdvz_default_dra
+
+Converting GML script: ${project_dir}/scripts/rdvz_update_client_info/rdvz_update_client_info.gml
+Converted description /// @description  rdvz_update_client_info(clientid
+
+Converting GML script: ${project_dir}/scripts/rdvz_bring_client_up_to_speed/rdvz_bring_client_up_to_speed.gml
+Converted description /// @description  rdvz_bring_client_up_to_speed(client_socket
+
+Converting GML script: ${project_dir}/scripts/rdvz_received_packet/rdvz_received_packet.gml
+Converted description /// @description  rdvz_received_packet(client,ip,port,buffer,size
+
+Converting GML script: ${project_dir}/scripts/rdvz_manage_idle/rdvz_manage_idle.gml
+Converted description /// @description  rdvz_manage_idle(
+
+Converting GML script: ${project_dir}/scripts/rdvz_reset_idle_timer/rdvz_reset_idle_timer.gml
+Converted description /// @description  rdvz_reset_idle_timer(client
+
+Converting GML script: ${project_dir}/scripts/rdvz_send/rdvz_send.gml
+Converted description /// @description  rdvz_send(client,message_id,buffer
+
+Converting GML script: ${project_dir}/scripts/tcp_send_packet/tcp_send_packet.gml
+Converted description /// @description  tcp_send_packet(socket,buffer
+
+Converting GML script: ${project_dir}/objects/obj_rdvz_server/Create_0.gml
+Converted description /// @description  Rendevouz Server Initializatio
+
+Converting GML script: ${project_dir}/objects/obj_rdvz_server/Destroy_0.gml
+Converted description /// @description  Rendevouz Server Cleanu
+
+Converting GML script: ${project_dir}/objects/obj_rdvz_server/Step_0.gml
+Converted description /// @description  Stepwise Behavior
+
+Converting GML script: ${project_dir}/objects/obj_rdvz_server/Other_68.gml
+Converted description /// @description  Handle Network Action
+
+Converting GML script: ${project_dir}/objects/obj_rdvz_server/Draw_0.gml
+Converted description /// @description  Default Information Dra
+
+Game speed set to 60
