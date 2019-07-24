@@ -6,10 +6,18 @@ var _msg_id         = argument0;
 var _is_reliable    = argument1;
 var _buffer         = argument2;
 
-var _idx = 0;
 var _num_clients = ds_list_size(udp_client_list);
+var _idx, _client;
 
-var _client, _map, _port, _ip, _udpr_id, _udpr_offset, _sqn_offset, _sqn;
+for(_idx=0;_idx<_num_clients;++_idx){
+
+	_client = udp_client_list[| _idx];
+	
+	udp_host_send(_client,_msg_id,_is_reliable,_buffer);
+}
+
+
+/*var _client, _map, _port, _ip, _udpr_id, _udpr_offset, _sqn_offset, _sqn;
 
 // use zero just to supply argument, used within script to fetch
 // a udpr id, but it will not be fetched with argument false, and
@@ -59,4 +67,4 @@ for(_idx=0;_idx<_num_clients;_idx++){
     _client     = udp_client_list[| _idx];
     _map        = udp_client_maps[? _client];
     _map[? "keep_alive_timer"] = irandom_range(udp_keep_alive_interval,udp_keep_alive_interval*2);
-}
+}*/

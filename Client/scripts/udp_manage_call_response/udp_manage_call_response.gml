@@ -29,7 +29,9 @@ if(udp_is_host() || udp_is_client){
             message_buffer,
             udp_non_client_id,
             udp_msg.udp_peer_call,
-            false
+            false,
+			0, 1, 1,
+			buffer_tell(message_buffer)
         );
     
     } else if (udp_is_client()){
@@ -37,7 +39,9 @@ if(udp_is_host() || udp_is_client){
         udp_client_write_header(
             message_buffer,
             udp_msg.udp_peer_call,
-            false
+            false,
+			0, 1, 1,
+			buffer_tell(message_buffer)
         );
     }
     
@@ -63,7 +67,7 @@ if(udp_is_host() || udp_is_client){
     // list of session clients
     
     var _num_clients = ds_list_size(udp_client_list);
-    var _idx, _client, _map, _ip, _port;
+    var _idx, _client, _map;
     
     for(_idx=0;_idx<_num_clients;++_idx){
     

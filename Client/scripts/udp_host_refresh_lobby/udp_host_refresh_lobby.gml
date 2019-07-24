@@ -13,7 +13,7 @@ buffer_write(message_buffer,buffer_string,udp_host_map[? "username"]);
 // write out client information
 var _num_clients = ds_list_size(udp_client_list);
 
-var _client_id, _client_map, _ip, _port, _udpr_id;
+var _client_id, _client_map;
 var _idx, _ping, _ready, _name;
 
 buffer_write(message_buffer,buffer_u8,_num_clients);
@@ -31,6 +31,8 @@ for(_idx=0;_idx<_num_clients;_idx++){
     buffer_write(message_buffer,buffer_bool,_ready);
     buffer_write(message_buffer,buffer_string,_name);
 }
+
+show_debug_message("host refresh lobby - buffer size "+string(buffer_tell(message_buffer)));
 
 udp_host_send_all(udp_msg.udp_refresh_lobby,true,message_buffer);
 

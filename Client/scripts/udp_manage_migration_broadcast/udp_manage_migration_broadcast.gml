@@ -33,15 +33,17 @@ if(udp_is_host() || udp_is_client()){
         buffer_write(message_buffer,buffer_bool, udp_is_host());
         buffer_write(message_buffer,buffer_u16, udp_client_port);
         
+		_size = buffer_tell(message_buffer);
+		
         udp_host_write_header(
             message_buffer,
             udp_non_client_id,
             udp_msg.udp_migration_meta_client,
-            false
+            false,
+			0, 1, 1,
+			_size
         );
-        
-        _size = buffer_get_size(message_buffer);
-        
+		
         for(_port = broadcast_min; _port <= broadcast_max; ++_port)
             network_send_broadcast(udp_client_socket, _port, message_buffer, _size);
           
@@ -53,13 +55,15 @@ if(udp_is_host() || udp_is_client()){
         buffer_write(message_buffer,buffer_bool, udp_is_host());
         buffer_write(message_buffer,buffer_u16, udp_host_socket_port);
         
+		_size = buffer_tell(message_buffer);
+		
         udp_client_write_header(
             message_buffer,
             udp_msg.udp_migration_meta_host,
-            false
+            false,
+			0, 1, 1,
+			_size
         );
-        
-        _size = buffer_get_size(message_buffer);
         
         for(_port = broadcast_min; _port <= broadcast_max; ++_port)
             network_send_broadcast(udp_host_socket, _port, message_buffer, _size);
@@ -70,13 +74,15 @@ if(udp_is_host() || udp_is_client()){
         buffer_write(message_buffer,buffer_bool, udp_is_host());
         buffer_write(message_buffer,buffer_u16, udp_client_port);
         
+		_size = buffer_tell(message_buffer);
+		
         udp_client_write_header(
             message_buffer,
             udp_msg.udp_migration_meta_client,
-            false
+            false,
+			0, 1, 1,
+			_size
         );
-        
-        _size = buffer_get_size(message_buffer);
         
         for(_port = broadcast_min; _port <= broadcast_max; ++_port)
             network_send_broadcast(udp_client_socket, _port, message_buffer, _size);

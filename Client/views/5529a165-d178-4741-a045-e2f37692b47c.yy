@@ -14,7 +14,10 @@
         "a7dc57b4-1810-48fe-9232-6be18ceb5039",
         "591fb206-75e3-4dd5-b104-d67a110dc39c",
         "0a276b7a-e022-4789-8128-fa4f7339aa79",
-        "c6bad927-4eec-4b31-b25e-ac333f33f4be"
+        "c6bad927-4eec-4b31-b25e-ac333f33f4be",
+        "eae78726-e23c-41c4-9021-84b33f304998",
+        "1b345fb1-236c-4e17-99b2-165a26dbe0a4",
+        "dad86a92-706e-4522-8272-9fa3606b1c12"
     ],
     "filterType": "GMScript",
     "folderName": "clientMessaging",

@@ -16,11 +16,12 @@ var _client_map = udp_client_maps[? _client];
 
 if(!ds_map_exists(udp_client_maps,_client)){
     show_debug_message("&&& client absent "+string(_client)+" msg id "+string(_msg_id)+" sqn "+string(_new_sqn));
-    show_message_async("&&& client absent "+string(_client)+" msg id "+string(_msg_id)+" sqn "+string(_new_sqn));
+    //show_message_async("&&& client absent "+string(_client)+" msg id "+string(_msg_id)+" sqn "+string(_new_sqn));
 }
+
 if(!ds_exists(_client_map,ds_type_map)){
     show_debug_message("&&& client map does not exist");
-    show_message_async("&&& client map does not exist");
+    //show_message_async("&&& client map does not exist");
 }
     
 var _map        = _client_map[? "udp_seq_num_rcvd_map"];

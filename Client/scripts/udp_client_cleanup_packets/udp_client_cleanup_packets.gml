@@ -32,4 +32,8 @@ ds_map_clear(udpr_sent_maps);
 ds_list_clear(udpr_sent_list);
 ds_map_clear(udpr_rcvd_map);
 ds_list_clear(udpr_rcvd_list);
+udpr_next_id = 1;
 
+ds_list_clear(udplrg_rcvd_list);
+ds_map_clear(udplrg_rcvd_map);
+udplrg_next_id = 1;

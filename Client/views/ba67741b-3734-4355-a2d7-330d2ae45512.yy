@@ -16,7 +16,10 @@
         "067c84f6-9c8a-4b0c-843c-2fc8b8d4b22b",
         "271cb176-1c1e-4dc4-ae8d-fbc954b0bdcd",
         "b72fb5bb-157d-4bfc-9288-7ca1576649bf",
-        "445c52e7-0e23-4cd9-a50a-3cb22fd7d4e6"
+        "445c52e7-0e23-4cd9-a50a-3cb22fd7d4e6",
+        "7514b9d0-0128-4787-a869-ca781b87a95f",
+        "f3f97f1e-a2a1-44a9-b9c6-5e23ccff9b15",
+        "bccb0474-182f-426c-9e05-bd6708d05208"
     ],
     "filterType": "GMScript",
     "folderName": "hostMessaging",

@@ -43,18 +43,28 @@ udp_host_allow_join_in_progress = true;
 udp_max_clients_cap = 23; // Totally Arbitrary
 udp_max_clients_default = 7; // Totally Arbitrary
 udp_host_exit_kills_session = false;
+//udp_max_transmission_unit = 1350; // max bytes per packet
+udp_max_transmission_unit = 40;
 
 // rdvz header <udp (bool) | msg_id (u16) >
 rdvz_header_size = buffer_sizeof(buffer_bool) 
                     +buffer_sizeof(buffer_u16);
-// udp header <udp (bool) | msg_id (u16) | checksum (u32)
-// udp_id (s32) | time stamp (u32) | udpr id (u16) >
-udp_header_size = buffer_sizeof(buffer_bool) 
-               +buffer_sizeof(buffer_u16)
-               +buffer_sizeof(buffer_u32)
-               +buffer_sizeof(buffer_s32)
-               +buffer_sizeof(buffer_u32)
-               +buffer_sizeof(buffer_u16);
+// udp header //
+// <is udp (bool) | msg_id (u16) | checksum (u32)
+// udp_id (s32) | seq num (u32) | udpr id (u16)
+// udplrg id (u16) | udplrg idx (u16) | udplrg num (u16)
+// udplrg frag len (u16) >
+udp_header_size = buffer_sizeof(buffer_bool) // is udp
+               +buffer_sizeof(buffer_u16) // msg id
+               +buffer_sizeof(buffer_u32) // checksum
+               +buffer_sizeof(buffer_s32) // udp id
+               +buffer_sizeof(buffer_u32) // seq num
+               +buffer_sizeof(buffer_u16) // udpr id
+			   +buffer_sizeof(buffer_u16) // udplrg id
+			   +buffer_sizeof(buffer_u16) // udplrg idx
+			   +buffer_sizeof(buffer_u16) // udplrg num
+			   +buffer_sizeof(buffer_u16) // udplrg frag len
+udp_max_data_size = udp_max_transmission_unit - udp_header_size;
 
 rdvz_client_port = -1;
 rdvz_client_socket = -1;
@@ -118,6 +128,10 @@ udpr_sent_maps = ds_map_create();
 udpr_rcvd_map = ds_map_create();
 udpr_rcvd_list = ds_list_create();
 udpr_next_id = 1;
+	// client large packet receipt
+udplrg_rcvd_list	= ds_list_create();
+udplrg_rcvd_map		= ds_map_create();
+udplrg_next_id		= 1;
 
 // udp host specific
 udp_host_socket_port = -1; // name clash between host and client needs fixed

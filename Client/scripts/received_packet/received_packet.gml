@@ -9,6 +9,7 @@ var _socket = argument4;
 
 var _is_udp, _msg_id, _checksum, _udpr_id, _sqn;
 var _udpr_received, _valid_sqn, _sender_udp_id;
+var _udplrg_id, _udplrg_idx, _udplrg_num, _udplrg_len;
 
         // -- // Check Packet Integrity // -- //
         
@@ -27,6 +28,12 @@ if(_is_udp){ // only udp messages contain these header fields
     _sender_udp_id  = buffer_read(_buffer,buffer_s32);
     _sqn            = buffer_read(_buffer,buffer_u32);
     _udpr_id        = buffer_read(_buffer,buffer_u16);
+	
+	_udplrg_id		= buffer_read(_buffer,buffer_u16);
+	_udplrg_idx		= buffer_read(_buffer,buffer_u16);
+	_udplrg_num		= buffer_read(_buffer,buffer_u16);
+	_udplrg_len		= buffer_read(_buffer,buffer_u16);
+	
     _udpr_received  = false;
     _valid_sqn      = false;
     
@@ -71,7 +78,33 @@ if(_is_udp){ // only udp messages contain these header fields
         if(_udpr_id != 0)    
             _udpr_received  = udp_client_reliable_received(_udpr_id);
     }
-} else { // TCP communications with rendevouz server
+	
+	// handle large messages arriving piecemeal
+	if(_udplrg_id > 0){
+		if(udp_is_host()){
+			
+			if(udp_host_lrgpkt_rcvd(_sender_udp_id,_udplrg_id,_udplrg_idx,_udplrg_num,_udplrg_len,_buffer))
+				_buffer = udp_host_lrgpkt_assemble(_sender_udp_id,_udplrg_id,buffer_tell(_buffer));
+			else
+				exit;
+				
+		} else if(udp_is_client()){
+			
+			if(udp_client_lrgpkt_rcvd(_udplrg_id,_udplrg_idx,_udplrg_num,_udplrg_len,_buffer))
+				_buffer = udp_client_lrgpkt_assemble(_udplrg_id,buffer_tell(_buffer));
+			else
+				exit;
+				
+		} else {
+			
+			exit;	
+		}
+	}
+	
+} else { 
+	
+	// TCP communications with rendevouz server //
+	
     _client_id  = -1;
     _sqn        = -1;
     _udpr_id    = -1;
@@ -991,7 +1024,9 @@ if(_is_udp){
                         message_buffer,
                         udp_non_client_id,
                         udp_msg.udp_peer_response,
-                        false
+                        false,
+						0, 1, 1,
+						buffer_tell(message_buffer)
                     );
                 
                 } else if (udp_is_client()){
@@ -999,7 +1034,9 @@ if(_is_udp){
                     udp_client_write_header(
                         message_buffer,
                         udp_msg.udp_peer_response,
-                        false
+                        false,
+						0, 1, 1,
+						buffer_tell(message_buffer)
                     );
                 }
                 

@@ -1,0 +1,440 @@
+
+
+
+
+	Wish List:
+
+- LAN mode that operates without rendevouz server
+- somekind of proper default window formatting
+
+	Later:
+
+	On Deck:
+
+- script to centralize transitions between states
+- remove any show_message dialouges
+- investigate if buffer_tell will clip old unneeded data from buffer sizes
+
+	Current: 
+
+- abstract out ds_map_exists checks for udp host on packet receipt
+- stress testing should be revisited
+- valid packet script for rdvz server
+- consolidate host properties stored by client into a map instead of all over the place variables
+- config variable for minimum players to start a session
+- incorrect player counts being reported in rdvz server? (need to reproduce)
+- client on one machine will see flickering of client ports associated with clients on another machine
+	- may have something to do with lan broadcasts
+- after series of host transitions, if a client leaves udp session, will be confused
+	on which rdvz id has which port/ip properties
+- check rdvz update trigger on host cancel session
+
+	July of 2019
+
+> sending of multipart packets
+	- don't forget to change MTU back to something reasonable
+	X break large into multiple small
+	X distribute as reliable packets
+	X store chunks as they're receieved
+	X detect completed packets and continue execution
+	- memory cleanup of completed large packets
+	- sender tracking of large packet receipt
+	- considerations of host migration
+
+
+	Novmeber 4th 2018 through January 2019:
+
+X decease frequency of holepunch packet sends
+
+- config option for assigning session host to peer with best performing network topology
+	- decoupling of session "admin" from network host
+
+- re-factoring effort resulting from migration implementations
+	- code redundancy within migrations
+	- default variable values hardcoded in some places
+	- data structures to manage key spaces
+		- default values
+		- key sets shared between host and client
+		- key sets specific to host and client
+
+X lobby continuity after game end
+
+> host migration
+	- last remaining client should take over session if host drops
+	- need to handle possibility of two peers trying to lay claim to the session
+		- perhaps could be handled by new host issuing new session id?
+	X sharing of public facing connection data
+		X do not overwrite with public-facing, do overwrite however with lan-facing
+	X local broadcasts to correct connection data between private network peers
+		X unique session identifiers to prevent confusion
+		X firing of lan broadcasts
+		X receipt and processing of lan broadcasts
+			X broadcasts need to recognized as valid packets
+	X lobby refresh currently wipes all client data out (losing state), needs to retain state
+	X connection establish and maintenance throughout peers
+		X connection state properties in session peer maps
+		X valid packet script changes to accomadate other senders
+		X monitoring timeouts in case of network outage
+	X evaluation of each machine's average latency and sharing with host
+	X determined order that players will serve as backup hosts
+	X actual state migration
+		X alter behavior on host quit as opposed to process kill
+			X handle with config option
+		X create new state machine to handle migration steps
+			X needs to be zeroed out when udp sessions end
+			X needs to be zeroed out when migration complete
+		X client migrate to client
+			X host dropout migration
+				X move to migrate verify state and message on deck peer
+				X set migrate timeout
+				X on receipt of new host declaration perform changes
+					X change host port & ip
+					X remove host data from session
+					X renumerate sequence numbers and reliable ids from zero
+					X clear memory of inbound reliable packets
+			X host retained migration
+				X need to "demote" host to client
+		X client migrate to host
+			X host dropout migration
+				X move to verify state and await peer messages confirming host drop
+				X set migrate timeout
+				X when enough (?) messages received send migration initiation
+					X migrate peer data to host data structures
+					X appropriate udp state change
+					X remove self from client data structures
+					X packet data structures reset on their own
+					X determine whether to connect to rdvz server
+					X need to sync max players and other configs
+					X next client id to give out
+			X host retained migration
+				X "demote" host to client
+		X host migrate to client
+			X need to set host port and ip
+			X need to add self to client lists
+			X need to perform cleanup of host related data structures
+			X need to copy data from host structures to client analogues
+			X need to determine what to do with reliable messages
+			X remove host-specific keys from client structures
+		X reset ready status during lobby migration
+
+X udp state machine script can be refactored with udp_is_host() and udp_is_client() scripts
+
+	November 11th:
+
+
+X Replace microsecond time stamps with real packet sequencing
+
+
+	September 3rd:
+
+
+
+X Rendevouz server ought to use arrays instead of linked lists to track player data
+
+
+
+	August 27th:
+
+
+
+X Rename GMS Project files
+X Kick idle players from rdvz server
+
+
+
+	August 26th:
+
+
+
+X cleanup organization of rdvz server code
+X Copyright and licensing notices included in software
+X ds map key existance checks in packet receive
+
+
+
+	August 25th:
+
+
+
+X remove game_end() from TCP timeout
+X memory leak check
+X increase rdvz client keep alive interval, no need to drown server
+X distribute player pings and other metadata in game states
+
+
+
+	August 23rd:
+
+
+
+X add checksum to message integrity check
+X movement through game state cycle
+	X State flow for conventional game end
+		X intermediate ending and post state
+	X udp_host_game_in_progress = false when appropriate
+		X rdvz update if joins allowed and !empty
+	X clients able to disconnect at any time
+	X host able to cancel session at any time
+	X information exchanged about dropped clients
+	X different control flow for joining in progress
+		X need a script for initializing client data fields
+		X accept client and share pertinent information
+		X client moves to init state to sync resources
+		X when init complete tell pre-existing players
+		X username sharing
+	X reset input states when move to game states
+	X connecting/disconnecting udp host from rdvz server
+		X if joining on the fly disallowed disconnect on game start
+		X if join in progress allowed
+			X connect when not full
+			X renegotiate udp params w/ server
+			X keep rdvz server up to date
+			X share info with other rdvz clients
+	X game_init_complete reset when appropriate
+	X move into game state
+X method of feeding input arguments to input script
+	X set of enums representing different inputs
+	X reconfigure input script to work using enums
+
+
+
+	August 11th:
+
+
+
+X create ready ups, and alternatively allow host to start game whenever they want
+	X boolean that controls whether ready ups are ignored
+	X input key for ready ups
+	X reliable message for ready up status
+		X need to be reliable and time stamped
+	X lobby refreshes need to include ready states
+	X keyboard key input for game start
+X username exchange
+	X host username not included
+X Decide how to track host player properties
+	X Will want a data structure as properties accumulate
+	> in game data will be neatly mixed in with other clients
+	> special cases mostly going to exist in lobby
+
+
+
+	July 29th:
+
+X refactor input mechanisms for portability
+
+	July 22nd:
+
+
+X make randomized reconnect timer default behavior
+X move draw items to scripts for client
+X rdvz keep alive system needs to be tweaked
+X double check message buffer cleanup for rdvz server
+X add ui piece for esc key in reconnect state
+X double check rdvz id overflow
+X change all instances of "i" in for loops to temporary _idx variable
+X Script that verifies packet integrity and ignores bad packets
+	X message id out of range
+	X ip or port is incorrect
+	X socket incorrect for message type
+	X buffer bool is not 0 or 1 (any # > ! == true)
+	> recall bug with identifying sender port in tcp
+X Recovery action for faulty meta data from server
+	> Transition out of udp sesssion for multipe rdvz clients sometimes causes 
+	  crash on the same or another rdvz client
+	X Notice what's happening and break TCP connection
+	X set randomized timer and reattempt rdvz connect
+	X incorporate into rdvz state machine
+
+
+
+	July 16th:
+
+
+
+X create system that frees stored reliable packet ids as time passes
+	> reliable resends use the exact same buffer, old time stamp and all
+	> reliable ids roll over, once "they've all been received" the system will break
+		because every udpr will be treated as already received even if new
+	> remember no technical limit on how late a packet can arrive
+	> might be as simple as checking the time stamp before acting and freeing ids as time passes
+	X need a keys list for udpr_rcvd_map
+	X free ids when sufficient time passes
+	X need variable to store multiply factor
+X reduce rdvz bandwidtch and I/O by getting away from "wipe out" client info refreshes
+	X Entering clients need to be given all information
+	X existing clients need to be told about
+		X new client connected
+		X client disconnected
+		X client/session status updates
+X Client and host ignore udp packets that come from unrecnognized senders
+X client accept should verify that incoming traffic is from correct port/ip
+X ignore any messages that fall outside id ranges or are not from a valid port/ip
+	X Already handled with default case
+
+
+
+	July 14th:
+
+
+
+X clean up rdvz message id naming scheme
+	X start and end on msg id's for rdvz
+X check to make sure *_accept() scripts aren't being triggered with each packet
+X Tweek keep alive system, should't just be blasting packets all the time
+	X every received packet should reset the timeout timer
+	X every sent packet should reset the keep alive request timer
+		X host needs a timer for each client
+	X KA packets should only be sent once sent timer for host/particular client has dropped low enough
+	X several code duplications on resetting timer
+	X have same connection problem as before with determine client making a mess
+		X any packet serves as a hole punch packet
+		X removed sucessive "reminders" from determine client
+X change state check to message id check for udp pings in rdvz_client_send()
+
+
+
+	July 13th:
+
+
+
+X enumeration of reliable packet ids is weird (next reliable id scripts)
+X rdvz_client_write_header() && rdvz_client_send() functions for rdvz client and rdvz server
+	X rendevouz server needs to be expecting header on every packet
+	X udp pings will need to included as well
+	X change tcp header size to rdvz header size
+X go through timers and see if decrements continue indefinitely
+X drop timestamp == 0 condition check in received packet
+
+
+
+	Previous:
+
+
+
+X fetching next reliable id should use ds_map_exists() instead of ds_list_find_value()
+X replace ds_list_find_value() whereever possible with ds_map_exists()
+X host doesn't seem to be acknowledging reliable packets properly from clients
+	X client sending id of 1 and host seeing id of 1008
+	X wrong argument being supplied to udp_host_reliable_received
+X uniform system of UDP packet headers with simplified sending methods
+	X udp packets < udp true  | msg_id | udp_id | time_stamp | udpr_id | Data >
+	X tcp packets < udp false | msg_id | Data >
+	X new functions 
+		X udp_host_send(client, msg_id, T/F reliable)
+		X udp_host_send_all(msg_id, T/F reliable)
+		X udp_client_send(msg_id, T/F reliable)
+	X header to be read in full at the top of recieved_packet
+	X rendevouz server will have to put udp false in each of its  messages
+	X need header sizes for buffer seek
+	X switching order of timestamp and udpr_id will make everything easier
+	X all message writes have to have offset placed, and msg_id moved to send call
+	X could make a buffer_seek_header() function
+		X not necessary
+	X all UDP packets received by a rendevouz client need to have header formatted
+		X NOTE: Rendevouz server never actually sends UDP packets
+	X need better solution to header being faked in hole punch packets
+X ping numbers don't make much sense, responsiveness is nearly instantaneous and
+	numers are appearing in the 10's of thousands
+	X buffer was being written incorrectly in udp_host_send_all()
+X treatment of time stamps is inconsistent, there isn't really a need to have a true false,
+	if necessary the receiving machine checks, if not it ignores
+	X remove from state_independent_updates()
+X udp id not getting received by client sometimes
+	X resend udp id in determine client
+	X could be that id is getting dropped by client because it has not made state change yet
+		X that packet will still be acknowledged properly
+X descrepency on default # of players allowed in a session
+X rename solidfy scripts to accept()
+X time stamp could be replaced with sequence number
+	X would require a separate sequence number for each client, timer might actually be better
+X get client id at top of script for host
+X move time stamp check and reliable check to top of received_packet()
+	X udpr and time stamp both need to use 0 to indicate ignore
+X Add UDP id to header information
+	X change udp_header_size variable
+	X UDP id needs to get read in received packet
+	X UDP host can determine client at top of received packet
+	X anywhere packets are getting send need to make sure the data doesn't include stupid stuff
+	X _udpr_received, _valid_stamp, _sender_udp_id, need to replace method calls
+X flag that allows/disallows joining on the fly
+X create game states
+X text output line for messages from system
+X create script that sends the same buffer to all clients
+	X reliable and unreliable version
+X allow client to configure rendevouz server ip and ports
+X some state machine behaviours ought to be wrapped into their own functions
+X join init state needs to keep going with tcp KA packet requests
+X chat reel for udp session
+	X need udp msg tag
+	X display messages neatly
+	X don't send empty chats
+	X retain some arbitrary number in memory
+	X change ds_list_insert(udp_chat_list) into a script that manages storage
+	X host is passing messages correctly but host messages not being received by clients
+	X udp host needs to pass along all messages it receives
+	X messages sent as reliables
+X allow host to kick a client from a session lobby
+X allow host control over max number of players
+X fold all keyboard commands into keyboard input script  
+X do something about disconnect_client, cleanup_packets, and delete_client all having to be called in succession
+X move code blocks to scripts and execute the scripts
+X need somekind of automated stress testing
+	X key that toggles behavior on and off
+	X chooses random actions on a randomized interval
+X rcvd packets list could get quite long, need to think about management and lookup times
+	X Map is way faster, need to convert system
+	X experiment comparing ds_list_find_index() and ds_map_exists()
+	= could attach a timer to each entry and delete after 10 * timeout or something ( RE Evaluate Later )
+		= technical limit doesn't exist for how late a UDP packet can arrive
+= crash somewhere in reliable acknowledged script on host end
+	= a delayed packet from a disconnected client cause an invalid map access
+	= similar thing could happen any time udp_client_maps[] is accessed without validating the client id
+		= Most instances of udp_client_maps[] seem okay
+X TCP clients sometimes not receiving the id packet sent from the server
+	X have to check for this when the client tries to do something, and get an id
+X create repo on bitbucket or github
+X timeout for udp pings to rdvz server
+X Handle TCP connection failure to rendevouz server
+X TCP timeout to rendevouz server
+X destroy and recreate buffer for packet writes, buffer_grow will eventually stay at some maximum size
+X remove rdvz_joined state?
+X periodic client refreshes from UDP host
+X pings should just be host->client instead of both ways
+X switch reliable received function to boolean returns, makes way more sense
+X find all j/k for loops and change to _idx var
+X time sensitive packet interface
+	X track most recent time a packet with an id type was received
+	X need valid time stamp function
+X could probably consolidate udp sending into two functions for reliable and non reliable
+X udp host needs to  distribute ids and information on other clients
+X udp clients need ids given to them from the host
+X need reliable udp packets infrastructure
+	X when a reliable packet is acknowledged need to free up associated id
+	X document packets when sent & set resend timer
+	X resend packets after timer elapses
+	X add buffer delete to acknowledge script
+	X double check packet cleanup on destroy / disconnect
+X handle upd client id integer overflow 
+X udp ping tracking between udp host and udp clients
+X drop clients when host cancels
+X client not receiving keep alive packets from host
+X update server on number of udp clients when they leave
+X udp clients need to be able to back out of udp session and return to the rdvz server
+X clear keyboard string on udp join
+X disconnect clients that have joined udp sessions from the rendevouz server
+X need proper cleanup of udp host's hole punch maps
+X need to handle failure of Ok'd hole punch
+X players can create a lobby session and other players know about it
+X hosts need data structures similar to rdvz server to track their clients
+X hosts and clients need vars and structures to track where their hole punches go
+X keyboard string parse to get which host the client wants to join
+X client creates udp socket and tells server
+X server requests udp ping then updates all clients via tcp
+X need to verify udp host is live and can accept more players
+X update server on number udp clients on join
+X need a cancellation method on hole punching
+X server instructs host and client to hole punch
+X need to change rdvz connect timeout config
+X hole punch acknowledge, shift to fixed client/host relationship, begin keep alive packets
+X seperate message numbers
+X keep alive packets receieved during hole punch need to trigger relationship fix

@@ -10,12 +10,22 @@ show_debug_message("mod interval: "+string(udp_hole_punch_timer % udp_hole_punch
     
 if(udp_hole_punch_timer > 0){
     if(udp_hole_punch_timer % udp_hole_punch_interval == 0){
-        udp_client_write_header(message_buffer,udp_msg.udp_hole_punch,false);
+		
+        udp_client_write_header(
+			message_buffer,
+			udp_msg.udp_hole_punch,
+			false,
+			0, 1, 1,
+			buffer_get_size(message_buffer)
+		);
+		
         udp_send_packet(udp_client_socket,udp_host_to_join_ip,udp_host_to_join_port,message_buffer);
     }
 } else {
+	
     show_debug_message("client hole punch timeout");
     system_message_set("hole punch failed");
+	
     udp_client_hole_punch_fail_reset();
 }
 

@@ -34,7 +34,9 @@ if(rendevouz_state == rdvz_states.rdvz_host && (_lobby_host || _game_host)){
         message_buffer, 
         udp_non_client_id, 
         udp_msg.udp_host_lan_broadcast, 
-        false
+        false,
+		0, 1, 1,
+		buffer_tell(message_buffer)
     );
     
     _socket = udp_host_socket;
@@ -50,7 +52,9 @@ if(rendevouz_state == rdvz_states.rdvz_host && (_lobby_host || _game_host)){
     udp_client_write_header(
         message_buffer, 
         udp_msg.udp_idle_lan_broadcast, 
-        false
+        false,
+		0, 1, 1,
+		buffer_tell(message_buffer)
     );
     
     _socket = udp_client_socket;

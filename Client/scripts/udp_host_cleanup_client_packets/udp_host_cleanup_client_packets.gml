@@ -16,6 +16,8 @@ var _udpr_rcvd_list = _client_map[? "udpr_rcvd_list"];
 var _udpr_rcvd_map  = _client_map[? "udpr_rcvd_map"];
 var _udp_sqn_sent   = _client_map[? "udp_seq_num_sent_map"];
 var _udp_sqn_rcvd   = _client_map[? "udp_seq_num_rcvd_map"];
+var _lrg_pkts_list	= _client_map[? "udplrg_rcvd_list"];
+var _lrg_pkts_map	= _client_map[? "udplrg_rcvd_map"];
 
 var _key, _map, _buffer;
 var _idx;

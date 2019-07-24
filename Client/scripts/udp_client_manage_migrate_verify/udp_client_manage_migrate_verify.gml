@@ -37,7 +37,9 @@ buffer_write(message_buffer,buffer_s32,udp_id);
 udp_client_write_header(
     message_buffer,
     udp_msg.udp_migrate_lost_host,
-    false
+    false,
+	0, 1, 1,
+	buffer_tell(message_buffer)
 );
 
 udp_send_packet(
