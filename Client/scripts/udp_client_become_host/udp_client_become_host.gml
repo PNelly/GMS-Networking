@@ -34,13 +34,13 @@ if(udp_is_client()){
     udp_client_demote_host();
     
     // alter variables encountered in client reset
-    udp_host_id = udp_id;
-    udp_host_to_join = -1;
-    udp_host_to_join_ip = "";
-    udp_host_to_join_port = -1;
-    udp_host_ip = "";
-    udp_client_host_port = -1;
-    udp_hole_punch_timer = -1;
+    udp_host_id				= udp_id;
+    udp_host_to_join		= -1;
+    udp_host_to_join_ip		= "";
+    udp_host_to_join_port	= -1;
+    udp_host_ip				= "";
+    udp_client_host_port	= -1;
+    udp_hole_punch_timer	= -1;
     udp_client_cleanup_packets();
 
     // remove self from client data structures    

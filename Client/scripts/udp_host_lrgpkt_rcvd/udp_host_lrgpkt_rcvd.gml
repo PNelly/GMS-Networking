@@ -29,7 +29,7 @@ var _msg_map;
 
 if(ds_map_exists(_udplrg_rcvd_map,_udplrg_id)){
 	
-	show_debug_message("new fragment for existing message");
+	//show_debug_message("new fragment for existing message");
 	
 	// add new fragment and evaluate completeness //
 	

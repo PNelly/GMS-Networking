@@ -335,6 +335,14 @@
             }
         },
         {
+            "Key": "276a9add-86fc-4783-89c4-40315af20dc4",
+            "Value": {
+                "id": "15229711-9b45-484b-b12c-569b00c413ae",
+                "resourcePath": "scripts\/udp_client_lrgpkt_clean\/udp_client_lrgpkt_clean.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "27b8caa3-8cab-4952-b6a7-52097b7b6563",
             "Value": {
                 "id": "ba3d21f5-a9cb-4c81-b3d5-19b5b289bf57",
@@ -1127,6 +1135,14 @@
             }
         },
         {
+            "Key": "b388e8a7-7b11-4482-93fe-da1705c2781c",
+            "Value": {
+                "id": "60467ce0-f765-4e54-8f7b-36edbf96161f",
+                "resourcePath": "scripts\/udp_host_lrgpkt_clean\/udp_host_lrgpkt_clean.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "b6dfb444-ce1c-474c-8d7c-774ba2aeb0e0",
             "Value": {
                 "id": "81554fe3-be72-483f-b004-8411c4d81ce7",
@@ -1718,6 +1734,7 @@
         "7514b9d0-0128-4787-a869-ca781b87a95f",
         "f3f97f1e-a2a1-44a9-b9c6-5e23ccff9b15",
         "bccb0474-182f-426c-9e05-bd6708d05208",
+        "b388e8a7-7b11-4482-93fe-da1705c2781c",
         "72289c60-be66-406c-9c8d-97f355fcb845",
         "d7c76307-6dd7-40c2-b178-bad807c30ea6",
         "e6f80ca8-f843-4109-99a4-448da19c1368",
@@ -1748,6 +1765,7 @@
         "eae78726-e23c-41c4-9021-84b33f304998",
         "1b345fb1-236c-4e17-99b2-165a26dbe0a4",
         "dad86a92-706e-4522-8272-9fa3606b1c12",
+        "276a9add-86fc-4783-89c4-40315af20dc4",
         "dd0bf652-4a57-4fe7-9c59-dc6b452ce4d2",
         "bfc37bf2-9150-438c-a3e4-52dbd69e615f",
         "679e3cdd-aec8-4b8d-9755-b82e0bf6320c",

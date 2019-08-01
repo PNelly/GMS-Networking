@@ -10,6 +10,7 @@ var _socket = argument4;
 var _is_udp, _msg_id, _checksum, _udpr_id, _sqn;
 var _udpr_received, _valid_sqn, _sender_udp_id;
 var _udplrg_id, _udplrg_idx, _udplrg_num, _udplrg_len;
+var _lrgpkt_rcvd;
 
         // -- // Check Packet Integrity // -- //
         
@@ -36,7 +37,8 @@ if(_is_udp){ // only udp messages contain these header fields
 	
     _udpr_received  = false;
     _valid_sqn      = false;
-    
+    _lrgpkt_rcvd	= false;
+	
     /*
         following checks will prevent a crash in udp_host_valid_sqn,
         need to be absorbed into valid packet somehow
@@ -83,17 +85,21 @@ if(_is_udp){ // only udp messages contain these header fields
 	if(_udplrg_id > 0){
 		if(udp_is_host()){
 			
-			if(udp_host_lrgpkt_rcvd(_sender_udp_id,_udplrg_id,_udplrg_idx,_udplrg_num,_udplrg_len,_buffer))
+			if(udp_host_lrgpkt_rcvd(_sender_udp_id,_udplrg_id,_udplrg_idx,_udplrg_num,_udplrg_len,_buffer)){
 				_buffer = udp_host_lrgpkt_assemble(_sender_udp_id,_udplrg_id,buffer_tell(_buffer));
-			else
+				_lrgpkt_rcvd = true;
+			} else {
 				exit;
+			}
 				
 		} else if(udp_is_client()){
 			
-			if(udp_client_lrgpkt_rcvd(_udplrg_id,_udplrg_idx,_udplrg_num,_udplrg_len,_buffer))
+			if(udp_client_lrgpkt_rcvd(_udplrg_id,_udplrg_idx,_udplrg_num,_udplrg_len,_buffer)){
 				_buffer = udp_client_lrgpkt_assemble(_udplrg_id,buffer_tell(_buffer));
-			else
+				_lrgpkt_rcvd = true;
+			} else {
 				exit;
+			}
 				
 		} else {
 			
@@ -1434,4 +1440,14 @@ if(_is_udp){
             // Do Nothing
         break;
     }
+	
+	// clean up memory allocated to large udp message receipt //
+	
+	if(_lrgpkt_rcvd){
+		
+		if(udp_is_host())
+			udp_host_lrgpkt_clean(_sender_udp_id,true);
+		else if (udp_is_client())
+			udp_client_lrgpkt_clean(true);
+	}
 }

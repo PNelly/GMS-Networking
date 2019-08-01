@@ -33,18 +33,22 @@
 
 > sending of multipart packets
 	- don't forget to change MTU back to something reasonable
+	- sender tracking of large packet receipt
+	- if broadcast size is larger will cause valid packet disruptions
 	X break large into multiple small
 	X distribute as reliable packets
 	X store chunks as they're receieved
 	X detect completed packets and continue execution
-	- memory cleanup of completed large packets
-	- sender tracking of large packet receipt
-	- considerations of host migration
+	X memory cleanup of completed large packets
+		X script to remove buffer components
+		X clean up of received packet immediately following consumption
+		X clean up by host of disconnected clients
+		X client clean up on session exit
+	X considerations of host migration
+		X already address in packet clean calls of migration scripts
 
 
 	Novmeber 4th 2018 through January 2019:
-
-X decease frequency of holepunch packet sends
 
 - config option for assigning session host to peer with best performing network topology
 	- decoupling of session "admin" from network host
@@ -56,8 +60,6 @@ X decease frequency of holepunch packet sends
 		- default values
 		- key sets shared between host and client
 		- key sets specific to host and client
-
-X lobby continuity after game end
 
 > host migration
 	- last remaining client should take over session if host drops
@@ -116,6 +118,9 @@ X lobby continuity after game end
 			X need to determine what to do with reliable messages
 			X remove host-specific keys from client structures
 		X reset ready status during lobby migration
+
+X decease frequency of holepunch packet sends
+X lobby continuity after game end
 
 X udp state machine script can be refactored with udp_is_host() and udp_is_client() scripts
 

@@ -7,38 +7,38 @@
 enum rdvz_msg { // -- // Have to Match in Rdvz Server Enum // -- //
 
     // min and max for filtering
-    rdvz_msg_enum_start     = 0,
-    rdvz_msg_enum_end       = 21,
+    rdvz_msg_enum_start						= 0,
+    rdvz_msg_enum_end						= 21,
     
     // message ids
     
     // specific client connection related
-    rdvz_tell_new_id                = 0,
-    rdvz_tcp_keep_alive             = 1,
-    rdvz_tcp_keep_alive_acknowledge = 2,
-    rdvz_request_id                 = 3,
-    rdvz_idle_disconnect            = 4,
+    rdvz_tell_new_id						= 0,
+    rdvz_tcp_keep_alive						= 1,
+    rdvz_tcp_keep_alive_acknowledge			= 2,
+    rdvz_request_id							= 3,
+    rdvz_idle_disconnect					= 4,
     
     // Facilitating Hole Punching
-    rdvz_new_udp_host       = 5,
-    rdvz_new_udp_client     = 6,
-    rdvz_request_udp_ping   = 7,
-    rdvz_udp_ping_host_w_host_socket = 8,
-    rdvz_udp_ping_host_w_client_socket = 9,
-    rdvz_udp_ping_client_w_host_socket = 10,
-    rdvz_udp_ping_client_w_client_socket = 11,
-    rdvz_udp_acknowledge    = 12,
-    rdvz_udp_host_cancel    = 13,
-    rdvz_udp_hole_punch_request     = 14,
-    rdvz_udp_hole_punch_notice      = 15,
-    rdvz_udp_hole_punch_rejected    = 16,
+    rdvz_new_udp_host						= 5,
+    rdvz_new_udp_client						= 6,
+    rdvz_request_udp_ping					= 7,
+    rdvz_udp_ping_host_w_host_socket		= 8,
+    rdvz_udp_ping_host_w_client_socket		= 9,
+    rdvz_udp_ping_client_w_host_socket		= 10,
+    rdvz_udp_ping_client_w_client_socket	= 11,
+    rdvz_udp_acknowledge					= 12,
+    rdvz_udp_host_cancel					= 13,
+    rdvz_udp_hole_punch_request				= 14,
+    rdvz_udp_hole_punch_notice				= 15,
+    rdvz_udp_hole_punch_rejected			= 16,
     
     // informational
-    rdvz_client_connected           = 17,
-    rdvz_client_disconnected        = 18,
-    rdvz_client_update_info         = 19,
-    rdvz_bring_up_to_speed          = 20,
-    rdvz_udp_host_update_rdvz       = 21
+    rdvz_client_connected					= 17,
+    rdvz_client_disconnected				= 18,
+    rdvz_client_update_info					= 19,
+    rdvz_bring_up_to_speed					= 20,
+    rdvz_udp_host_update_rdvz				= 21
 
 }
 
