@@ -54,16 +54,28 @@ rdvz_header_size = buffer_sizeof(buffer_bool)
 // udp_id (s32) | seq num (u32) | udpr id (u16)
 // udplrg id (u16) | udplrg idx (u16) | udplrg num (u16)
 // udplrg frag len (u16) >
-udp_header_size = buffer_sizeof(buffer_bool) // is udp
-               +buffer_sizeof(buffer_u16) // msg id
-               +buffer_sizeof(buffer_u32) // checksum
-               +buffer_sizeof(buffer_s32) // udp id
-               +buffer_sizeof(buffer_u32) // seq num
-               +buffer_sizeof(buffer_u16) // udpr id
-			   +buffer_sizeof(buffer_u16) // udplrg id
-			   +buffer_sizeof(buffer_u16) // udplrg idx
-			   +buffer_sizeof(buffer_u16) // udplrg num
-			   +buffer_sizeof(buffer_u16) // udplrg frag len
+udp_header_size = buffer_sizeof(buffer_bool)	// is udp
+               +buffer_sizeof(buffer_u16)		// msg id
+               +buffer_sizeof(buffer_u32)		// checksum
+               +buffer_sizeof(buffer_s32)		// udp id
+               +buffer_sizeof(buffer_u32)		// seq num
+               +buffer_sizeof(buffer_u16)		// udpr id
+			   +buffer_sizeof(buffer_u16)		// udplrg id
+			   +buffer_sizeof(buffer_u16)		// udplrg idx
+			   +buffer_sizeof(buffer_u16)		// udplrg num
+			   +buffer_sizeof(buffer_u16);		// udplrg frag len
+			   
+udp_header_offset_is_udp		= 0;
+udp_header_offset_msg_id		= udp_header_offset_is_udp		+buffer_sizeof(buffer_bool);
+udp_header_offset_checksum		= udp_header_offset_msg_id		+buffer_sizeof(buffer_u16);
+udp_header_offset_udp_id		= udp_header_offset_checksum	+buffer_sizeof(buffer_u32);
+udp_header_offset_sqn			= udp_header_offset_udp_id		+buffer_sizeof(buffer_s32);
+udp_header_offset_udpr_id		= udp_header_offset_sqn			+buffer_sizeof(buffer_u32);
+udp_header_offset_udplrg_id		= udp_header_offset_udpr_id		+buffer_sizeof(buffer_u16);
+udp_header_offset_udplrg_idx	= udp_header_offset_udplrg_id	+buffer_sizeof(buffer_u16);
+udp_header_offset_udplrg_num	= udp_header_offset_udplrg_idx	+buffer_sizeof(buffer_u16);
+udp_header_offset_udplrg_len	= udp_header_offset_udplrg_num	+buffer_sizeof(buffer_u16);
+
 udp_max_data_size = udp_max_transmission_unit - udp_header_size;
 
 rdvz_client_port = -1;
@@ -123,15 +135,18 @@ udp_seq_num_rcvd_map = ds_map_create();
 udp_init_seq_numbers(udp_seq_num_sent_map);
 udp_init_seq_numbers(udp_seq_num_rcvd_map);
     // client reliable udp
-udpr_sent_list = ds_list_create();
-udpr_sent_maps = ds_map_create();
-udpr_rcvd_map = ds_map_create();
-udpr_rcvd_list = ds_list_create();
-udpr_next_id = 1;
+udpr_sent_list	= ds_list_create();
+udpr_sent_maps	= ds_map_create();
+udpr_rcvd_map	= ds_map_create();
+udpr_rcvd_list	= ds_list_create();
+udpr_next_id	= 1;
 	// client large packet receipt
-udplrg_rcvd_list	= ds_list_create();
-udplrg_rcvd_map		= ds_map_create();
-udplrg_next_id		= 1;
+udplrg_rcvd_list		= ds_list_create();
+udplrg_rcvd_map			= ds_map_create();
+udplrg_sent_map			= ds_map_create();
+udplrg_sent_udpr_map	= ds_map_create();
+udplrg_sent_list		= ds_list_create();
+udplrg_next_id			= 1;
 
 // udp host specific
 udp_host_socket_port = -1; // name clash between host and client needs fixed

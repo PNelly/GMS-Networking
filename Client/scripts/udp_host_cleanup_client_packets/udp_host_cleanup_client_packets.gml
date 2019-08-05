@@ -12,13 +12,18 @@ if(!ds_map_exists(udp_client_maps,_client))
 
 // reliable and sequencing
 
-var _client_map     = udp_client_maps[? _client];
-var _udpr_sent_list = _client_map[? "udpr_sent_list"];
-var _udpr_sent_maps = _client_map[? "udpr_sent_maps"];
-var _udpr_rcvd_list = _client_map[? "udpr_rcvd_list"];
-var _udpr_rcvd_map  = _client_map[? "udpr_rcvd_map"];
-var _udp_sqn_sent   = _client_map[? "udp_seq_num_sent_map"];
-var _udp_sqn_rcvd   = _client_map[? "udp_seq_num_rcvd_map"];
+var _client_map				= udp_client_maps[? _client];
+var _udpr_sent_list			= _client_map[? "udpr_sent_list"];
+var _udpr_sent_maps			= _client_map[? "udpr_sent_maps"];
+var _udpr_rcvd_list			= _client_map[? "udpr_rcvd_list"];
+var _udpr_rcvd_map			= _client_map[? "udpr_rcvd_map"];
+var _udp_sqn_sent			= _client_map[? "udp_seq_num_sent_map"];
+var _udp_sqn_rcvd			= _client_map[? "udp_seq_num_rcvd_map"];
+var _udplrg_rcvd_list		= _client_map[? "udplrg_rcvd_list"];
+var _udplrg_rcvd_map		= _client_map[? "udplrg_rcvd_map"];
+var _udplrg_sent_list		= _client_map[? "udplrg_sent_list"];
+var _udplrg_sent_udpr_map	= _client_map[? "udplrg_sent_udpr_map"];
+var _udplrg_sent_map		= _client_map[? "udplrg_sent_map"];
 
 var _key, _map, _buffer;
 var _idx;
@@ -46,3 +51,15 @@ ds_map_destroy(_udp_sqn_rcvd);
 
 // large packets
 udp_host_lrgpkt_clean(_client,false);
+
+ds_map_clear(_udplrg_rcvd_map);
+ds_map_clear(_udplrg_sent_udpr_map);
+ds_map_clear(_udplrg_sent_map);
+ds_list_clear(_udplrg_rcvd_list);
+ds_list_clear(_udplrg_sent_list);
+
+ds_map_destroy(_udplrg_sent_udpr_map);
+ds_map_destroy(_udplrg_sent_map);
+ds_map_destroy(_udplrg_rcvd_map);
+ds_list_destroy(_udplrg_rcvd_list);
+ds_list_destroy(_udplrg_sent_list);

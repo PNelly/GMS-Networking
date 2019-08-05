@@ -14,7 +14,7 @@ for(_idx=0;_idx<ds_list_size(udplrg_rcvd_list);++_idx){
 	_msg_map	= udplrg_rcvd_map[? _udplrg_id];
 	
 	var _complete = _msg_map[? "udplrg_complete"];
-	var _remove   = (_complete || (!_complete && !_retain_incomplete));
+	var _remove   = (_complete || !_retain_incomplete);
 	
 	show_debug_message("Remove: "+string(_remove)+" lrgid: "+string(_udplrg_id));
 	
@@ -48,5 +48,36 @@ for(_idx=0;_idx<ds_list_size(udplrg_rcvd_list);++_idx){
 		--_idx;
 		
 		show_debug_message("deleted asm buffer and descrmented loop counter");
+	}
+}
+
+// sent large packets, need to clear nested lists
+
+for(_idx=0;_idx<ds_list_size(udplrg_sent_list);++_idx){
+
+	var _udplrg_id	= udplrg_sent_list[| _idx];
+	var _trk_map	= udplrg_sent_map[? _udplrg_id];
+	
+	var _received	= _trk_map[? "udplrg_received"];
+	var _remove		= (_received || !_retain_incomplete);
+	
+	show_debug_message("udplrg sent list idx "+string(_idx)
+		+" id "+string(_udplrg_id)
+		+" rcvd "+string(_received)
+		+" remove "+string(_remove)
+	);
+	
+	if(_remove){
+	
+		if(ds_exists(_trk_map[? "udpr_list"],ds_type_list))
+			ds_list_destroy(_trk_map[? "udpr_list"]);
+			
+		ds_list_delete(udplrg_sent_list,_idx);
+		ds_map_destroy(_trk_map);
+		ds_map_delete(udplrg_sent_map,_udplrg_id);
+		
+		--_idx;
+		
+		show_debug_message("removed");
 	}
 }

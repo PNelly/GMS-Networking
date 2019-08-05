@@ -28,14 +28,20 @@ ds_map_destroy(udp_host_map);
 
 // client udp packets, reliable and timestamps
 udp_client_cleanup_packets();
+
 ds_list_destroy(udpr_sent_list);
 ds_map_destroy(udpr_sent_maps);
 ds_list_destroy(udpr_rcvd_list);
 ds_map_destroy(udpr_rcvd_map);
+
 ds_map_destroy(udp_seq_num_sent_map);
 ds_map_destroy(udp_seq_num_rcvd_map);
+
 ds_list_destroy(udplrg_rcvd_list);
 ds_map_destroy(udplrg_rcvd_map);
+ds_map_destroy(udplrg_sent_udpr_map);
+ds_map_destroy(udplrg_sent_map);
+ds_list_destroy(udplrg_sent_list);
 
 // UDP Host Hole Punching Structures
 for(_idx=0;_idx<ds_list_size(udp_hole_punch_list);_idx++){

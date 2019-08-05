@@ -36,6 +36,18 @@ if(_total_size <= udp_max_transmission_unit){
 						? (_data_remaining / udp_max_data_size)
 						: (1 + floor(_data_remaining / udp_max_data_size));
 	
+	// initialize component tracking data
+	
+	udplrg_sent_map[? _udplrg_id]	= ds_map_create();
+	
+	var _trk_map;
+	
+	_trk_map						= udplrg_sent_map[? _udplrg_id];
+	_trk_map[? "udplrg_received"]	= false;
+	_trk_map[? "udpr_list"]			= ds_list_create();
+	
+	// fracture and send
+	
 	for(;_udplrg_idx <= _udplrg_num; ++_udplrg_idx){
 	
 		var _frag_size	= (_data_remaining > udp_max_data_size)
@@ -77,7 +89,12 @@ if(_total_size <= udp_max_transmission_unit){
 		udp_client_reliable_record(_udpr_id,_msg_id,_frag_buffer);
 		udp_send_packet(udp_client_socket,udp_host_ip,udp_client_host_port,_frag_buffer);
 	
-		_data_remaining -= (_frag_size -udp_header_size); 
+		_data_remaining -= (_frag_size -udp_header_size);
+		
+		// add reliable packet to tracking for this large message
+		
+		ds_list_add(_trk_map[? "udpr_list"], _udpr_id);
+		udplrg_sent_udpr_map[? _udpr_id] = _udplrg_id;
 	}
 }
     

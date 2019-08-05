@@ -33,8 +33,19 @@
 
 > sending of multipart packets
 	- don't forget to change MTU back to something reasonable
-	- sender tracking of large packet receipt
 	- if broadcast size is larger will cause valid packet disruptions
+	X udp_client_shrink_packets might need to change
+	X sender tracking of large packet receipt
+		X data structure to track
+			X mapping of udplrg id to list of udp reliable ids
+			X mapping of udp reliable ids to udplrg id
+			X acknowledgements of reliable packets can sum to confirm
+				reciept of a large packet
+			X fetching next udplrg id will need to pay attention to
+				existing map keys
+			X cleanup packets scripts might need to be modified
+				X cleaning no longer needed markers in reliable ack
+				X cleaning of nested lists in cleanup lrg scripts
 	X break large into multiple small
 	X distribute as reliable packets
 	X store chunks as they're receieved

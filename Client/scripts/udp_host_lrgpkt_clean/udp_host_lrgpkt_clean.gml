@@ -11,8 +11,10 @@ show_debug_message("== Host Large Packet Clean ==");
 
 if(is_undefined(_client_map)) exit;
 
-var _udplrg_rcvd_list	= _client_map[? "udplrg_rcvd_list"];
-var _udplrg_rcvd_map	= _client_map[? "udplrg_rcvd_map"];
+// received large packets
+
+var _udplrg_rcvd_list		= _client_map[? "udplrg_rcvd_list"];
+var _udplrg_rcvd_map		= _client_map[? "udplrg_rcvd_map"];
 
 var _idx, _udplrg_id, _msg_map;
 
@@ -22,7 +24,7 @@ for(_idx=0;_idx<ds_list_size(_udplrg_rcvd_list);++_idx){
 	_msg_map	= _udplrg_rcvd_map[? _udplrg_id];
 	
 	var _complete	= _msg_map[? "udplrg_complete"];
-	var _remove		= (_complete || (!_complete && !_retain_incomplete)); 
+	var _remove		= (_complete || !_retain_incomplete); 
 	
 	show_debug_message("remove: "+string(_remove)+" lrgid: "+string(_udplrg_id)+" for client "+string(_client));
 	
@@ -56,5 +58,39 @@ for(_idx=0;_idx<ds_list_size(_udplrg_rcvd_list);++_idx){
 		--_idx;
 		
 		show_debug_message("deleted asm buffer and decremented loop counter");
+	}
+}
+
+// sent large packets, need to clear nested lists
+
+var _udplrg_sent_map	= _client_map[? "udplrg_sent_map"];
+var _udplrg_sent_list	= _client_map[? "udplrg_sent_list"];
+
+for(_idx=0;_idx<ds_list_size(_udplrg_sent_list);++_idx){
+
+	var _udplrg_id	= _udplrg_sent_list[| _idx];
+	var _trk_map	= _udplrg_sent_map[? _udplrg_id];
+
+	var _received	= _trk_map[? "udplrg_received"];
+	var _remove		= (_received || !_retain_incomplete);
+	
+	show_debug_message("udplrg sent list idx "+string(_idx)
+		+" id "+string(_udplrg_id)
+		+" rcvd "+string(_received)
+		+" remove "+string(_remove)
+	);
+	
+	if(_remove){
+	
+		if(ds_exists(_trk_map[? "udpr_list"],ds_type_list))
+			ds_list_destroy(_trk_map[? "udpr_list"]);
+			
+		ds_list_delete(_udplrg_sent_list,_idx);
+		ds_map_destroy(_trk_map);
+		ds_map_delete(_udplrg_sent_map,_udplrg_id);
+		
+		--_idx;
+		
+		show_debug_message("removed");
 	}
 }

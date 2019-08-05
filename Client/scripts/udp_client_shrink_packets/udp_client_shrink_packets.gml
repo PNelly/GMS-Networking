@@ -12,8 +12,8 @@ show_debug_message("-- udp client shrink packets --");
 
 var _idx, _packet, _map, _buffer, _msg_idx;
 
-var _udpr_offset = udp_header_size - buffer_sizeof(buffer_u16);
-var _sqn_offset  = udp_header_size -(buffer_sizeof(buffer_u16) + buffer_sizeof(buffer_u32));
+var _udpr_offset = udp_header_offset_udpr_id;
+var _sqn_offset  = udp_header_offset_sqn;
 
 var _num_reliable   = ds_list_size(udpr_sent_list);
 var _sort_grid      = ds_grid_create(2,_num_reliable);
@@ -81,7 +81,6 @@ udpr_next_id = _num_reliable + 1;
     Shrink Packet Sequence Numbers
 */
 
-var _msg_count;
 var _msg_list = ds_list_create();
 
 var _first = udp_msg.udp_msg_enum_start;

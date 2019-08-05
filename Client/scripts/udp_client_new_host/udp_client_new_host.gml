@@ -56,3 +56,7 @@ udp_client_share_connection_params();
 // clear inbound reliable packets
 ds_map_clear(udpr_rcvd_map);
 ds_list_clear(udpr_rcvd_list);
+
+// wipe any large packet transfers
+udp_client_lrgpkt_clean(false);
+udplrg_next_id = 1;

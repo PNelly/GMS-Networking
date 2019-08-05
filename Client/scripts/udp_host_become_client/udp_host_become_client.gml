@@ -48,6 +48,8 @@ if(udp_is_host()){
         ds_map_delete(_map,"udp_seq_num_rcvd_map");
 		ds_map_delete(_map,"udplrg_rcvd_list");
 		ds_map_delete(_map,"udplrg_rcvd_map");
+		ds_map_delete(_map,"udplrg_sent_list");
+		ds_map_delete(_map,"udplrg_sent_map");
 		ds_map_delete(_map,"udplrg_next_id");
     }
         

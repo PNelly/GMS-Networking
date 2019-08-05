@@ -26,8 +26,8 @@ for(_idx=0;_idx<_num_clients;++_idx){
 udp_host_write_header(_buffer,udp_non_client_id,_msg_id,false);
 
 // calculate offsets for udpr id and sequence number
-_udpr_offset = udp_header_size - buffer_sizeof(buffer_u16);
-_sqn_offset  = udp_header_size -(buffer_sizeof(buffer_u16)+buffer_sizeof(buffer_u32));
+_udpr_offset = udp_header_offset_udpr_id;
+_sqn_offset  = udp_header_offset_sqn;
 
 if(!_is_reliable){ // non reliable packet
     _udpr_id = 0;

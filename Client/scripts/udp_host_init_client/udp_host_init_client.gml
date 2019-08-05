@@ -34,6 +34,9 @@ _client_map[? "udp_seq_num_sent_map"]   = ds_map_create();
 _client_map[? "udp_seq_num_rcvd_map"]   = ds_map_create();
 _client_map[? "udplrg_rcvd_list"]		= ds_list_create();
 _client_map[? "udplrg_rcvd_map"]		= ds_map_create();
+_client_map[? "udplrg_sent_udpr_map"]	= ds_map_create();
+_client_map[? "udplrg_sent_map"]		= ds_map_create();
+_client_map[? "udplrg_sent_list"]		= ds_list_create();
 _client_map[? "udplrg_next_id"]			= 1;
 
 udp_init_seq_numbers(_client_map[? "udp_seq_num_sent_map"]);

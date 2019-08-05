@@ -34,7 +34,6 @@ ds_map_clear(udpr_rcvd_map);
 ds_list_clear(udpr_rcvd_list);
 udpr_next_id = 1;
 
+// cleanup large packets
 udp_client_lrgpkt_clean(false);
-ds_list_clear(udplrg_rcvd_list);
-ds_map_clear(udplrg_rcvd_map);
 udplrg_next_id = 1;
