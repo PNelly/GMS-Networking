@@ -29,6 +29,16 @@ for(_idx=0;_idx<ds_list_size(udplrg_rcvd_list);++_idx){
 			var _udplrg_idx = _pkt_list[| _pos];
 			var _buff		= _pkt_map[? _udplrg_idx];
 			
+			if(is_undefined(_buff))
+				show_debug_message("undf buff, udplrg id "+string(_udplrg_id)
+					+" complete "+string(_complete)
+					+" remove "+string(_remove)
+					+" _msg_map "+string(_msg_map)
+					+" _pkt_list "+string(_pkt_list)
+					+" _pkt_map "+string(_pkt_map)
+					+" udplrg idx "+string(_udplrg_idx)
+				);
+			
 			buffer_delete(_buff);
 			ds_map_delete(_pkt_map,_udplrg_idx);
 			ds_list_delete(_pkt_list,_pos);

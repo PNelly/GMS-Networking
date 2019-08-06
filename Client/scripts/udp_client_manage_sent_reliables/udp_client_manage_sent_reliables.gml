@@ -22,7 +22,7 @@ for(_idx=0;_idx<_size;_idx++){
         if(udp_ping == 0)
             _map[? "resend_timer"] = udp_reliable_resend_default;
             
-        show_debug_message("client resent reliable packet: "+string(_id));
+        //show_debug_message("client resent reliable packet: "+string(_id));
     }    
 
 }

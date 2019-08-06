@@ -2,11 +2,11 @@
 
 // adds packet properties to data structures and sets resend timer
 
-var _packet_id = argument0;
-var _msg_id    = argument1;
-var _buffer    = argument2;
+var _packet_id	= argument0;
+var _msg_id		= argument1;
+var _buffer		= argument2;
+var _size		= argument3;
 
-var _size = buffer_get_size(_buffer);
 var _store_buffer = buffer_create( _size, buffer_fixed, 1);
 
 buffer_copy(_buffer,0,_size,_store_buffer,0);
@@ -25,4 +25,4 @@ if(udp_ping == 0)
 ds_list_add(udpr_sent_list,_packet_id);
 ds_map_add(udpr_sent_maps,_packet_id,_packet_map);
 
-show_debug_message("client documented sending of udpr: "+string(_packet_id));
+//show_debug_message("client documented sending of udpr: "+string(_packet_id));

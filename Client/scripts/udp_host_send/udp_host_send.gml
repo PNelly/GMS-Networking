@@ -35,7 +35,7 @@ if(_total_size <= udp_max_transmission_unit){
 	);
 
 	if(_is_reliable)
-	    udp_host_reliable_record(_client,_udpr_id,_buffer);
+	    udp_host_reliable_record(_client,_udpr_id,_buffer,_total_size);
 		
 	if(_has_hook)
 		_hook_key = "udpr_id_"+string(_udpr_id);
@@ -113,7 +113,7 @@ if(_total_size <= udp_max_transmission_unit){
 			_frag_size
 		);
 		
-		udp_host_reliable_record(_client,_udpr_id,_frag_buffer);
+		udp_host_reliable_record(_client,_udpr_id,_frag_buffer,_frag_size);
 		udp_send_packet(udp_host_socket,_ip,_port,_frag_buffer);
 		
 		_data_remaining -= (_frag_size -udp_header_size);

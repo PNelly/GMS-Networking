@@ -18,6 +18,9 @@ var _msg_id;
 var _lan_broadcast;
 var _peer_to_peer;
 
+if(buffer_get_size(_buffer) == 0)
+	return false;
+
 buffer_seek(_buffer,buffer_seek_start,0);
 
 _bool_u8    = buffer_read(_buffer,buffer_u8);

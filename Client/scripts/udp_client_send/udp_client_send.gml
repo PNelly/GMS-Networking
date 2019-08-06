@@ -33,7 +33,7 @@ if(_total_size <= udp_max_transmission_unit){
 	udp_send_packet(udp_client_socket,udp_host_ip,udp_client_host_port,_buffer);
 
 	if(_is_reliable)
-	    udp_client_reliable_record(_udpr_id,_msg_id,_buffer);
+	    udp_client_reliable_record(_udpr_id,_msg_id,_buffer,_total_size);
 	
 	if(_has_hook)
 		_hook_key = "udpr_id_"+string(_udpr_id);
@@ -51,6 +51,8 @@ if(_total_size <= udp_max_transmission_unit){
 						: (1 + floor(_data_remaining / udp_max_data_size));
 	
 	// initialize component tracking data
+	
+	ds_list_add(udplrg_sent_list, _udplrg_id);
 	
 	udplrg_sent_map[? _udplrg_id]	= ds_map_create();
 	
@@ -105,7 +107,7 @@ if(_total_size <= udp_max_transmission_unit){
 			_frag_size
 		);
 		
-		udp_client_reliable_record(_udpr_id,_msg_id,_frag_buffer);
+		udp_client_reliable_record(_udpr_id,_msg_id,_frag_buffer,_frag_size);
 		udp_send_packet(udp_client_socket,udp_host_ip,udp_client_host_port,_frag_buffer);
 	
 		_data_remaining -= (_frag_size -udp_header_size);

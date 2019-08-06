@@ -45,10 +45,11 @@ X Receipt verification hooks
 	July of 2019
 
 > sending of multipart packets
-	- extraordinarily long messages, essentially file transfers, need special attention
-		- multipart packet fragmentation seems to work pretty well up to about 1MB on local machine
+	(if a non-relialbe packet/broadcast > MTU problems could arise during testing)
 	- don't forget to change MTU back to something reasonable
-	- if broadcast size is larger will cause valid packet disruptions
+	- once messages reach a certain size they create a udp flood
+		- outbound large packets need to be metered over multiple frames
+		- 5x10^6 / room_speed / 8 will give frame threshold for a 5Mbps upload connection
 	X udp_client_shrink_packets might need to change
 	X sender tracking of large packet receipt
 		X delivery progress tracking
