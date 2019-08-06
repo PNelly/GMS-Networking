@@ -43,8 +43,8 @@ udp_host_allow_join_in_progress = true;
 udp_max_clients_cap = 23; // Totally Arbitrary
 udp_max_clients_default = 7; // Totally Arbitrary
 udp_host_exit_kills_session = false;
-//udp_max_transmission_unit = 1350; // max bytes per packet
-udp_max_transmission_unit = 40;
+udp_max_transmission_unit = 1350; // max bytes per packet
+//udp_max_transmission_unit = 40;
 
 // rdvz header <udp (bool) | msg_id (u16) >
 rdvz_header_size = buffer_sizeof(buffer_bool) 
@@ -147,6 +147,9 @@ udplrg_sent_map			= ds_map_create();
 udplrg_sent_udpr_map	= ds_map_create();
 udplrg_sent_list		= ds_list_create();
 udplrg_next_id			= 1;
+	// client delivery hooks
+udp_dlvry_hooks_list = ds_list_create();
+udp_dlvry_hooks_map  = ds_map_create();
 
 // udp host specific
 udp_host_socket_port = -1; // name clash between host and client needs fixed

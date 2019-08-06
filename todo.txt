@@ -13,7 +13,6 @@
 
 - script to centralize transitions between states
 - remove any show_message dialouges
-- investigate if buffer_tell will clip old unneeded data from buffer sizes
 
 	Current: 
 
@@ -29,13 +28,30 @@
 	on which rdvz id has which port/ip properties
 - check rdvz update trigger on host cancel session
 
+	August of 2019
+
+X Receipt verification hooks
+	X data structure to contain hooks and their parameters
+		X host will need to nest hooks for each client
+		X cleanup on disconnects
+		X cleanup on migrations
+	X a "hook" will consist of a data structure naming a script and arguments to pass
+		X argument tracking
+		X map that names number of arguments and their values
+	X udp host/client send scripts will record hooks if passed within
+	X udp host/client reliable ack scripts will check delivery and execute the hook
+	X memory cleanup in cleanup packets scripts and migrations
+
 	July of 2019
 
 > sending of multipart packets
+	- extraordinarily long messages, essentially file transfers, need special attention
+		- multipart packet fragmentation seems to work pretty well up to about 1MB on local machine
 	- don't forget to change MTU back to something reasonable
 	- if broadcast size is larger will cause valid packet disruptions
 	X udp_client_shrink_packets might need to change
 	X sender tracking of large packet receipt
+		X delivery progress tracking
 		X data structure to track
 			X mapping of udplrg id to list of udp reliable ids
 			X mapping of udp reliable ids to udplrg id
@@ -45,7 +61,7 @@
 				existing map keys
 			X cleanup packets scripts might need to be modified
 				X cleaning no longer needed markers in reliable ack
-				X cleaning of nested lists in cleanup lrg scripts
+				X cleaning of nested lists in cleanup lrg scripts 
 	X break large into multiple small
 	X distribute as reliable packets
 	X store chunks as they're receieved

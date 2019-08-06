@@ -10,7 +10,7 @@ if(udp_state == udp_states.udp_client_lobby
 
     show_debug_message("client leaving udp session");
 
-    udp_client_send(udp_msg.udp_disconnect_instruction,false,message_buffer);
+    udp_client_send(udp_msg.udp_disconnect_instruction,false,message_buffer,-1);
     
     udp_client_reset(); // state change occurs within
     

@@ -752,7 +752,7 @@ if(_is_udp){
                     var _time = buffer_read(_buffer,buffer_u32);
                     buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
                     buffer_write(message_buffer,buffer_u32, _time);
-                    udp_client_send(udp_msg.udp_ping_acknowledge,false,_buffer);
+                    udp_client_send(udp_msg.udp_ping_acknowledge,false,_buffer,-1);
                 }
             }
         
@@ -1145,7 +1145,7 @@ if(_is_udp){
                 buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
                 buffer_write(message_buffer,buffer_s32,udp_id);
                 buffer_write(message_buffer,buffer_string,udp_session_id);
-                udp_host_send(_peer_id,udp_msg.udp_migrate_new_host,false,message_buffer);
+                udp_host_send(_peer_id,udp_msg.udp_migrate_new_host,false,message_buffer,-1);
             }
         
         break;
@@ -1299,7 +1299,7 @@ if(_is_udp){
                         _map[? "username"] = _name;
                         
                         udp_host_distribute_new_client(_sender_udp_id);
-                        udp_host_send(_sender_udp_id,udp_msg.udp_game_start,true,message_buffer);
+                        udp_host_send(_sender_udp_id,udp_msg.udp_game_start,true,message_buffer,-1);
                     }
                 }
             
@@ -1432,9 +1432,12 @@ if(_is_udp){
                         }
                     }
                 }
-            
             }
         break;
+		
+		case udp_msg.udp_dummy_message:
+			// Do Nothing
+		break;
         
         default:
             // Do Nothing

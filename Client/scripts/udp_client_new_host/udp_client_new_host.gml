@@ -60,3 +60,17 @@ ds_list_clear(udpr_rcvd_list);
 // wipe any large packet transfers
 udp_client_lrgpkt_clean(false);
 udplrg_next_id = 1;
+
+// clear packet hooks
+var _idx, _key, _map;
+
+for(_idx=0;_idx<ds_list_size(udp_dlvry_hooks_list);++_idx){
+
+	_key = udp_dlvry_hooks_list[| _idx];
+	_map = udp_dlvry_hooks_map[? _key];
+	
+	ds_map_destroy(_map);
+}
+
+ds_list_clear(udp_dlvry_hooks_list);
+ds_map_clear(udp_dlvry_hooks_map);

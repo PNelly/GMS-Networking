@@ -24,6 +24,8 @@ var _udplrg_rcvd_map		= _client_map[? "udplrg_rcvd_map"];
 var _udplrg_sent_list		= _client_map[? "udplrg_sent_list"];
 var _udplrg_sent_udpr_map	= _client_map[? "udplrg_sent_udpr_map"];
 var _udplrg_sent_map		= _client_map[? "udplrg_sent_map"];
+var _udp_dlvry_hooks_list	= _client_map[? "udp_dlvry_hooks_list"];
+var _udp_dlvry_hooks_map	= _client_map[? "udp_dlvry_hooks_map"];
 
 var _key, _map, _buffer;
 var _idx;
@@ -63,3 +65,17 @@ ds_map_destroy(_udplrg_sent_map);
 ds_map_destroy(_udplrg_rcvd_map);
 ds_list_destroy(_udplrg_rcvd_list);
 ds_list_destroy(_udplrg_sent_list);
+
+// delivery hooks
+for(_idx=0;_idx<ds_list_size(_udp_dlvry_hooks_list);++_idx){
+
+	_key = _udp_dlvry_hooks_list[| _idx];
+	_map = _udp_dlvry_hooks_map[? _key];
+	
+	ds_map_destroy(_map);
+}
+
+ds_map_clear(_udp_dlvry_hooks_map);
+ds_list_clear(_udp_dlvry_hooks_list);
+ds_map_destroy(_udp_dlvry_hooks_map);
+ds_list_destroy(_udp_dlvry_hooks_list);

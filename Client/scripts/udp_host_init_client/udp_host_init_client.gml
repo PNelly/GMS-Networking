@@ -38,6 +38,8 @@ _client_map[? "udplrg_sent_udpr_map"]	= ds_map_create();
 _client_map[? "udplrg_sent_map"]		= ds_map_create();
 _client_map[? "udplrg_sent_list"]		= ds_list_create();
 _client_map[? "udplrg_next_id"]			= 1;
+_client_map[? "udp_dlvry_hooks_list"]	= ds_list_create();
+_client_map[? "udp_dlvry_hooks_map"]	= ds_map_create();
 
 udp_init_seq_numbers(_client_map[? "udp_seq_num_sent_map"]);
 udp_init_seq_numbers(_client_map[? "udp_seq_num_rcvd_map"]);

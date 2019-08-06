@@ -16,7 +16,10 @@
         "9d131d04-8c03-46ee-ad9f-47a88dd4d6dd",
         "b147b72a-f2fe-444e-8a30-97ac19f8a991",
         "2efcaa7f-a029-4f37-8895-056c77bb82d4",
-        "8a9210ec-2c48-4c90-930b-2f8931ee478e"
+        "8a9210ec-2c48-4c90-930b-2f8931ee478e",
+        "9fbc049e-5573-4b0a-a9a5-e3b47c566bfa",
+        "eb9783fc-bf3f-49a4-9f4e-b12c9390efd0",
+        "45a25a4e-5906-48e3-aeab-b531e160c173"
     ],
     "filterType": "GMScript",
     "folderName": "udpShared",

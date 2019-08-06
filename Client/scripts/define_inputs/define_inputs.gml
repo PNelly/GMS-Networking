@@ -21,5 +21,6 @@ enum inputs {
     input_go_back,
     input_toggle_stress_test,
     input_force_takeover,
-    input_execute
+    input_execute,
+	input_test_dlvry_hook
 }

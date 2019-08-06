@@ -46,7 +46,7 @@ enum udp_msg {
 
     // min and max for filtering
     udp_msg_enum_start          = 1000,
-    udp_msg_enum_end            = 1032,
+    udp_msg_enum_end            = 1033,
 
     // message ids
     udp_hole_punch              = 1000,
@@ -81,5 +81,6 @@ enum udp_msg {
     udp_idle_lan_broadcast      = 1029,
     udp_host_lan_broadcast      = 1030,
     udp_migrate_lost_host       = 1031,
-    udp_migrate_new_host        = 1032
+    udp_migrate_new_host        = 1032,
+	udp_dummy_message			= 1033
 }

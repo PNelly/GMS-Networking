@@ -495,6 +495,14 @@
             }
         },
         {
+            "Key": "45a25a4e-5906-48e3-aeab-b531e160c173",
+            "Value": {
+                "id": "371c5f55-ae82-4a60-9eb2-eedb8c5b3426",
+                "resourcePath": "scripts\/udp_delivery_hook\/udp_delivery_hook.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "46b90231-4dbe-4409-bf2e-2170eec6362b",
             "Value": {
                 "id": "475e69dc-4dcf-41c8-841b-0eac79cdd015",
@@ -1007,6 +1015,14 @@
             }
         },
         {
+            "Key": "9fbc049e-5573-4b0a-a9a5-e3b47c566bfa",
+            "Value": {
+                "id": "fb3adf58-bb77-47c3-8df3-7537674d12f1",
+                "resourcePath": "scripts\/udp_test_dlvry_hook\/udp_test_dlvry_hook.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "a4370787-a9b2-4856-8449-98ed18b0e7c0",
             "Value": {
                 "id": "630cea71-6de6-4726-b81a-b940bf31b093",
@@ -1495,6 +1511,14 @@
             }
         },
         {
+            "Key": "eb9783fc-bf3f-49a4-9f4e-b12c9390efd0",
+            "Value": {
+                "id": "a607e50d-4c8d-4bfa-b22c-cc475a422e7f",
+                "resourcePath": "scripts\/udp_test_dlvry_hook_dialogue\/udp_test_dlvry_hook_dialogue.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "ed4cbba9-8234-4d95-bfd5-9c6e6b63b353",
             "Value": {
                 "id": "69a3627a-a2ff-43b1-9517-5fd767bf333c",
@@ -1792,7 +1816,10 @@
         "9d131d04-8c03-46ee-ad9f-47a88dd4d6dd",
         "b147b72a-f2fe-444e-8a30-97ac19f8a991",
         "2efcaa7f-a029-4f37-8895-056c77bb82d4",
-        "8a9210ec-2c48-4c90-930b-2f8931ee478e"
+        "8a9210ec-2c48-4c90-930b-2f8931ee478e",
+        "9fbc049e-5573-4b0a-a9a5-e3b47c566bfa",
+        "eb9783fc-bf3f-49a4-9f4e-b12c9390efd0",
+        "45a25a4e-5906-48e3-aeab-b531e160c173"
     ],
     "tutorial": ""
 }

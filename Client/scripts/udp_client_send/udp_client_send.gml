@@ -1,11 +1,22 @@
-/// @description  udp_client_send(message_id,use_reliable,buffer)
+/// @description  udp_client_send(message_id,use_reliable,buffer,delivery_hook)
 
 // send udp message to the session host
 
 var _msg_id         = argument0;
 var _is_reliable    = argument1;
 var _buffer         = argument2;
+var _hook			= argument3;
 var _total_size		= buffer_tell(_buffer);
+
+var _trk_map		= -1;
+var _hook_key		= -1;
+var _has_hook		= (
+						ds_exists(_hook,ds_type_map) 
+						&& (
+							_is_reliable 
+							|| (_total_size > udp_max_transmission_unit)
+							)
+					  );
 
 if(_total_size <= udp_max_transmission_unit){
 
@@ -23,6 +34,9 @@ if(_total_size <= udp_max_transmission_unit){
 
 	if(_is_reliable)
 	    udp_client_reliable_record(_udpr_id,_msg_id,_buffer);
+	
+	if(_has_hook)
+		_hook_key = "udpr_id_"+string(_udpr_id);
 		
 } else {
 	
@@ -40,11 +54,16 @@ if(_total_size <= udp_max_transmission_unit){
 	
 	udplrg_sent_map[? _udplrg_id]	= ds_map_create();
 	
-	var _trk_map;
-	
 	_trk_map						= udplrg_sent_map[? _udplrg_id];
 	_trk_map[? "udplrg_received"]	= false;
+	_trk_map[? "udplrg_num"]		= _udplrg_num;
+	_trk_map[? "udplrg_progress"]	= 0;
 	_trk_map[? "udpr_list"]			= ds_list_create();
+	
+	// setup delivery hook if applicable
+	
+	if(_has_hook)
+		_hook_key = "udplrg_id_"+string(_udplrg_id);
 	
 	// fracture and send
 	
@@ -97,7 +116,17 @@ if(_total_size <= udp_max_transmission_unit){
 		udplrg_sent_udpr_map[? _udpr_id] = _udplrg_id;
 	}
 }
+
+// tag delivery hook
+
+if(_has_hook){
+	ds_list_add(udp_dlvry_hooks_list,_hook_key);
+	udp_dlvry_hooks_map[? _hook_key] = _hook;
+}
     
 // reset keep alive sent timer, since we've just sent a packet
 udp_keep_alive_timer = udp_get_keep_alive_time();
 
+// return tracking map if applicable
+if(_trk_map > 0)
+	return _trk_map;

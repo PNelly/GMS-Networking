@@ -32,4 +32,4 @@ for(_idx=0;_idx<_num_clients;_idx++){
     buffer_write(message_buffer,buffer_string,_name);
 }
 
-udp_host_send(_new_client,udp_msg.udp_game_bring_to_speed,true,message_buffer);
+udp_host_send(_new_client,udp_msg.udp_game_bring_to_speed,true,message_buffer,-1);

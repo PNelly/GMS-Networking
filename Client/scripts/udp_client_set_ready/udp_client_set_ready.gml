@@ -10,6 +10,6 @@ if(udp_state == udp_states.udp_client_lobby){
     _map[? "ready"] = !_map[? "ready"];
     buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
     buffer_write(message_buffer,buffer_bool,_map[? "ready"]);
-    udp_client_send(udp_msg.udp_ready,true,message_buffer);
+    udp_client_send(udp_msg.udp_ready,true,message_buffer,-1);
 }
 

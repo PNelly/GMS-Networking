@@ -11,5 +11,5 @@ if(udp_is_client()){
     buffer_write(message_buffer, buffer_bool, _connected);
     buffer_write(message_buffer, buffer_u16, _avg_ping);
     
-    udp_client_send(udp_msg.udp_migration_stats_info, true, message_buffer); 
+    udp_client_send(udp_msg.udp_migration_stats_info, true, message_buffer, -1); 
 }

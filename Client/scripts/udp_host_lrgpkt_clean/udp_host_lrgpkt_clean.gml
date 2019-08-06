@@ -43,10 +43,13 @@ for(_idx=0;_idx<ds_list_size(_udplrg_rcvd_list);++_idx){
 			ds_map_delete( _pkt_map,_udplrg_idx);
 			ds_list_delete(_pkt_list,_pos);
 			
-			show_debug_message("deleted idx "+string(_udplrg_idx)+" for lrgpkt id "+string(_udplrg_id));
+			//show_debug_message("deleted idx "+string(_udplrg_idx)+" for lrgpkt id "+string(_udplrg_id));
 		}
 		
-		buffer_delete(_msg_map[? "udplrg_asm_buffer"]);
+		// asm buffer may not exist if a packet was not assembled before clean script
+		if(ds_map_exists(_msg_map,"udplrg_asm_buffer"))
+			if(buffer_exists(_msg_map[? "udplrg_asm_buffer"]))
+				buffer_delete(_msg_map[? "udplrg_asm_buffer"]);
 		
 		ds_map_destroy( _pkt_map);
 		ds_list_destroy(_pkt_list);

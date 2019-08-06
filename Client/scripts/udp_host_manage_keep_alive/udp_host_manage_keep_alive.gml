@@ -13,7 +13,7 @@ if(_num_clients > 0){
         _map[? "keep_alive_timer"] = _map[? "keep_alive_timer"] -1;
         if(_map[? "keep_alive_timer"] < 0){
             _map[? "keep_alive_timer"] = udp_get_keep_alive_time();
-            udp_host_send(_id,udp_msg.udp_keep_alive,false,message_buffer);
+            udp_host_send(_id,udp_msg.udp_keep_alive,false,message_buffer,-1);
         }        
     }    
 }

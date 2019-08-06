@@ -105,7 +105,7 @@ if(input_state == input_states.input_none){
         break;
         
         case inputs.input_set_rdvz_udp_port:
-            if(rendeouvz_state == rdvz_states.rdvz_none
+            if(rendevouz_state == rdvz_states.rdvz_none
             && udp_state == udp_states.udp_none){
                 show_debug_message("input set udp port");
                 input_state = input_states.input_set_rdvz_udp_port;
@@ -145,6 +145,10 @@ if(input_state == input_states.input_none){
             if(udp_is_client())
                 udp_client_become_host();
         break;
+		
+		case inputs.input_test_dlvry_hook:
+			udp_test_dlvry_hook();
+		break;
            
     }
     

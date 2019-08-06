@@ -459,6 +459,28 @@ switch(udp_state){
             }
         }
     break;
-
 }
 
+if(udp_is_host() || udp_is_client()){
+	
+	// large packet delivery progress tracking test
+	
+	if(ds_exists(debug_hook_test_trk_map,ds_type_map)){
+		if(ds_map_exists(debug_hook_test_trk_map,"udplrg_progress")){
+			
+			draw_healthbar(
+				room_width  -3*_x,
+				room_height -2*_y,
+				room_width  -_x,
+				room_height -_y,
+				100 * debug_hook_test_trk_map[? "udplrg_progress"],
+				c_black,
+				c_white,
+				c_white,
+				0,
+				false,
+				false
+			);
+		}
+	}
+}

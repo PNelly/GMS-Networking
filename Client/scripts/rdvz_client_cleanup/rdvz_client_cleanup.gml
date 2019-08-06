@@ -43,6 +43,9 @@ ds_map_destroy(udplrg_sent_udpr_map);
 ds_map_destroy(udplrg_sent_map);
 ds_list_destroy(udplrg_sent_list);
 
+ds_list_destroy(udp_dlvry_hooks_list);
+ds_map_destroy(udp_dlvry_hooks_map);
+
 // UDP Host Hole Punching Structures
 for(_idx=0;_idx<ds_list_size(udp_hole_punch_list);_idx++){
 

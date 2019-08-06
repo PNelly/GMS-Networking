@@ -13,7 +13,7 @@ for(_idx=0;_idx<_num_clients;++_idx){
 
 	_client = udp_client_list[| _idx];
 	
-	udp_host_send(_client,_msg_id,_is_reliable,_buffer);
+	udp_host_send(_client,_msg_id,_is_reliable,_buffer,-1);
 }
 
 
