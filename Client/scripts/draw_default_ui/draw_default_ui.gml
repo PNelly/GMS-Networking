@@ -171,7 +171,7 @@ switch(udp_state){
         draw_set_color(c_white);
         
         var _id, _map, _ip, _client_port, _host_port;
-        var _ping, _ka_timer, _name, _idx;
+        var _ping, _ka_timer, _name, _idx, _timeout;
         
         for(_idx=0;_idx<_udp_clients;_idx++){
             _id             = udp_client_list[| _idx];
@@ -183,9 +183,11 @@ switch(udp_state){
             _name           = _map[? "username"];
             _ka_timer       = _map[? "keep_alive_timer"];
             _ready          = _map[? "ready"];
+			_timeout		= _map[? "timeout"];
             
             //draw_text(_x,_y+140+20*_idx,string(_name)+" id: "+string(_id)+" ip: "+string(_ip)+" port: "+string(_port)+" ping: "+string(_ping)+" ka timer: "+string(_ka_timer));
-            draw_text(_x,_y+140+20*_idx,string_hash_to_newline("id: "+string(_id)+" "+string(_name)+" ping: "+string(_ping)+" hp: "+string(_host_port)));
+            //draw_text(_x,_y+140+20*_idx,string_hash_to_newline("id: "+string(_id)+" "+string(_name)+" ping: "+string(_ping)+" hp: "+string(_host_port)));
+			draw_text(_x,_y+140+20*_idx,string(_id)+" "+string(_name)+" png: "+string(_ping)+" to: "+string(_timeout));
             
             draw_set_halign(fa_right);
                 if(_ready){
@@ -215,7 +217,8 @@ switch(udp_state){
     case udp_states.udp_client_lobby:
         // draw client info
         draw_text(_x + room_width/2,_y,string_hash_to_newline("udp state: udp client lobby"));
-        draw_text(_x + room_width/2,_y+_line,string_hash_to_newline("my udp id: "+string(udp_id)+" ping: "+string(udp_ping)));
+        //draw_text(_x + room_width/2,_y+_line,string_hash_to_newline("my udp id: "+string(udp_id)+" ping: "+string(udp_ping)));
+		draw_text(_x + room_width/2,+y+_line,"my udp id: "+string(udp_id)+" timeout "+string(udp_connection_timer));
         draw_text(_x,_y+2*_line,string_hash_to_newline("session id: "+string(udp_session_id)));
         draw_text(_x,_y+120,string_hash_to_newline("host: "+string(udp_host_map[? "username"])+" ping: "+string(udp_ping)+" cp: "+string(udp_client_host_client_port)));
         
@@ -309,7 +312,7 @@ switch(udp_state){
         draw_set_color(c_white);
         
         var _id, _map, _ip, _client_port, _host_port;
-        var _ping, _ka_timer, _name, _idx;
+        var _ping, _ka_timer, _name, _idx, _timeout;
         
         for(_idx=0;_idx<_udp_clients;_idx++){
         
@@ -322,6 +325,7 @@ switch(udp_state){
             _name           = _map[? "username"];
             _ka_timer       = _map[? "keep_alive_timer"];
             _ready          = _map[? "ready"];
+			_timeout		= _map[? "timeout"];
             
             //draw_text(_x,_y+140+20*_idx,string(_name)+" id: "+string(_id)+" ip: "+string(_ip)+" port: "+string(_port)+" ping: "+string(_ping)+" ka timer: "+string(_ka_timer));
             draw_text(_x,_y+140+20*_idx,string_hash_to_newline(string(_name)+" ping: "+string(_ping)));

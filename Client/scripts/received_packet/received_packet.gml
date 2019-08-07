@@ -73,12 +73,12 @@ if(_is_udp){ // only udp messages contain these header fields
         if(_sender_udp_id >= 0){ // only call udpr & stamp methods for accepted udp clients
             _valid_sqn      = udp_host_valid_seq_num(_sender_udp_id,_msg_id,_sqn);
             if(_udpr_id != 0)      
-                _udpr_received  = udp_host_reliable_received(_sender_udp_id,_udpr_id);
+                _udpr_received  = udp_host_reliable_received(_sender_udp_id,_udpr_id,_udplrg_id,_udplrg_idx);
         }
     } else {
         _valid_sqn     = udp_client_valid_seq_num(_msg_id,_sqn);
         if(_udpr_id != 0)    
-            _udpr_received  = udp_client_reliable_received(_udpr_id);
+            _udpr_received  = udp_client_reliable_received(_udpr_id,_udplrg_id,_udplrg_idx);
     }
 	
 	// handle large messages arriving piecemeal
@@ -89,6 +89,7 @@ if(_is_udp){ // only udp messages contain these header fields
 				_buffer = udp_host_lrgpkt_assemble(_sender_udp_id,_udplrg_id,buffer_tell(_buffer));
 				_lrgpkt_rcvd = true;
 			} else {
+				udp_host_reset_client_timeout(_sender_udp_id);
 				exit;
 			}
 				
@@ -98,6 +99,7 @@ if(_is_udp){ // only udp messages contain these header fields
 				_buffer = udp_client_lrgpkt_assemble(_udplrg_id,buffer_tell(_buffer));
 				_lrgpkt_rcvd = true;
 			} else {
+				udp_client_reset_timeout();
 				exit;
 			}
 				
@@ -111,7 +113,6 @@ if(_is_udp){ // only udp messages contain these header fields
 	
 	// TCP communications with rendevouz server //
 	
-    _client_id  = -1;
     _sqn        = -1;
     _udpr_id    = -1;
 }
@@ -453,10 +454,13 @@ if(_is_udp){
         if(udp_is_host()){
         
             if(ds_map_exists(udp_client_maps,_sender_udp_id)){
-                _map = udp_client_maps[? _sender_udp_id];
-                _map[? "timeout"] = udp_connection_timeout;
+				
+				udp_host_reset_client_timeout(_sender_udp_id);
+				
             } else {
+				
                 var _joining = udp_host_accept_client(_ip, _port);
+				
                 if(!_joining){ 
                     show_debug_message("host unrecognized sender");
                     exit; // unrecognized sender
@@ -474,7 +478,7 @@ if(_is_udp){
             
                 if(_ip == udp_host_ip && _port == udp_client_host_port){
                 
-                    udp_connection_timer = udp_connection_timeout;
+                    udp_client_reset_timeout();
                     
                 } else {
                 
@@ -791,17 +795,19 @@ if(_is_udp){
         
         // Received Acknowledgement of a Reliable Packet
         case udp_msg.udp_reliable_acknowledge:
-            if(udp_is_client()){
-                var _ackd_id = buffer_read(_buffer,buffer_u16);
-                udp_client_reliable_acknowledged(_ackd_id);
-            }
-            
-            if(udp_is_host()){
-                    
-                var _ackd_id = buffer_read(_buffer,buffer_u16);
-                if(_sender_udp_id >= 1)
-                    udp_host_reliable_acknowledged(_sender_udp_id,_ackd_id);
-            }
+		
+			if(udp_is_host() || udp_is_client()){
+			
+				var _ack_id		= buffer_read(_buffer,buffer_u16);
+				var _udplrg_id	= buffer_read(_buffer,buffer_u16);
+				var _udplrg_idx = buffer_read(_buffer,buffer_u16);
+				
+				if(udp_is_client())
+					udp_client_reliable_acknowledged(_ack_id,_udplrg_id,_udplrg_idx);
+				else if(udp_is_host() && _sender_udp_id > 0)
+					udp_host_reliable_acknowledged(_sender_udp_id,_ack_id,_udplrg_id,_udplrg_idx);
+			}
+		
         break;
         
         

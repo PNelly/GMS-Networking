@@ -18,7 +18,8 @@
         "eae78726-e23c-41c4-9021-84b33f304998",
         "1b345fb1-236c-4e17-99b2-165a26dbe0a4",
         "dad86a92-706e-4522-8272-9fa3606b1c12",
-        "276a9add-86fc-4783-89c4-40315af20dc4"
+        "276a9add-86fc-4783-89c4-40315af20dc4",
+        "3fada12c-5e5f-408f-b1c8-84fa938b4479"
     ],
     "filterType": "GMScript",
     "folderName": "clientMessaging",

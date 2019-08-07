@@ -8,7 +8,7 @@ var _next_id   = _udplrg_id +1;
 if(_next_id > unsigned_16_max)
 	_next_id = 1;
 
-while(ds_map_exists(udplrg_sent_map,_next_id)){
+while(ds_map_exists(udplrg_outbound_map,_next_id)){
     _next_id++;
     if( _next_id > unsigned_16_max )
         _next_id = 1;

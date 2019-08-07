@@ -20,7 +20,7 @@ _packet_map[? "buffer"] = _store_buffer;
 if(udp_ping > 0)
     _packet_map[? "resend_timer"] = ceil( udp_ping * udp_reliable_resend_factor );
 if(udp_ping == 0)
-    _packet_map[? "resend_timer"] = udp_reliable_resend_default;
+    _packet_map[? "resend_timer"] = irandom(2 * udp_reliable_resend_default);
 
 ds_list_add(udpr_sent_list,_packet_id);
 ds_map_add(udpr_sent_maps,_packet_id,_packet_map);

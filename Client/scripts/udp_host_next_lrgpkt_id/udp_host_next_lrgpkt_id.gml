@@ -4,7 +4,7 @@
 
 var _client		= argument0;
 var _client_map	= udp_client_maps[? _client];
-var _sent_map	= _client_map[? "udplrg_sent_map"];
+var _sent_map	= _client_map[? "udplrg_outbound_map"];
 var _udplrg_id  = _client_map[? "udplrg_next_id"];
 var _next_id	= _udplrg_id +1;
 

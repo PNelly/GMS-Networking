@@ -143,6 +143,14 @@
             }
         },
         {
+            "Key": "0f2b9f0f-740e-41d5-87a6-eb66f1b19e56",
+            "Value": {
+                "id": "1dd3a315-68dd-43c2-88fc-9756ad94fb8c",
+                "resourcePath": "scripts\/udp_client_reset_timeout\/udp_client_reset_timeout.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "0fa78981-d021-4066-b5fa-1c6058ecd7e3",
             "Value": {
                 "id": "4c0162b0-f4f7-42db-b139-7e6d0e81f023",
@@ -447,6 +455,14 @@
             }
         },
         {
+            "Key": "3fada12c-5e5f-408f-b1c8-84fa938b4479",
+            "Value": {
+                "id": "45b7fd0a-738f-4919-a6d0-c1160cd64ff9",
+                "resourcePath": "scripts\/udp_client_lrgpkt_manage_outbound\/udp_client_lrgpkt_manage_outbound.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "3fd761eb-8938-4a03-a5ac-5c3da69d2d11",
             "Value": {
                 "id": "79adf285-6fa2-4f30-bbc6-084a25b1b1a6",
@@ -515,6 +531,14 @@
             "Value": {
                 "id": "54c2e915-9a7c-4eb7-a5d1-02188ac39b1e",
                 "resourcePath": "scripts\/rdvz_go_back\/rdvz_go_back.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
+            "Key": "4930018a-ef21-4686-8eb9-d7521ee17fc0",
+            "Value": {
+                "id": "a59edfdb-6c29-4ae6-b2bb-b5b54e32ddb7",
+                "resourcePath": "scripts\/udp_host_reset_client_timeout\/udp_host_reset_client_timeout.yy",
                 "resourceType": "GMScript"
             }
         },
@@ -991,6 +1015,14 @@
             }
         },
         {
+            "Key": "9b6bab40-051a-46d1-aee7-5beb70ebbdd6",
+            "Value": {
+                "id": "857d7560-3e20-4d6d-8a75-51ef7e5ccacf",
+                "resourcePath": "scripts\/wait_microseconds\/wait_microseconds.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "9be17598-2a72-429c-88ff-88933aab4503",
             "Value": {
                 "id": "477d5df9-81b4-4db8-a5a3-cab8a6f3e4a8",
@@ -1243,6 +1275,14 @@
             "Value": {
                 "id": "fdde299f-25e7-4eac-89c0-77f34a9d95ef",
                 "resourcePath": "scripts\/udp_client_all_peers_connected\/udp_client_all_peers_connected.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
+            "Key": "bfd4e412-d23a-46bf-863a-d46e3a5f1fe1",
+            "Value": {
+                "id": "50b8748b-03ed-4b4e-b9eb-5af9aaf9dd7a",
+                "resourcePath": "scripts\/udp_host_lrgpkt_manage_outbound\/udp_host_lrgpkt_manage_outbound.yy",
                 "resourceType": "GMScript"
             }
         },
@@ -1667,6 +1707,7 @@
         "1c7c6928-9b8d-416c-ba02-c8cc90fc15de",
         "fea11703-3372-4676-a882-2b34bdb295de",
         "44ea8849-723b-4081-a5c7-1b70ad63291d",
+        "9b6bab40-051a-46d1-aee7-5beb70ebbdd6",
         "1e8120d4-e1c0-48e3-a6c7-0d55c55d874b",
         "d4133da2-b20e-4461-9cdb-04656aa64bdf",
         "2489de6d-2b72-42fd-9f86-553cc265500a",
@@ -1735,6 +1776,7 @@
         "fbcab3bc-a3c9-48c0-b66f-554638b6a204",
         "aeda08f6-a188-4013-bc09-18200d2d88c3",
         "1a978ff4-154f-46ce-ac13-03b5f8335622",
+        "4930018a-ef21-4686-8eb9-d7521ee17fc0",
         "8464f078-0bfc-49cd-a630-d463ba67b14d",
         "22f56b11-6012-4aae-8b7b-68fcd7036d90",
         "56d8fc96-f553-4941-b731-09db7501ecb6",
@@ -1759,6 +1801,7 @@
         "f3f97f1e-a2a1-44a9-b9c6-5e23ccff9b15",
         "bccb0474-182f-426c-9e05-bd6708d05208",
         "b388e8a7-7b11-4482-93fe-da1705c2781c",
+        "bfd4e412-d23a-46bf-863a-d46e3a5f1fe1",
         "72289c60-be66-406c-9c8d-97f355fcb845",
         "d7c76307-6dd7-40c2-b178-bad807c30ea6",
         "e6f80ca8-f843-4109-99a4-448da19c1368",
@@ -1772,6 +1815,7 @@
         "3d1d4417-b9b0-427f-8b8f-eaed8da01a60",
         "52d1ff93-672b-4008-ae75-a4387479c8a3",
         "0c796d14-e3f1-4b5e-b98f-4432350bb82d",
+        "0f2b9f0f-740e-41d5-87a6-eb66f1b19e56",
         "b2f49ce2-b506-4343-8d88-46fb9a1c19eb",
         "a9234b51-9943-4c15-934c-25e41892a6ad",
         "970528a5-f849-407d-8dff-d25095dcbc31",
@@ -1790,6 +1834,7 @@
         "1b345fb1-236c-4e17-99b2-165a26dbe0a4",
         "dad86a92-706e-4522-8272-9fa3606b1c12",
         "276a9add-86fc-4783-89c4-40315af20dc4",
+        "3fada12c-5e5f-408f-b1c8-84fa938b4479",
         "dd0bf652-4a57-4fe7-9c59-dc6b452ce4d2",
         "bfc37bf2-9150-438c-a3e4-52dbd69e615f",
         "679e3cdd-aec8-4b8d-9755-b82e0bf6320c",

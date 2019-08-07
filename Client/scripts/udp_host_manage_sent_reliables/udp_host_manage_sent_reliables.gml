@@ -34,7 +34,7 @@ for(_idx1=0;_idx1<_num_clients;_idx1++){
             if(_ping > 0)
                 _this_packet_map[? "resend_timer"] = ceil( _ping * udp_reliable_resend_factor);
             if(_ping == 0)
-                _this_packet_map[? "resend_timer"] = udp_reliable_resend_default;
+                _this_packet_map[? "resend_timer"] = irandom(2 * udp_reliable_resend_default);
                 
             //show_debug_message("host resent udpr: "+string(_packet_id)+" to client: "+string(_client_id));
         }

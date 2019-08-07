@@ -20,7 +20,7 @@ for(_idx=0;_idx<_size;_idx++){
         if(udp_ping > 0)
             _map[? "resend_timer"] = ceil( udp_ping * udp_reliable_resend_factor);
         if(udp_ping == 0)
-            _map[? "resend_timer"] = udp_reliable_resend_default;
+            _map[? "resend_timer"] = irandom(2 * udp_reliable_resend_default);
             
         //show_debug_message("client resent reliable packet: "+string(_id));
     }    

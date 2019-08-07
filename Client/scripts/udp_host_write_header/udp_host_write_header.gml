@@ -17,7 +17,7 @@ var _udpr_id;
 buffer_seek(_buffer,buffer_seek_start,0);
 buffer_write(_buffer,buffer_bool,true); // is udp (true)
 buffer_write(_buffer,buffer_u16,_msg_id);
-buffer_write(_buffer,buffer_u32,buffer_checksum(udp_header_size,_buffer));
+buffer_write(_buffer,buffer_u32,buffer_checksum(udp_header_size,_buffer,_udplrg_len));
 buffer_write(_buffer,buffer_s32,udp_id);
 buffer_write(_buffer,buffer_u32,udp_host_next_seq_num(_client,_msg_id));
 

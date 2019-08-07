@@ -19,6 +19,7 @@ if(udp_is_host()){
     udp_host_manage_received_reliables();
     udp_host_manage_migration_stats_request();
     udp_host_manage_migration_order();
+	udp_host_lrgpkt_manage_outbound();
 }
 
 // all client states
@@ -29,9 +30,9 @@ if(udp_is_client()){
     udp_client_manage_peer_timeouts();
     udp_client_manage_sent_reliables();
     udp_client_manage_received_reliables();
-    
     udp_client_manage_migrate_verify();
     udp_client_manage_migrate_timeout();
+	udp_client_lrgpkt_manage_outbound();
 }
 
 // actions that are state specific

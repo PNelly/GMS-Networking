@@ -76,7 +76,11 @@ udp_header_offset_udplrg_idx	= udp_header_offset_udplrg_id	+buffer_sizeof(buffer
 udp_header_offset_udplrg_num	= udp_header_offset_udplrg_idx	+buffer_sizeof(buffer_u16);
 udp_header_offset_udplrg_len	= udp_header_offset_udplrg_num	+buffer_sizeof(buffer_u16);
 
-udp_max_data_size = udp_max_transmission_unit - udp_header_size;
+udp_max_data_size				= udp_max_transmission_unit - udp_header_size;
+udplrg_max_bits_per_sec			= 5000000;
+udplrg_max_bytes_per_frame		= floor(udplrg_max_bits_per_sec / 8 / room_speed);
+udplrg_max_packets_per_sec		= 1000;
+udplrg_max_packets_per_frame	= floor(udplrg_max_packets_per_sec / room_speed);
 
 rdvz_client_port = -1;
 rdvz_client_socket = -1;
@@ -140,13 +144,13 @@ udpr_sent_maps	= ds_map_create();
 udpr_rcvd_map	= ds_map_create();
 udpr_rcvd_list	= ds_list_create();
 udpr_next_id	= 1;
-	// client large packet receipt
+	// client large packet management
 udplrg_rcvd_list		= ds_list_create();
 udplrg_rcvd_map			= ds_map_create();
-udplrg_sent_map			= ds_map_create();
-udplrg_sent_udpr_map	= ds_map_create();
-udplrg_sent_list		= ds_list_create();
+udplrg_outbound_list	= ds_list_create();
+udplrg_outbound_map		= ds_map_create();
 udplrg_next_id			= 1;
+
 	// client delivery hooks
 udp_dlvry_hooks_list = ds_list_create();
 udp_dlvry_hooks_map  = ds_map_create();

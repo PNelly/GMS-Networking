@@ -39,9 +39,8 @@ ds_map_destroy(udp_seq_num_rcvd_map);
 
 ds_list_destroy(udplrg_rcvd_list);
 ds_map_destroy(udplrg_rcvd_map);
-ds_map_destroy(udplrg_sent_udpr_map);
-ds_map_destroy(udplrg_sent_map);
-ds_list_destroy(udplrg_sent_list);
+ds_list_destroy(udplrg_outbound_list);
+ds_map_destroy(udplrg_outbound_map);
 
 ds_list_destroy(udp_dlvry_hooks_list);
 ds_map_destroy(udp_dlvry_hooks_map);

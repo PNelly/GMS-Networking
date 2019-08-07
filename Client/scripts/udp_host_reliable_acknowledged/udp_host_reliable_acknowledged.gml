@@ -1,10 +1,12 @@
-/// @description  udp_host_reliable_acknowledged(client_id,packet_id)
+/// @description  udp_host_reliable_acknowledged(client_id,packet_id,udplrg_id,udplrg_idx)
 
 // removes this packet from sent list and sent map
 // freeing up id and preventing extra sends
 
-var _client_id = argument0;
-var _packet_id = argument1;
+var _client_id	= argument0;
+var _packet_id	= argument1;
+var _udplrg_id	= argument2;
+var _udplrg_idx = argument3;
 
 /*show_debug_message("starting reliable acknowledge, client: "+string(_client_id)+" packet: "+string(_packet_id));
 var _idx;
@@ -34,7 +36,7 @@ var _map            = _udpr_sent_maps[? _packet_id];
 
 // if map is undefined it means this packet has already been acknowledged
 if(is_undefined(_map)){
-    show_debug_message("udp host received redundant ack of udpr: "+string(_packet_id)+" from client: "+string(_client_id));
+    //show_debug_message("udp host received redundant ack of udpr: "+string(_packet_id)+" from client: "+string(_client_id));
     exit;
 }
 
@@ -68,57 +70,39 @@ if(ds_map_exists(_udp_dlvry_hooks_map,_key)){
 
 	// ## manage tracking of large packet receipts ## //
 
-var _udplrg_sent_list		= _client_map[? "udplrg_sent_list"];
-var _udplrg_sent_map		= _client_map[? "udplrg_sent_map"];
-var _udplrg_sent_udpr_map	= _client_map[? "udplrg_sent_udpr_map"];
+var _udplrg_outbound_list	= _client_map[? "udplrg_outbound_list"];
+var _udplrg_outbound_map	= _client_map[? "udplrg_outbound_map"];
 
-// reliable packets will only sometimes map to large packet transmissions
-if(!ds_map_exists(_udplrg_sent_udpr_map,_packet_id))
+if(!ds_map_exists(_udplrg_outbound_map,_udplrg_id))
 	exit;
 	
-var _udplrg_id	= _udplrg_sent_udpr_map[? _packet_id];
-var _trk_map	= _udplrg_sent_map[? _udplrg_id];
-var _pkt_list	= _trk_map[? "udpr_list"];
+var _trk_map	= _udplrg_outbound_map[? _udplrg_id];
+var _idx_list	= _trk_map[? "udplrg_cnf_list"];
 
-//show_debug_message("removed pkt "+string(_packet_id)+" from lrg pkt tracking "+string(_udplrg_id));
+// remove index from list of packets to be confirmed
 
-// record delivery of this packet by removing it from list of fragments to deliver
 ds_list_delete(
-	_pkt_list,
+	_idx_list,
 	ds_list_find_index(
-		_pkt_list,
-		_packet_id
+		_idx_list,
+		_udplrg_idx
 	)
 );
 
-ds_map_delete(_udplrg_sent_udpr_map,_packet_id);
+// update progress tracking
 
-// update delivery progress
 var _udplrg_num = _trk_map[? "udplrg_num"];
-var _delivered  = _udplrg_num -ds_list_size(_pkt_list);
+var _delivered	= _udplrg_num -ds_list_size(_idx_list);
 
 _trk_map[? "udplrg_progress"] = _delivered / _udplrg_num;
 
-//show_debug_message("udplrg id "+string(_udplrg_id)+" progress "+string(_trk_map[? "udplrg_progress"]));
+// check completion
 
-// check if delivery completed
-if(ds_list_empty(_pkt_list)){
+if(ds_list_empty(_idx_list)){
 
-	show_debug_message("host confirmed receipt of udplrg id "+string(_udplrg_id));
 	_trk_map[? "udplrg_received"] = true;
-	
-	ds_list_destroy(_pkt_list);
-	ds_map_destroy(_trk_map);
-	ds_map_delete(_udplrg_sent_map, _udplrg_id);
-	ds_list_delete(
-		_udplrg_sent_list,
-		ds_list_find_index(
-			_udplrg_sent_list,
-			_udplrg_id
-		)
-	);
-	
-	// check if delivery hook exists for this large packet
+
+	// delivery action hook if applicable
 	var _key = "udplrg_id_"+string(_udplrg_id);
 	
 	if(ds_map_exists(_udp_dlvry_hooks_map,_key)){
@@ -130,4 +114,19 @@ if(ds_list_empty(_pkt_list)){
 			_udp_dlvry_hooks_list
 		);
 	}
+
+	// clean up
+	
+	ds_list_destroy(_idx_list);
+	if(buffer_exists(_trk_map[? "udplrg_buffer"]))
+		buffer_delete(_trk_map[? "udplrg_buffer"]);
+	ds_map_destroy(_trk_map);
+	ds_map_delete(_udplrg_outbound_map,_udplrg_id);
+	ds_list_delete(
+		_udplrg_outbound_list,
+		ds_list_find_index(
+			_udplrg_outbound_list,
+			_udplrg_id
+		)
+	);
 }

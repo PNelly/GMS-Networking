@@ -105,8 +105,9 @@ _valid_meta_data = (_valid_rdvz_meta || _valid_udp_meta);
 
 // verify contents
 
-var _checksumA = -1;
-var _checksumB = -2;
+var _checksumA  = -1;
+var _checksumB  = -2;
+var _udplrg_len = buffer_peek(_buffer,udp_header_offset_udplrg_len,buffer_u16);
 
 var _valid_bool        = false;
 var _valid_rdvz_msg_id = false;
@@ -118,7 +119,7 @@ _valid_bool = (_bool_u8 == 0 || _bool_u8 == 1);
 
 if(_bool_u8 == 1){ // is udp and contains checksum
     _checksumA  = buffer_read(_buffer,buffer_u32);
-    _checksumB  = buffer_checksum(udp_header_size,_buffer);
+	_checksumB  = buffer_checksum(udp_header_size,_buffer,_udplrg_len);
     _valid_checksum = (_checksumA == _checksumB);
 } else if (_bool_u8 == 0){
     _valid_checksum = true; // no checksum on tcp

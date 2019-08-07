@@ -8,6 +8,8 @@ var _idx, _udplrg_id, _msg_map;
 
 show_debug_message("== Client Large Packet Clean ==");
 
+// large packets received from host
+
 for(_idx=0;_idx<ds_list_size(udplrg_rcvd_list);++_idx){
 
 	_udplrg_id	= udplrg_rcvd_list[| _idx];
@@ -16,20 +18,24 @@ for(_idx=0;_idx<ds_list_size(udplrg_rcvd_list);++_idx){
 	var _complete = _msg_map[? "udplrg_complete"];
 	var _remove   = (_complete || !_retain_incomplete);
 	
-	show_debug_message("Remove: "+string(_remove)+" lrgid: "+string(_udplrg_id));
+	//show_debug_message("Remove: "+string(_remove)+" lrgid: "+string(_udplrg_id));
 	
 	if(_remove){
 	
 		var _pkt_list = _msg_map[? "udplrg_pkt_list"];
 		var _pkt_map  = _msg_map[? "udplrg_pkt_map"];
 		
-		while(!ds_list_empty(_pkt_list)){
+		var _pos = 0;
 		
-			var _pos		= 0;
-			var _udplrg_idx = _pkt_list[| _pos];
+		for(;_pos<ds_list_size(_pkt_list);++_pos){
+		
+			var _udplrg_idx	= _pkt_list[| _pos];
 			var _buff		= _pkt_map[? _udplrg_idx];
 			
-			if(is_undefined(_buff))
+			if(buffer_exists(_buff)){
+				buffer_delete(_buff);
+				//show_debug_message("%%% deleted idx "+string(_udplrg_idx)+" for lrgpkt id "+string(_udplrg_id));
+			} else {
 				show_debug_message("undf buff, udplrg id "+string(_udplrg_id)
 					+" complete "+string(_complete)
 					+" remove "+string(_remove)
@@ -38,13 +44,11 @@ for(_idx=0;_idx<ds_list_size(udplrg_rcvd_list);++_idx){
 					+" _pkt_map "+string(_pkt_map)
 					+" udplrg idx "+string(_udplrg_idx)
 				);
-			
-			buffer_delete(_buff);
-			ds_map_delete(_pkt_map,_udplrg_idx);
-			ds_list_delete(_pkt_list,_pos);
-			
-			//show_debug_message("deleted idx "+string(_udplrg_idx)+" for lrgpkt id "+string(_udplrg_id));
+			}
 		}
+		
+		ds_list_clear(_pkt_list);
+		ds_map_clear( _pkt_map);
 		
 		// asm buffer may not exist if packet was not assembled before clean script
 		if(ds_map_exists(_msg_map,"udplrg_asm_buffer"))
@@ -60,16 +64,16 @@ for(_idx=0;_idx<ds_list_size(udplrg_rcvd_list);++_idx){
 		ds_list_delete(udplrg_rcvd_list,_idx);
 		--_idx;
 		
-		show_debug_message("deleted asm buffer and descrmented loop counter");
+		//show_debug_message("deleted asm buffer and descrmented loop counter");
 	}
 }
 
-// sent large packets, need to clear nested lists
+// outbound large packets
 
-for(_idx=0;_idx<ds_list_size(udplrg_sent_list);++_idx){
+for(_idx=0;_idx<ds_list_size(udplrg_outbound_list);++_idx){
 
-	var _udplrg_id	= udplrg_sent_list[| _idx];
-	var _trk_map	= udplrg_sent_map[? _udplrg_id];
+	var _udplrg_id	= udplrg_outbound_list[| _idx];
+	var _trk_map	= udplrg_outbound_map[? _udplrg_id];
 	
 	var _received	= _trk_map[? "udplrg_received"];
 	var _remove		= (_received || !_retain_incomplete);
@@ -82,12 +86,15 @@ for(_idx=0;_idx<ds_list_size(udplrg_sent_list);++_idx){
 	
 	if(_remove){
 	
-		if(ds_exists(_trk_map[? "udpr_list"],ds_type_list))
-			ds_list_destroy(_trk_map[? "udpr_list"]);
+		if(ds_exists(_trk_map[? "udplrg_cnf_list"],ds_type_list))
+			ds_list_destroy(_trk_map[? "udplrg_cnf_list"]);
 			
-		ds_list_delete(udplrg_sent_list,_idx);
+		if(buffer_exists(_trk_map[? "udplrg_buffer"]))
+			buffer_delete(_trk_map[? "udplrg_buffer"]);
+			
+		ds_list_delete(udplrg_outbound_list,_idx);
 		ds_map_destroy(_trk_map);
-		ds_map_delete(udplrg_sent_map,_udplrg_id);
+		ds_map_delete(udplrg_outbound_map,_udplrg_id);
 		
 		--_idx;
 		
