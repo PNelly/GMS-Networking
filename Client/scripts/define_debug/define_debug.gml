@@ -8,8 +8,9 @@ debug_stress_test_interval_max	= room_speed * 10;
 debug_stress_test_interval_min	= 1;
 debug_stress_test_timer			= -1;
 debug_error_message				= -1;
-debug_show_invalid_pkt			= true;
+debug_show_invalid_pkt			= false;
 debug_save_invalid_pkt			= false;
+debug_invalid_pkt_count			= 0;
 debug_hook_test_trk_map			= -1;
 
 // notes

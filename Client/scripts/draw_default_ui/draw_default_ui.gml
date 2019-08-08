@@ -172,8 +172,9 @@ switch(udp_state){
         
         var _id, _map, _ip, _client_port, _host_port;
         var _ping, _ka_timer, _name, _idx, _timeout;
-        
+		
         for(_idx=0;_idx<_udp_clients;_idx++){
+			
             _id             = udp_client_list[| _idx];
             _map            = udp_client_maps[? _id];
             _ip             = _map[? "ip"];
@@ -188,7 +189,7 @@ switch(udp_state){
             //draw_text(_x,_y+140+20*_idx,string(_name)+" id: "+string(_id)+" ip: "+string(_ip)+" port: "+string(_port)+" ping: "+string(_ping)+" ka timer: "+string(_ka_timer));
             //draw_text(_x,_y+140+20*_idx,string_hash_to_newline("id: "+string(_id)+" "+string(_name)+" ping: "+string(_ping)+" hp: "+string(_host_port)));
 			draw_text(_x,_y+140+20*_idx,string(_id)+" "+string(_name)+" png: "+string(_ping)+" to: "+string(_timeout));
-            
+			
             draw_set_halign(fa_right);
                 if(_ready){
                     draw_set_color(c_lime);
@@ -469,22 +470,55 @@ if(udp_is_host() || udp_is_client()){
 	
 	// large packet delivery progress tracking test
 	
-	if(ds_exists(debug_hook_test_trk_map,ds_type_map)){
-		if(ds_map_exists(debug_hook_test_trk_map,"udplrg_progress")){
+	if(udp_is_client()){
+	
+		if(ds_exists(debug_hook_test_trk_map,ds_type_map)){
+			if(ds_map_exists(debug_hook_test_trk_map,"udplrg_progress")){
 			
-			draw_healthbar(
-				room_width  -3*_x,
-				room_height -2*_y,
-				room_width  -_x,
-				room_height -_y,
-				100 * debug_hook_test_trk_map[? "udplrg_progress"],
-				c_black,
-				c_white,
-				c_white,
-				0,
-				false,
-				false
-			);
+				draw_healthbar(
+					room_width  -3*_x,
+					room_height -2*_y,
+					room_width  -_x,
+					room_height -_y,
+					100 * debug_hook_test_trk_map[? "udplrg_progress"],
+					c_black,
+					c_white,
+					c_white,
+					0,
+					false,
+					false
+				);
+			}
+		}
+	}
+	
+	if(udp_is_host()){
+		
+		var _idx		= 0; 
+		var _trk_map	= undefined; 
+		var _progress	= 0;
+		var _client, _client_map, _trk_map;
+		
+		for(;_idx<ds_list_size(udp_client_list);++_idx){
+			
+			_client		= udp_client_list[| _idx];
+			_client_map = udp_client_maps[? _client];
+			
+			if(ds_map_exists(_client_map,"debug_hook_test_trk_map")){
+				
+				if(ds_exists(_client_map[? "debug_hook_test_trk_map"],ds_type_map)){
+					
+					_trk_map = _client_map[? "debug_hook_test_trk_map"];
+					_progress = _trk_map[? "udplrg_progress"];
+				}
+				
+				if(_progress > 0)
+					draw_healthbar(
+						0,_y+140+20*_idx,_x,_y+140+20*_idx+20,
+						100* _progress, c_black, c_white, c_white, 
+						0, false, false
+					);
+			}
 		}
 	}
 }

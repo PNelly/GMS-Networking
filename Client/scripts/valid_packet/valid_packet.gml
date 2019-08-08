@@ -155,6 +155,8 @@ if(_socket == rdvz_client_socket && _port == 0){
 // check flags and save packet if it doesn't make sense (Have to remove above return statement)
 if(!_valid_meta_data || !_valid_bool || !_valid_msg_id || !_consistent || !_valid_checksum){
 
+	++debug_invalid_pkt_count;
+
     var _time = current_time;
     
     var _note_string = "Invalid packet detected by rdvz_id "+string(rendevouz_id)+" udp_id "+string(udp_id)+"#"

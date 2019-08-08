@@ -18,6 +18,8 @@ for(;_idx_client<_num_clients;++_idx_client){
 	_client		= udp_client_list[| _idx_client];
 	_client_map = udp_client_maps[? _client];
 	
+	//show_debug_message("host managing large outbounds for client "+string(_client));
+	
 	var _udplrg_outbound_list = _client_map[? "udplrg_outbound_list"];
 	var _udplrg_outbound_map  = _client_map[? "udplrg_outbound_map"];
 	
@@ -85,10 +87,10 @@ for(;_idx_client<_num_clients;++_idx_client){
 			
 			if(_bytes_sent >= udplrg_max_bytes_per_frame
 			|| _pkts_sent  >= udplrg_max_packets_per_frame){
-				if(_bytes_sent >= udplrg_max_bytes_per_frame)
+				/*if(_bytes_sent >= udplrg_max_bytes_per_frame)
 					show_debug_message("exceeded bytes per frame");
 				if(_pkts_sent  >= udplrg_max_packets_per_frame)
-					show_debug_message("exceeded packets per frame");
+					show_debug_message("exceeded packets per frame");*/
 				break;
 			}
 		}
@@ -103,7 +105,7 @@ for(;_idx_client<_num_clients;++_idx_client){
 		break;
 }
 
-if(_bytes_sent > 0)
+/*if(_bytes_sent > 0)
 		show_debug_message("*^&$# "+string(get_timer()-_base_microseconds)+" elapsed"
 		+" packets sent "+string(_pkts_sent)+" bytes sent "+string(_bytes_sent)
-	);
+	);*/

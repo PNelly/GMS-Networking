@@ -10,7 +10,7 @@ var _socket = argument4;
 var _is_udp, _msg_id, _checksum, _udpr_id, _sqn;
 var _udpr_received, _valid_sqn, _sender_udp_id;
 var _udplrg_id, _udplrg_idx, _udplrg_num, _udplrg_len;
-var _lrgpkt_rcvd;
+var _lrgpkt_rcvd, _udp_has_payload, _sender_udp_id_non_neg;
 
         // -- // Check Packet Integrity // -- //
         
@@ -25,19 +25,23 @@ _msg_id     = buffer_read(_buffer,buffer_u16);
         
 if(_is_udp){ // only udp messages contain these header fields
 
-    _checksum       = buffer_read(_buffer,buffer_u32);
-    _sender_udp_id  = buffer_read(_buffer,buffer_s32);
-    _sqn            = buffer_read(_buffer,buffer_u32);
-    _udpr_id        = buffer_read(_buffer,buffer_u16);
+    _checksum			= buffer_read(_buffer,buffer_u32);
+    _sender_udp_id		= buffer_read(_buffer,buffer_s32);
+    _sqn				= buffer_read(_buffer,buffer_u32);
+    _udpr_id			= buffer_read(_buffer,buffer_u16);
 	
-	_udplrg_id		= buffer_read(_buffer,buffer_u16);
-	_udplrg_idx		= buffer_read(_buffer,buffer_u16);
-	_udplrg_num		= buffer_read(_buffer,buffer_u16);
-	_udplrg_len		= buffer_read(_buffer,buffer_u16);
+	_udplrg_id			= buffer_read(_buffer,buffer_u16);
+	_udplrg_idx			= buffer_read(_buffer,buffer_u16);
+	_udplrg_num			= buffer_read(_buffer,buffer_u16);
+	_udplrg_len			= buffer_read(_buffer,buffer_u16);
 	
-    _udpr_received  = false;
-    _valid_sqn      = false;
-    _lrgpkt_rcvd	= false;
+    _udpr_received		= false;
+    _valid_sqn			= false;
+    _lrgpkt_rcvd		= false;
+	
+	_udp_has_payload	= (buffer_get_size(_buffer) > udp_header_size);
+	
+	_sender_udp_id_non_neg = (_sender_udp_id >= 0);
 	
     /*
         following checks will prevent a crash in udp_host_valid_sqn,
@@ -45,7 +49,7 @@ if(_is_udp){ // only udp messages contain these header fields
     */
     
     // ignore self-referential packets (can happen in broadcasts)
-    if(_sender_udp_id >= 0 
+    if(_sender_udp_id_non_neg
     && _sender_udp_id == udp_id
     && (udp_is_host() || udp_is_client())) exit;
       
@@ -53,7 +57,7 @@ if(_is_udp){ // only udp messages contain these header fields
     // (confusion can occur around disconnects)
     if(_msg_id == udp_msg.udp_migration_meta_client
     || _msg_id == udp_msg.udp_migration_meta_host){
-        if(_sender_udp_id >= 0){
+        if(_sender_udp_id_non_neg){
             if(udp_is_host() && !ds_map_exists(udp_client_maps,_sender_udp_id))
                 exit;
             if(udp_is_client()
@@ -63,25 +67,32 @@ if(_is_udp){ // only udp messages contain these header fields
         }
     }
     
-    // if host, ignore lan broadcasts from other hosts
+    // if host, ignore lan broadcasts from other hosts //
+	
     if(udp_is_host() && _msg_id == udp_msg.udp_host_lan_broadcast)
         exit;
     
     if(udp_is_host()){
-        if(_sender_udp_id < 0) 
+		
+        if(!_sender_udp_id_non_neg){
             _sender_udp_id  = udp_host_determine_client(_ip,_port);
-        if(_sender_udp_id >= 0){ // only call udpr & stamp methods for accepted udp clients
+			_sender_udp_id_non_neg = (_sender_udp_id >= 0);
+		}
+		
+        if(_sender_udp_id_non_neg){ // only call udpr & stamp methods for accepted udp clients
             _valid_sqn      = udp_host_valid_seq_num(_sender_udp_id,_msg_id,_sqn);
             if(_udpr_id != 0)      
                 _udpr_received  = udp_host_reliable_received(_sender_udp_id,_udpr_id,_udplrg_id,_udplrg_idx);
         }
+		
     } else {
         _valid_sqn     = udp_client_valid_seq_num(_msg_id,_sqn);
         if(_udpr_id != 0)    
             _udpr_received  = udp_client_reliable_received(_udpr_id,_udplrg_id,_udplrg_idx);
     }
 	
-	// handle large messages arriving piecemeal
+	// handle large messages arriving piecemeal //
+	
 	if(_udplrg_id > 0){
 		if(udp_is_host()){
 			
@@ -502,7 +513,7 @@ if(_is_udp){
     
         // Prospective Player Received LAN Host Broadcast
         case udp_msg.udp_host_lan_broadcast:
-            if(rendevouz_state != rdvz_states.rdvz_none){
+            if(rendevouz_state != rdvz_states.rdvz_none && _udp_has_payload){
                 // don't care about sqn or reliable since no established cnxn
                 
                 // record broadcast info into data structure of local network hosts
@@ -553,7 +564,7 @@ if(_is_udp){
         
         // Prospective Player Received LAN Idle Broadcast
         case udp_msg.udp_idle_lan_broadcast:
-            if(rendevouz_state != rdvz_states.rdvz_none){
+            if(rendevouz_state != rdvz_states.rdvz_none && _udp_has_payload){
                 // record broadcast info into data structure of lan members
                 
                 var _rdvz_id        = buffer_read(_buffer, buffer_u16);
@@ -599,7 +610,7 @@ if(_is_udp){
         case udp_msg.udp_migration_meta_host:
         case udp_msg.udp_migration_meta_client:
         
-            if(udp_is_host() || udp_is_client()){
+            if((udp_is_host() || udp_is_client()) && _udp_has_payload){
             
                 var _session_id         = buffer_read(_buffer,buffer_string);
                 var _broadcaster_id     = buffer_read(_buffer,buffer_s32);
@@ -765,7 +776,7 @@ if(_is_udp){
         
         // Received Ping Callback from Client
         case udp_msg.udp_ping_acknowledge:
-            if(udp_is_host()){
+            if(udp_is_host() && _udp_has_payload){
                 
                 if(ds_map_exists(udp_client_maps,_sender_udp_id)){
                     var _timeA = buffer_read(_buffer,buffer_u32);
@@ -787,7 +798,7 @@ if(_is_udp){
             || udp_state == udp_states.udp_client_game_init
             || udp_state == udp_states.udp_client_game){
                 
-                if(!_udpr_received)
+                if(!_udpr_received && _udp_has_payload)
                     udp_id = buffer_read(_buffer,buffer_u16);
             }
         break;
@@ -796,7 +807,7 @@ if(_is_udp){
         // Received Acknowledgement of a Reliable Packet
         case udp_msg.udp_reliable_acknowledge:
 		
-			if(udp_is_host() || udp_is_client()){
+			if((udp_is_host() || udp_is_client()) && _udp_has_payload){
 			
 				var _ack_id		= buffer_read(_buffer,buffer_u16);
 				var _udplrg_id	= buffer_read(_buffer,buffer_u16);
@@ -804,7 +815,7 @@ if(_is_udp){
 				
 				if(udp_is_client())
 					udp_client_reliable_acknowledged(_ack_id,_udplrg_id,_udplrg_idx);
-				else if(udp_is_host() && _sender_udp_id > 0)
+				else if(udp_is_host() && _sender_udp_id_non_neg)
 					udp_host_reliable_acknowledged(_sender_udp_id,_ack_id,_udplrg_id,_udplrg_idx);
 			}
 		
@@ -815,8 +826,21 @@ if(_is_udp){
         case udp_msg.udp_refresh_lobby:
             if(udp_state == udp_states.udp_client_lobby){
                   
-                if(!_udpr_received && _valid_sqn){
+				/*if(!_udpr_received && _valid_sqn){
+					if(!_udp_has_payload)
+						show_message_async("no payload in lobby refresh, buffer size "
+							+string(buffer_get_size(_buffer))+" buffer tell "
+							+string(buffer_tell(_buffer))
+						);
+				}*/
+				  
+                if(!_udpr_received && _valid_sqn && _udp_has_payload){
                 
+					show_debug_message("refresh -- buffer size "
+						+string(buffer_get_size(_buffer))
+						+" buffer tell "+string(buffer_tell(_buffer))
+					);
+				
                     udp_session_id              = buffer_read(_buffer,buffer_string);
                     udp_max_clients             = buffer_read(_buffer,buffer_u8);
                     show_debug_message("received session id "+string(udp_session_id));
@@ -864,7 +888,7 @@ if(_is_udp){
             if(udp_is_host()){
                 
                 if(ds_map_exists(udp_client_maps,_sender_udp_id)){
-                    if(!_udpr_received){
+                    if(!_udpr_received && _udp_has_payload){
                         var _chat = buffer_read(_buffer,buffer_string);
                         // pass along to other clients, need to include id of original sender
                         buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
@@ -876,7 +900,7 @@ if(_is_udp){
                 }
             }
             
-            if(udp_is_client()){
+            if(udp_is_client() && _udp_has_payload){
                 
                 var _chat_sender_udp_id = buffer_read(_buffer,buffer_s32);
                 var _chat = buffer_read(_buffer,buffer_string);
@@ -889,47 +913,50 @@ if(_is_udp){
         // Received Username
         case udp_msg.udp_username:
         
-            if(udp_state == udp_states.udp_host_lobby){
-                if(ds_map_exists(udp_client_maps,_sender_udp_id)){
-                    if(!_udpr_received){
-                        var _name = buffer_read(_buffer,buffer_string);
-                        var _map  = udp_client_maps[? _sender_udp_id];
-                        _map[? "username"] = _name;
-                        udp_host_refresh_lobby();
-                    }
-                }
-            }
+			if(_udp_has_payload){
+		
+	            if(udp_state == udp_states.udp_host_lobby){
+	                if(ds_map_exists(udp_client_maps,_sender_udp_id)){
+	                    if(!_udpr_received){
+	                        var _name = buffer_read(_buffer,buffer_string);
+	                        var _map  = udp_client_maps[? _sender_udp_id];
+	                        _map[? "username"] = _name;
+	                        udp_host_refresh_lobby();
+	                    }
+	                }
+	            }
             
-            if(udp_state == udp_states.udp_host_game){
-                if(ds_map_exists(udp_client_maps,_sender_udp_id)){
-                    if(!_udpr_received){
-                        var _name = buffer_read(_buffer,buffer_string);
-                        var _map  = udp_client_maps[? _sender_udp_id];
-                        _map[? "username"] = _name;
+	            if(udp_state == udp_states.udp_host_game){
+	                if(ds_map_exists(udp_client_maps,_sender_udp_id)){
+	                    if(!_udpr_received){
+	                        var _name = buffer_read(_buffer,buffer_string);
+	                        var _map  = udp_client_maps[? _sender_udp_id];
+	                        _map[? "username"] = _name;
                         
-                        buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
-                        buffer_write(message_buffer,buffer_s32,_sender_udp_id);
-                        buffer_write(message_buffer,buffer_string,_name);
-                        udp_host_send_all(udp_msg.udp_username,true,message_buffer);  
-                    }
-                }
-            }
+	                        buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
+	                        buffer_write(message_buffer,buffer_s32,_sender_udp_id);
+	                        buffer_write(message_buffer,buffer_string,_name);
+	                        udp_host_send_all(udp_msg.udp_username,true,message_buffer);  
+	                    }
+	                }
+	            }
             
-            if(udp_state == udp_states.udp_client_game){
-                var _client = buffer_read(_buffer,buffer_s32);
-                var _name   = buffer_read(_buffer,buffer_string);
+	            if(udp_state == udp_states.udp_client_game){
+	                var _client = buffer_read(_buffer,buffer_s32);
+	                var _name   = buffer_read(_buffer,buffer_string);
                 
-                var _map = udp_client_maps[? _client];
-                if(!is_undefined(_map))
-                    _map[? "username"] = _name;
-            }
+	                var _map = udp_client_maps[? _client];
+	                if(!is_undefined(_map))
+	                    _map[? "username"] = _name;
+	            }
+			}
             
         break;
         
         // received peer connection info
         case udp_msg.udp_connection_params:
         
-            if(udp_is_host() && !_udpr_received && _valid_sqn){
+            if(udp_is_host() && !_udpr_received && _valid_sqn && _udp_has_payload){
                 
                 var _public_ip          = buffer_read(_buffer,buffer_string);
                 var _public_host_port   = buffer_read(_buffer,buffer_s32);
@@ -955,7 +982,7 @@ if(_is_udp){
                 }
             }
             
-            if(udp_is_client() && !_udpr_received && _valid_sqn){
+            if(udp_is_client() && !_udpr_received && _valid_sqn && _udp_has_payload){
             
                 var _num_entries = buffer_read(_buffer,buffer_u8);
                 var _udp_id, _map;
@@ -1011,7 +1038,7 @@ if(_is_udp){
         // received peer connection call for call & response
         case udp_msg.udp_peer_call:
         
-            if(udp_is_host() || udp_is_client()){
+            if((udp_is_host() || udp_is_client()) && _udp_has_payload){
             
                 var _sender     = buffer_read(_buffer, buffer_s32);
                 var _time_stamp = buffer_read(_buffer, buffer_u32);
@@ -1085,7 +1112,7 @@ if(_is_udp){
         // received peer connection response for call & response
         case udp_msg.udp_peer_response:
         
-            if(udp_is_host() || udp_is_client()){
+            if((udp_is_host() || udp_is_client()) && _udp_has_payload){
             
                 var _sender     = buffer_read(_buffer,buffer_s32);
                 var _time_stamp = buffer_read(_buffer,buffer_u32);
@@ -1127,39 +1154,42 @@ if(_is_udp){
         // backup host receiving notice that peer dropped host connection
         case udp_msg.udp_migrate_lost_host:
         
-            var _peer_id = buffer_read(_buffer,buffer_s32);
+			if(_udp_has_payload){
+		
+	            var _peer_id = buffer_read(_buffer,buffer_s32);
         
-            if(udp_is_client() 
-            && udp_client_is_next_host()){
+	            if(udp_is_client() 
+	            && udp_client_is_next_host()){
                 
-                if(!ds_map_exists(udp_client_maps,_peer_id)) exit;
+	                if(!ds_map_exists(udp_client_maps,_peer_id)) exit;
                     
-                var _map = udp_client_maps[? _peer_id];
+	                var _map = udp_client_maps[? _peer_id];
                                             
-                if(migrate_state == migrate_states.client_to_host_verifying){
+	                if(migrate_state == migrate_states.client_to_host_verifying){
                 
-                    show_debug_message("Received dropped host notice from: "+string(_peer_id));
+	                    show_debug_message("Received dropped host notice from: "+string(_peer_id));
                 
-                    _map[? "dropped_host"] = true;
+	                    _map[? "dropped_host"] = true;
                   
-                    udp_client_check_takeover();
-                }
-            }
+	                    udp_client_check_takeover();
+	                }
+	            }
             
-            if(udp_is_host()){
+	            if(udp_is_host()){
             
-                buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
-                buffer_write(message_buffer,buffer_s32,udp_id);
-                buffer_write(message_buffer,buffer_string,udp_session_id);
-                udp_host_send(_peer_id,udp_msg.udp_migrate_new_host,false,message_buffer,-1);
-            }
+	                buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
+	                buffer_write(message_buffer,buffer_s32,udp_id);
+	                buffer_write(message_buffer,buffer_string,udp_session_id);
+	                udp_host_send(_peer_id,udp_msg.udp_migrate_new_host,false,message_buffer,-1);
+	            }
+			}
         
         break;
         
         // client receiving notice that a session peer is taking over as host
         case udp_msg.udp_migrate_new_host:
         
-            if(udp_is_host() || udp_is_client()){
+            if((udp_is_host() || udp_is_client()) && _udp_has_payload){
             
                 var _new_host_id    = buffer_read(_buffer,buffer_s32);
                 var _new_session_id = buffer_read(_buffer,buffer_string);
@@ -1186,7 +1216,7 @@ if(_is_udp){
         case udp_msg.udp_migration_stats_info:
             if(udp_is_host()){
             
-                if(!_udpr_received && _valid_sqn){
+                if(!_udpr_received && _valid_sqn && _udp_has_payload){
             
                     var _connected  = buffer_read(_buffer,buffer_bool);
                     var _avg_ping   = buffer_read(_buffer,buffer_u16);
@@ -1213,7 +1243,7 @@ if(_is_udp){
         // Client receiving migration order from host
         case udp_msg.udp_migration_order:
             if(udp_is_client()){
-                if(!_udpr_received && _valid_sqn){
+                if(!_udpr_received && _valid_sqn && _udp_has_payload){
                 
                     var _idx, _client, _map, _migration_order;
                 
@@ -1254,7 +1284,7 @@ if(_is_udp){
         case udp_msg.udp_ready:
             if(udp_state == udp_states.udp_host_lobby){
                 if(ds_map_exists(udp_client_maps,_sender_udp_id)){
-                    if(!_udpr_received && _valid_sqn){
+                    if(!_udpr_received && _valid_sqn && _udp_has_payload){
                         var _ready  = buffer_read(_buffer,buffer_bool);
                         var _map    = udp_client_maps[? _sender_udp_id];
                         _map[? "ready"] = _ready;
@@ -1266,7 +1296,7 @@ if(_is_udp){
         
         // Received unready all notice from host
         case udp_msg.udp_host_unready_all:
-            if(!_udpr_received && _valid_sqn){
+            if(!_udpr_received && _valid_sqn && _udp_has_payload){
                 if(udp_state == udp_states.udp_client_lobby){
                 
                     var _idx, _client, _map;
@@ -1285,7 +1315,7 @@ if(_is_udp){
         
         // Received game init message
         case udp_msg.udp_game_init:
-            if(!_udpr_received && _valid_sqn){
+            if(!_udpr_received && _valid_sqn && _udp_has_payload){
                 if(udp_state == udp_states.udp_client_lobby){
                     udp_client_begin_game_init();
                 }
@@ -1294,7 +1324,7 @@ if(_is_udp){
         
         // client is finished initalizing
         case udp_msg.udp_game_init_complete:
-            if(!_udpr_received && _valid_sqn){
+            if(!_udpr_received && _valid_sqn && _udp_has_payload){
             
                 // new client joining game in progress
                 if(udp_state == udp_states.udp_host_game){
@@ -1318,7 +1348,7 @@ if(_is_udp){
         
         // Client receiving notice to start game
         case udp_msg.udp_game_start:
-            if(!_udpr_received && _valid_sqn){
+            if(!_udpr_received && _valid_sqn && _udp_has_payload){
                 if(udp_state == udp_states.udp_client_game_init){
                     udp_client_game_start();
                 }
@@ -1327,7 +1357,7 @@ if(_is_udp){
         
         // Client receiving notice of departure of other client
         case udp_msg.udp_client_left:
-            if(!_udpr_received && _valid_sqn){
+            if(!_udpr_received && _valid_sqn && _udp_has_payload){
                 if(udp_is_client()){
                     var _client = buffer_read(_buffer,buffer_s32);
                     udp_client_remove_client(_client);
@@ -1338,7 +1368,7 @@ if(_is_udp){
         // Client joining in progress receiving game state
         case udp_msg.udp_game_bring_to_speed:
             if(udp_state == udp_states.udp_client_lobby){
-                if(!_udpr_received && _valid_sqn){
+                if(!_udpr_received && _valid_sqn && _udp_has_payload){
                 
                     udp_session_id              = buffer_read(_buffer,buffer_string);
                     udp_max_clients             = buffer_read(_buffer,buffer_u8);
@@ -1380,7 +1410,7 @@ if(_is_udp){
         // Existing client being told about a new in game arrival
         case udp_msg.udp_game_client_joined:
             if(udp_state == udp_states.udp_client_game){
-                if(!_udpr_received && _valid_sqn){
+                if(!_udpr_received && _valid_sqn && _udp_has_payload){
                     
                     var _id, _ping, _name;
                     
@@ -1420,7 +1450,7 @@ if(_is_udp){
             || udp_state == udp_states.udp_client_game_ending
             || udp_state == udp_states.udp_client_game_post){
             
-                if(_valid_sqn){
+                if(_valid_sqn && _udp_has_payload){
                 
                     var _num_clients = buffer_read(_buffer,buffer_u8);
                     var _idx, _client, _map, _ping;

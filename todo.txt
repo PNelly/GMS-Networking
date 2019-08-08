@@ -45,8 +45,8 @@ X Receipt verification hooks
 	July of 2019
 
 > sending of multipart packets
-	(if a non-relialbe packet/broadcast > MTU problems could arise during testing)
 	- don't forget to change MTU back to something reasonable
+	(if a non-relialbe packet/broadcast > MTU problems could arise during testing)
 	- once messages reach a certain size they create a udp flood
 		- outbound large packets need to be metered over multiple frames
 		- 5x10^6 / room_speed / 8 will give frame threshold for a 5Mbps upload connection

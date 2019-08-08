@@ -77,7 +77,7 @@ udp_header_offset_udplrg_num	= udp_header_offset_udplrg_idx	+buffer_sizeof(buffe
 udp_header_offset_udplrg_len	= udp_header_offset_udplrg_num	+buffer_sizeof(buffer_u16);
 
 udp_max_data_size				= udp_max_transmission_unit - udp_header_size;
-udplrg_max_bits_per_sec			= 5000000;
+udplrg_max_bits_per_sec			= 3000000;
 udplrg_max_bytes_per_frame		= floor(udplrg_max_bits_per_sec / 8 / room_speed);
 udplrg_max_packets_per_sec		= 1000;
 udplrg_max_packets_per_frame	= floor(udplrg_max_packets_per_sec / room_speed);
