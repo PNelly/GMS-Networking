@@ -7,6 +7,6 @@ var _url    = argument1;
 var _port   = argument2;
 var _buffer = argument3;
 
-var _size   = buffer_get_size(_buffer);
+var _size   = buffer_tell(_buffer);
 
 network_send_udp(_socket,_url,_port,_buffer,_size);

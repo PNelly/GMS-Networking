@@ -4,7 +4,11 @@
 // keep alive packet to any that hits -1
 
 var _num_clients = ds_list_size(udp_client_list);
-var _idx, _id, _map, _timer;
+var _idx, _id, _map;
+
+// need to seek buffer so checksums run properly
+
+buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
 
 if(_num_clients > 0){
     for(_idx=0;_idx<_num_clients;_idx++){
@@ -17,19 +21,3 @@ if(_num_clients > 0){
         }        
     }    
 }
-
-/*
-if(udp_keep_alive_timer >= 0)
-    udp_keep_alive_timer--;
-
-if(udp_keep_alive_timer < 0){
-    udp_keep_alive_timer = irandom_range(udp_keep_alive_interval,udp_keep_alive_interval*2);
-    
-    var _num_clients = ds_list_size(udp_client_list);
-    
-    if(_num_clients > 0){
-        udp_host_send_all(udp_msg.udp_keep_alive,false,message_buffer);
-    }
-        
-}*/
-

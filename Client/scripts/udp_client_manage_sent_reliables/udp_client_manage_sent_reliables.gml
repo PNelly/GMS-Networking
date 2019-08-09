@@ -15,8 +15,15 @@ for(_idx=0;_idx<_size;_idx++){
     _map[? "resend_timer"] = _map[? "resend_timer"] -1;
     
     if(_map[? "resend_timer"] < 0){
+		
         _buffer = _map[? "buffer"];
+		
+		// seek buffer to get correct sending size
+		
+		buffer_seek(_buffer,buffer_seek_start,_map[? "size"]);
+		
         udp_send_packet(udp_client_socket,udp_host_ip,udp_client_host_port,_buffer);
+		
         if(udp_ping > 0)
             _map[? "resend_timer"] = ceil( udp_ping * udp_reliable_resend_factor);
         if(udp_ping == 0)
@@ -24,5 +31,4 @@ for(_idx=0;_idx<_size;_idx++){
             
         //show_debug_message("client resent reliable packet: "+string(_id));
     }    
-
 }

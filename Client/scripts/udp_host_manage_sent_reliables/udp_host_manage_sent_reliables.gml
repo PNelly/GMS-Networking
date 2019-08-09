@@ -6,7 +6,7 @@
 var _num_clients = ds_list_size(udp_client_list);
 var _client_id, _client_map, _num_packets, _packet_list, _packet_maps;
 var _packet_id, _this_packet_map, _buffer;
-var _ip, _port;
+var _ip, _port, _ping;
 
 var _idx1, _idx2;
 
@@ -24,13 +24,20 @@ for(_idx1=0;_idx1<_num_clients;_idx1++){
     
     for(_idx2=0;_idx2<_num_packets;_idx2++){
     
-        _packet_id = _packet_list[| _idx2];
-        _this_packet_map = _packet_maps[? _packet_id];
-        _this_packet_map[? "resend_timer"] = _this_packet_map[? "resend_timer"] -1;
-        
+        _packet_id							= _packet_list[| _idx2];
+        _this_packet_map					= _packet_maps[? _packet_id];
+        _this_packet_map[? "resend_timer"]	= _this_packet_map[? "resend_timer"] -1;
+		
         if(_this_packet_map[? "resend_timer"] < 0){
+			
             _buffer = _this_packet_map[? "buffer"];
+			
+			// seek buffer to get correct sending size
+			
+			buffer_seek(_buffer,buffer_seek_start,_this_packet_map[? "size"]);
+			
             udp_send_packet(udp_host_socket,_ip,_port,_buffer);
+			
             if(_ping > 0)
                 _this_packet_map[? "resend_timer"] = ceil( _ping * udp_reliable_resend_factor);
             if(_ping == 0)
@@ -38,7 +45,5 @@ for(_idx1=0;_idx1<_num_clients;_idx1++){
                 
             //show_debug_message("host resent udpr: "+string(_packet_id)+" to client: "+string(_client_id));
         }
-    
     }
-
 }

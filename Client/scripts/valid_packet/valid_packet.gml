@@ -8,9 +8,9 @@ var _port   = argument1;
 var _socket = argument2;
 var _buffer = argument3;
 
-var _valid_rdvz_meta = false;
-var _valid_udp_meta  = false;
-var _valid_meta_data = false;
+var _valid_rdvz_meta	= false;
+var _valid_udp_meta		= false;
+var _valid_meta_data	= false;
 
 // first bytes needed to distinguish lan broadcast from a session host packet
 var _bool_u8;
@@ -18,8 +18,10 @@ var _msg_id;
 var _lan_broadcast;
 var _peer_to_peer;
 
-if(buffer_get_size(_buffer) == 0)
+if(buffer_get_size(_buffer) == 0){
+	show_debug_message("vp - empty buffer");
 	return false;
+}
 
 buffer_seek(_buffer,buffer_seek_start,0);
 
@@ -107,7 +109,6 @@ _valid_meta_data = (_valid_rdvz_meta || _valid_udp_meta);
 
 var _checksumA  = -1;
 var _checksumB  = -2;
-var _udplrg_len = buffer_peek(_buffer,udp_header_offset_udplrg_len,buffer_u16);
 
 var _valid_bool        = false;
 var _valid_rdvz_msg_id = false;
@@ -118,9 +119,19 @@ var _valid_checksum    = false;
 _valid_bool = (_bool_u8 == 0 || _bool_u8 == 1);
 
 if(_bool_u8 == 1){ // is udp and contains checksum
-    _checksumA  = buffer_read(_buffer,buffer_u32);
-	_checksumB  = buffer_checksum(udp_header_size,_buffer,_udplrg_len);
+	var _udplrg_len = buffer_peek(_buffer,udp_header_offset_udplrg_len,buffer_u16);
+    _checksumA		= buffer_read(_buffer,buffer_u32);
+	_checksumB		= buffer_checksum(udp_header_size,_buffer,_udplrg_len);
     _valid_checksum = (_checksumA == _checksumB);
+	
+	if(_checksumA != _checksumB)
+		show_debug_message("vp chksum, msg id "+string(_msg_id)
+			+" A: "+string(_checksumA)
+			+" B: "+string(_checksumB)
+			+" _udplrg_len: "+string(_udplrg_len)
+			+" buffgetlen: "+string(buffer_get_size(_buffer))
+		);
+	
 } else if (_bool_u8 == 0){
     _valid_checksum = true; // no checksum on tcp
 }

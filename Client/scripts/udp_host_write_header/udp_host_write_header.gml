@@ -12,9 +12,12 @@ var _udplrg_idx  = argument5;
 var _udplrg_num  = argument6;
 var _udplrg_len  = argument7;
 
+var _start_pos   = buffer_tell(_buffer);
+
 var _udpr_id;
 
 buffer_seek(_buffer,buffer_seek_start,0);
+
 buffer_write(_buffer,buffer_bool,true); // is udp (true)
 buffer_write(_buffer,buffer_u16,_msg_id);
 buffer_write(_buffer,buffer_u32,buffer_checksum(udp_header_size,_buffer,_udplrg_len));
@@ -30,5 +33,7 @@ buffer_write(_buffer,buffer_u16,_udplrg_id);
 buffer_write(_buffer,buffer_u16,_udplrg_idx);
 buffer_write(_buffer,buffer_u16,_udplrg_num);
 buffer_write(_buffer,buffer_u16,_udplrg_len);
+
+buffer_seek(_buffer,buffer_seek_start,_start_pos);
 
 return _udpr_id;

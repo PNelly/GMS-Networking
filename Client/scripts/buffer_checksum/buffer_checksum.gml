@@ -12,8 +12,14 @@ var _start_pos	= buffer_tell(_buffer);
 
 // check empty buffer
 
-if(_size == 0 || buffer_get_size(_buffer) == 0)
+if(_size == 0 || buffer_get_size(_buffer) == 0){
+	
+	show_debug_message("checksum - empty buffer, _size "
+		+string(_size)+" buffgetsize "+string(buffer_get_size(_buffer))
+	);
+	
 	return 0;
+}
 
 buffer_seek(_buffer,buffer_seek_start,_offset);
 
@@ -22,7 +28,13 @@ buffer_seek(_buffer,buffer_seek_start,_offset);
 if(buffer_tell(_buffer) >= _size
 || buffer_tell(_buffer) >= buffer_get_size(_buffer)){
 	
+	show_debug_message("checksum - tell "+string(buffer_tell(_buffer))
+		+" >= _size "+string(_size)
+		+" OR >= buffgetsize "+string(buffer_get_size(_buffer))
+	);
+	
 	buffer_seek(_buffer,buffer_seek_start,_start_pos);
+	
 	return 0;
 }
 

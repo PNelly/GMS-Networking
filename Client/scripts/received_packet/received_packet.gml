@@ -861,10 +861,16 @@ if(_is_udp){
                         _ready  = buffer_read(_buffer,buffer_bool);
                         _name   = buffer_read(_buffer,buffer_string);
                         
+						show_debug_message("refresh id "+string(_id)
+							+" ping "+string(_ping)
+							+" ready "+string(_ready)
+							+" name "+string(_name)
+						);
+						
                         if(!ds_map_exists(udp_client_maps,_id)){
                             udp_client_define_client(_id,_ping,_ready,_name);
                         } else {
-                            show_debug_message("refresh lobby id "+string(_id));
+                            //show_debug_message("refresh lobby id "+string(_id));
                             _map = udp_client_maps[? _id];
                             if(!ds_exists(_map,ds_type_map))
                                 show_message_async("no map for client "+string(_id)+" key exists? "+string(ds_map_exists(udp_client_maps,_id)));
@@ -914,13 +920,14 @@ if(_is_udp){
         case udp_msg.udp_username:
         
 			if(_udp_has_payload){
-		
+
 	            if(udp_state == udp_states.udp_host_lobby){
 	                if(ds_map_exists(udp_client_maps,_sender_udp_id)){
 	                    if(!_udpr_received){
 	                        var _name = buffer_read(_buffer,buffer_string);
 	                        var _map  = udp_client_maps[? _sender_udp_id];
 	                        _map[? "username"] = _name;
+								show_debug_message("host received name "+string(_name)+" from client "+string(_sender_udp_id));
 	                        udp_host_refresh_lobby();
 	                    }
 	                }
@@ -932,7 +939,7 @@ if(_is_udp){
 	                        var _name = buffer_read(_buffer,buffer_string);
 	                        var _map  = udp_client_maps[? _sender_udp_id];
 	                        _map[? "username"] = _name;
-                        
+								show_debug_message("host received name "+string(_name)+" from client "+string(_sender_udp_id));
 	                        buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
 	                        buffer_write(message_buffer,buffer_s32,_sender_udp_id);
 	                        buffer_write(message_buffer,buffer_string,_name);
@@ -944,7 +951,7 @@ if(_is_udp){
 	            if(udp_state == udp_states.udp_client_game){
 	                var _client = buffer_read(_buffer,buffer_s32);
 	                var _name   = buffer_read(_buffer,buffer_string);
-                
+						show_debug_message("client received name "+string(_name)+" from host for client "+string(_client));
 	                var _map = udp_client_maps[? _client];
 	                if(!is_undefined(_map))
 	                    _map[? "username"] = _name;

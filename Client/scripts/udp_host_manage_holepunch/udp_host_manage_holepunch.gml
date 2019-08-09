@@ -15,7 +15,7 @@ if(ds_list_size(udp_hole_punch_list) > 0){
 		udp_msg.udp_hole_punch,
 		false,
 		0, 1, 1,
-		buffer_get_size(message_buffer)
+		udp_header_size
 	);
     
     var _key, _map, _ip, _port, _idx;

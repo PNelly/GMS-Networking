@@ -16,7 +16,7 @@ if(udp_hole_punch_timer > 0){
 			udp_msg.udp_hole_punch,
 			false,
 			0, 1, 1,
-			buffer_get_size(message_buffer)
+			udp_header_size
 		);
 		
         udp_send_packet(udp_client_socket,udp_host_to_join_ip,udp_host_to_join_port,message_buffer);

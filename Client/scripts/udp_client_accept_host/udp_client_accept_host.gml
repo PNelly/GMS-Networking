@@ -14,6 +14,7 @@ if(_ip != udp_host_to_join_ip || _port != udp_host_to_join_port)
     exit; // unrecognized sender
 
 show_debug_message("UDP CLIENT ACCEPT HOST");
+show_debug_message("network_username "+string(network_username));
 
 udp_state               = udp_states.udp_client_lobby;
 udp_host_ip             = udp_host_to_join_ip;
@@ -24,12 +25,17 @@ udp_host_to_join_port   = -1;
 udp_client_init_timers();
 
 // give username to host
+
 buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
+
 buffer_write(message_buffer,buffer_string,network_username);
+
 udp_client_send(udp_msg.udp_username,true,message_buffer,-1);
 
 // share public facing connection info
+
 udp_client_share_connection_params();
 
 // discnnect from rdvz server
+
 rdvz_disconnect();

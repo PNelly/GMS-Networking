@@ -16,6 +16,7 @@ if(rdvz_udp_ping_timer < 0){
 } else {
 
     buffer_seek(message_buffer,buffer_seek_start,rdvz_header_size);
+	
     buffer_write(message_buffer,buffer_u16,rendevouz_id);
 
     rdvz_client_send(true, rdvz_msg.rdvz_udp_ping_host_w_host_socket,message_buffer);

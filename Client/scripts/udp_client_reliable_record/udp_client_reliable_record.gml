@@ -16,6 +16,7 @@ var _packet_map = ds_map_create();
 _packet_map[? "id"]     = _packet_id;
 _packet_map[? "msg_id"] = _msg_id;
 _packet_map[? "buffer"] = _store_buffer;
+_packet_map[? "size"]	= _size;
 
 if(udp_ping > 0)
     _packet_map[? "resend_timer"] = ceil( udp_ping * udp_reliable_resend_factor );
