@@ -19,7 +19,6 @@ else if(_new_num > 0 && _new_num <= udp_max_clients_cap)
 if(_new_num < ds_list_size(udp_client_list)){
 
     var _client, _map;
-    var _idx;
     
     while( ds_list_size(udp_client_list) > _new_num){
     

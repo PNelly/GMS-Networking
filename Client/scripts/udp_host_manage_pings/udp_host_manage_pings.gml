@@ -13,7 +13,7 @@ if(udp_ping_timer < 0){
     
         buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
         buffer_write(message_buffer,buffer_u32, milliseconds_u32);
-        udp_host_send_all(udp_msg.udp_ping_request,false,message_buffer);
+        udp_host_send_all(udp_msg.udp_ping_request,false,message_buffer,true);
     
     }
 }

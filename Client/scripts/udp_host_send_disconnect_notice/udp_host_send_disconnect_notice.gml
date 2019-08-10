@@ -4,4 +4,4 @@
 
 var _client = argument0;
 
-udp_host_send(_client,udp_msg.udp_disconnect_instruction,false,message_buffer,-1);
+udp_host_send(_client,udp_msg.udp_disconnect_instruction,false,message_buffer,-1,false);

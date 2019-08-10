@@ -67,6 +67,10 @@ for(;_idx_client<_num_clients;++_idx_client){
 			
 			udp_host_reliable_record(_client,_udpr_id,_frag_buffer,_frag_size);
 			
+			// seek buffer to ensure correct outbound sizing
+			
+			buffer_seek(_frag_buffer,buffer_seek_start,_frag_size);
+			
 			udp_send_packet(
 				udp_host_socket,
 				_client_map[? "ip"],

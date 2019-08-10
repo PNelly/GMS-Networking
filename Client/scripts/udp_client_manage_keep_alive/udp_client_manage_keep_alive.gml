@@ -7,5 +7,5 @@ if(udp_keep_alive_timer >= 0)
 
 if(udp_keep_alive_timer < 0){
     udp_keep_alive_timer = udp_get_keep_alive_time();
-    udp_client_send(udp_msg.udp_keep_alive,false,message_buffer,-1);
+    udp_client_send(udp_msg.udp_keep_alive,false,message_buffer,-1,false);
 }

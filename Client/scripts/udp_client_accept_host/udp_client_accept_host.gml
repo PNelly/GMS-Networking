@@ -30,7 +30,7 @@ buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
 
 buffer_write(message_buffer,buffer_string,network_username);
 
-udp_client_send(udp_msg.udp_username,true,message_buffer,-1);
+udp_client_send(udp_msg.udp_username,true,message_buffer,-1,true);
 
 // share public facing connection info
 

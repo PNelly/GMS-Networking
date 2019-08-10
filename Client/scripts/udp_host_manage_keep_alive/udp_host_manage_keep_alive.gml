@@ -6,10 +6,6 @@
 var _num_clients = ds_list_size(udp_client_list);
 var _idx, _id, _map;
 
-// need to seek buffer so checksums run properly
-
-buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
-
 if(_num_clients > 0){
     for(_idx=0;_idx<_num_clients;_idx++){
         _id     = udp_client_list[| _idx];
@@ -17,7 +13,7 @@ if(_num_clients > 0){
         _map[? "keep_alive_timer"] = _map[? "keep_alive_timer"] -1;
         if(_map[? "keep_alive_timer"] < 0){
             _map[? "keep_alive_timer"] = udp_get_keep_alive_time();
-            udp_host_send(_id,udp_msg.udp_keep_alive,false,message_buffer,-1);
+            udp_host_send(_id,udp_msg.udp_keep_alive,false,message_buffer,-1,false);
         }        
     }    
 }

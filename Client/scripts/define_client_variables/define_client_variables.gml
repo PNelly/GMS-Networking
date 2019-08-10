@@ -30,12 +30,12 @@ network_username = string_copy(
                    sha1_string_unicode(string(irandom(100))),
                    0, network_username_max_length);
 
-message_buffer_size = 16;
+message_buffer_size = 256;
 message_buffer = buffer_create(message_buffer_size,buffer_grow,1);
 
 // IMPLEMENTATION SPECIFIC VARIABLES
-//rendevouz_ip = "192.168.1.6";
-rendevouz_ip = "127.0.0.1";
+rendevouz_ip = "192.168.1.5";
+//rendevouz_ip = "127.0.0.1";
 rendevouz_tcp_port = 4643;
 rendevouz_udp_port = 4644;
 udp_host_enforce_ready_ups = true;

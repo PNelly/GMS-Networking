@@ -14,7 +14,7 @@ buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
 buffer_write(message_buffer,buffer_s32,udp_id);
 buffer_write(message_buffer,buffer_string,_chat);
 
-udp_host_send_all(udp_msg.udp_chat,true,message_buffer);
+udp_host_send_all(udp_msg.udp_chat,true,message_buffer,true);
 udp_add_chat(udp_id,_chat);
 
 

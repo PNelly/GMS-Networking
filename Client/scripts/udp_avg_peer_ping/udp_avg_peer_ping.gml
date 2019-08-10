@@ -9,7 +9,6 @@ if(udp_is_host() || udp_is_client()){
     var _client, _map, _idx;
     var _sum    = 0;
     var _num    = 0;
-    var _ping   = -1;
     
     for(_idx=0;_idx<_num_clients;++_idx){
     

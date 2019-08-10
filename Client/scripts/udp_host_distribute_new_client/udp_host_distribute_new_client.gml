@@ -16,4 +16,4 @@ buffer_write(message_buffer,buffer_s32,_id);
 buffer_write(message_buffer,buffer_u16,_ping);
 buffer_write(message_buffer,buffer_string,_name);
 
-udp_host_send_all(udp_msg.udp_game_client_joined,true,message_buffer);
+udp_host_send_all(udp_msg.udp_game_client_joined,true,message_buffer,true);

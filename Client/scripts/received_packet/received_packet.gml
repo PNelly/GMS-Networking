@@ -767,7 +767,7 @@ if(_is_udp){
                     var _time = buffer_read(_buffer,buffer_u32);
                     buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
                     buffer_write(message_buffer,buffer_u32, _time);
-                    udp_client_send(udp_msg.udp_ping_acknowledge,false,_buffer,-1);
+                    udp_client_send(udp_msg.udp_ping_acknowledge,false,_buffer,-1,true);
                 }
             }
         
@@ -900,7 +900,7 @@ if(_is_udp){
                         buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
                         buffer_write(message_buffer,buffer_s32,_sender_udp_id);
                         buffer_write(message_buffer,buffer_string,_chat);
-                        udp_host_send_all(udp_msg.udp_chat,true,message_buffer);
+                        udp_host_send_all(udp_msg.udp_chat,true,message_buffer,true);
                         udp_add_chat(_sender_udp_id,_chat);
                     }
                 }
@@ -943,7 +943,7 @@ if(_is_udp){
 	                        buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
 	                        buffer_write(message_buffer,buffer_s32,_sender_udp_id);
 	                        buffer_write(message_buffer,buffer_string,_name);
-	                        udp_host_send_all(udp_msg.udp_username,true,message_buffer);  
+	                        udp_host_send_all(udp_msg.udp_username,true,message_buffer,true);  
 	                    }
 	                }
 	            }
@@ -1187,7 +1187,7 @@ if(_is_udp){
 	                buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
 	                buffer_write(message_buffer,buffer_s32,udp_id);
 	                buffer_write(message_buffer,buffer_string,udp_session_id);
-	                udp_host_send(_peer_id,udp_msg.udp_migrate_new_host,false,message_buffer,-1);
+	                udp_host_send(_peer_id,udp_msg.udp_migrate_new_host,false,message_buffer,-1,true);
 	            }
 			}
         
@@ -1303,7 +1303,7 @@ if(_is_udp){
         
         // Received unready all notice from host
         case udp_msg.udp_host_unready_all:
-            if(!_udpr_received && _valid_sqn && _udp_has_payload){
+            if(!_udpr_received && _valid_sqn){
                 if(udp_state == udp_states.udp_client_lobby){
                 
                     var _idx, _client, _map;
@@ -1322,7 +1322,7 @@ if(_is_udp){
         
         // Received game init message
         case udp_msg.udp_game_init:
-            if(!_udpr_received && _valid_sqn && _udp_has_payload){
+            if(!_udpr_received && _valid_sqn){
                 if(udp_state == udp_states.udp_client_lobby){
                     udp_client_begin_game_init();
                 }
@@ -1342,7 +1342,7 @@ if(_is_udp){
                         _map[? "username"] = _name;
                         
                         udp_host_distribute_new_client(_sender_udp_id);
-                        udp_host_send(_sender_udp_id,udp_msg.udp_game_start,true,message_buffer,-1);
+                        udp_host_send(_sender_udp_id,udp_msg.udp_game_start,true,message_buffer,-1,false);
                     }
                 }
             
@@ -1355,7 +1355,7 @@ if(_is_udp){
         
         // Client receiving notice to start game
         case udp_msg.udp_game_start:
-            if(!_udpr_received && _valid_sqn && _udp_has_payload){
+            if(!_udpr_received && _valid_sqn){
                 if(udp_state == udp_states.udp_client_game_init){
                     udp_client_game_start();
                 }

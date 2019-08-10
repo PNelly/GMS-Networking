@@ -5,8 +5,7 @@
 // disconnect and cleanup packet info for all clients
 if(udp_host_exit_kills_session){
 
-    var _client;
-    var _map, _idx;
+    var _client, _map;
     
     while(!ds_list_empty(udp_client_list)){
         _client = udp_client_list[| 0];

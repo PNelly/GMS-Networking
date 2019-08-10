@@ -2,7 +2,7 @@
 
 var _port = real (string_digits( string( argument0 ) ) );
 
-if(_port >= 0 && _port <= 65535 && _port != rendeouvz_tcp_port){
+if(_port >= 0 && _port <= 65535 && _port != rendevouz_udp_port){
     rendevouz_udp_port = _port;
     system_message_set("meetup server udp port set to: "+string(_port));
 } else {

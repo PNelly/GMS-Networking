@@ -21,7 +21,8 @@ if(udp_host_enforce_ready_ups){
 }
 
 // tell clients to advance to init stage
-udp_host_send_all(udp_msg.udp_game_init,true,message_buffer);
+show_debug_message("### Host Game Init ###");
+udp_host_send_all(udp_msg.udp_game_init,true,message_buffer,false);
 udp_state = udp_states.udp_host_game_init;
 udp_host_game_in_progress = true;
 system_message_set("Game Initializing");

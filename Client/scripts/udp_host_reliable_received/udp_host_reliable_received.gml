@@ -20,7 +20,7 @@ buffer_write(message_buffer,buffer_u16,_packet_id);
 buffer_write(message_buffer,buffer_u16,_udplrg_id);
 buffer_write(message_buffer,buffer_u16,_udplrg_idx);
 
-udp_host_send(_client_id,udp_msg.udp_reliable_acknowledge,false,message_buffer,-1);
+udp_host_send(_client_id,udp_msg.udp_reliable_acknowledge,false,message_buffer,-1,true);
 
 if(ds_map_exists(_rcvd_map,_packet_id)){
 

@@ -64,7 +64,7 @@ if(rendevouz_state == rdvz_states.rdvz_host && (_lobby_host || _game_host)){
 
 if(_ready){
 
-    var _size = buffer_get_size(message_buffer);
+    var _size = buffer_tell(message_buffer);
     var _port;
     
     for(_port = broadcast_min; _port <= broadcast_max; ++_port){

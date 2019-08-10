@@ -7,4 +7,4 @@ buffer_write(message_buffer,buffer_string,udp_public_ip);
 buffer_write(message_buffer,buffer_s32,udp_public_host_port);
 buffer_write(message_buffer,buffer_s32,udp_public_client_port);
 
-udp_client_send(udp_msg.udp_connection_params,true,message_buffer,-1);
+udp_client_send(udp_msg.udp_connection_params,true,message_buffer,-1,true);

@@ -107,7 +107,7 @@ if(udp_is_client()){
     buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
     buffer_write(message_buffer,buffer_s32,udp_id);
     buffer_write(message_buffer,buffer_string,udp_session_id);
-    udp_host_send_all(udp_msg.udp_migrate_new_host,false,message_buffer);
+    udp_host_send_all(udp_msg.udp_migrate_new_host,false,message_buffer,true);
     
     // unready all clients in lobby state
     udp_host_unready_all_clients();

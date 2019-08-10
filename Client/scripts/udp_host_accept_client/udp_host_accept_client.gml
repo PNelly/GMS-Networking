@@ -54,7 +54,7 @@ for(_idx=0;_idx<ds_list_size(udp_hole_punch_list);_idx++){
             // send new client its id
             buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
             buffer_write(message_buffer,buffer_u16,_new_id);
-            udp_host_send(_new_id,udp_msg.udp_tell_client_id,true,message_buffer,-1);
+            udp_host_send(_new_id,udp_msg.udp_tell_client_id,true,message_buffer,-1,true);
                                     
             // inform rendevouz server about num clients
             if(rendevouz_state == rdvz_states.rdvz_host)

@@ -2,7 +2,7 @@
 
 // begin moving everyone to intermediate end state and postgame state
 
-udp_host_send_all(udp_msg.udp_game_end,true,message_buffer);
+udp_host_send_all(udp_msg.udp_game_end,true,message_buffer,false);
 udp_state = udp_states.udp_host_game_ending;
 udp_host_game_in_progress = false;
 
