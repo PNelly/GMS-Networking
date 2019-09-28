@@ -35,5 +35,5 @@ if(udp_is_host()){
         buffer_write(message_buffer,buffer_s32,_public_client_port);
     }
     
-    udp_host_send_all(udp_msg.udp_connection_params,true,message_buffer);
+    udp_host_send_all(udp_msg.udp_connection_params,true,message_buffer,true);
 }

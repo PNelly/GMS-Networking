@@ -15,4 +15,4 @@ for(_idx=0;_idx<_num_clients;++_idx){
     _map[? "ready"] = false;
 }
 
-udp_host_send_all(udp_msg.udp_host_unready_all,true,message_buffer);
+udp_host_send_all(udp_msg.udp_host_unready_all,true,message_buffer,false);

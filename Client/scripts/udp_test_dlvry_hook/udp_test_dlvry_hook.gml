@@ -29,7 +29,8 @@ if( (udp_is_host() && ds_list_size(udp_client_list) > 0) || udp_is_client() ){
 			udp_msg.udp_dummy_message,
 			true,
 			message_buffer,
-			_hook_map_short
+			_hook_map_short,
+			true
 		);
 		
 	if(udp_is_client())
@@ -37,7 +38,8 @@ if( (udp_is_host() && ds_list_size(udp_client_list) > 0) || udp_is_client() ){
 			udp_msg.udp_dummy_message,
 			true,
 			message_buffer,
-			_hook_map_short
+			_hook_map_short,
+			true
 		);
 	
 	// very long packet test //
@@ -71,7 +73,8 @@ if( (udp_is_host() && ds_list_size(udp_client_list) > 0) || udp_is_client() ){
 					udp_msg.udp_dummy_message,
 					true,
 					message_buffer,
-					_hook_map
+					_hook_map,
+					true
 				);
 			
 			var _base_time = ds_map_find_value(
@@ -94,7 +97,8 @@ if( (udp_is_host() && ds_list_size(udp_client_list) > 0) || udp_is_client() ){
 			udp_msg.udp_dummy_message,
 			true,
 			message_buffer,
-			_hook_map_long
+			_hook_map_long,
+			true
 		);
 
 		_hook_map_long[? "script"]		= udp_test_dlvry_hook_dialogue;

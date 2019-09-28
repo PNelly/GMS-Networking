@@ -4,7 +4,7 @@
 
 if(rendevouz_state != rdvz_states.rdvz_none){
 
-    var _idx, _rdvz_id, _rdvz_map, _local_map;
+    var _idx, _rdvz_id, _local_map;
     
     var _num_local = ds_list_size(lan_list);
     

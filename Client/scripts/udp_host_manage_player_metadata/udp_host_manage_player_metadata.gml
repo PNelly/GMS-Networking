@@ -21,6 +21,6 @@ if(udp_player_metadata_timer < 0){
             buffer_write(message_buffer,buffer_s32,_client);
             buffer_write(message_buffer,buffer_u32,_ping);
         }
-        udp_host_send_all(udp_msg.udp_player_metadata,false,message_buffer);
+        udp_host_send_all(udp_msg.udp_player_metadata,false,message_buffer,true);
     }
 }

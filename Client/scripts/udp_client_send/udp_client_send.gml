@@ -1,4 +1,4 @@
-/// @description  udp_client_send(message_id,use_reliable,buffer,delivery_hook)
+/// @description  udp_client_send(message_id,use_reliable,buffer,delivery_hook,has_payload)
 
 // send udp message to the session host
 
@@ -6,6 +6,12 @@ var _msg_id         = argument0;
 var _is_reliable    = argument1;
 var _buffer         = argument2;
 var _hook			= argument3;
+var _has_payload	= argument4;
+
+// if no payload seek to header end to get correct buffer size
+
+if(!_has_payload) buffer_seek(_buffer,buffer_seek_start,udp_header_size);
+
 var _total_size		= buffer_tell(_buffer);
 
 var _trk_map		= -1;

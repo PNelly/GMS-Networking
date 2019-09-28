@@ -34,7 +34,7 @@ for(_idx=0;_idx<_num_clients;_idx++){
 
 show_debug_message("host refresh lobby - buffer size "+string(buffer_tell(message_buffer)));
 
-udp_host_send_all(udp_msg.udp_refresh_lobby,true,message_buffer);
+udp_host_send_all(udp_msg.udp_refresh_lobby,true,message_buffer,true);
 
 // reset refresh timer
 udp_host_lobby_refresh_timer = udp_host_lobby_refresh_interval;

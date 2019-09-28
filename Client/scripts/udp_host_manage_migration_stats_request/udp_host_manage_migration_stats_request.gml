@@ -19,5 +19,5 @@ if(!_send_request) exit;
 
 show_debug_message("udp host sent migration stats request to clients");
 
-udp_host_send_all(udp_msg.udp_migration_stats_request, true, message_buffer);
+udp_host_send_all(udp_msg.udp_migration_stats_request, true, message_buffer, false);
 

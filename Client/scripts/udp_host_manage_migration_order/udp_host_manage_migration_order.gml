@@ -88,7 +88,7 @@ if(udp_is_host()){
                 buffer_write(message_buffer,buffer_s16, _map[? "migration_order"]);
             }
             
-            udp_host_send_all(udp_msg.udp_migration_order, true, message_buffer);
+            udp_host_send_all(udp_msg.udp_migration_order, true, message_buffer, true);
         }
     }
 }

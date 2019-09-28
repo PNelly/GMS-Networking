@@ -53,6 +53,10 @@ for(;_idx<_num;++_idx){
 		
 		udp_client_reliable_record(_udpr_id, _trk_map[? "udplrg_msg_id"], _frag_buffer, _frag_size);
 		
+		// seek buffer to ensure correct outbound sizing
+		
+		buffer_seek(_frag_buffer,buffer_seek_start,_frag_size);
+		
 		udp_send_packet(udp_client_socket,udp_host_ip,udp_client_host_port,_frag_buffer);
 		
 		// reset keep alive sent timer, since we've just sent a packet

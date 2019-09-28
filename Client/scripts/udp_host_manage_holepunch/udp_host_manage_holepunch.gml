@@ -17,6 +17,10 @@ if(ds_list_size(udp_hole_punch_list) > 0){
 		0, 1, 1,
 		udp_header_size
 	);
+	
+	// seek buffer to ensure correct outbound size
+	
+	buffer_seek(message_buffer,buffer_seek_start,udp_header_size);
     
     var _key, _map, _ip, _port, _idx;
 	

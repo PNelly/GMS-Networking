@@ -26,5 +26,5 @@ for(_idx=0;_idx<_num_clients;_idx++){
 }
 
 // Once everyone's initialized tell them to advance into the game
-udp_host_send_all(udp_msg.udp_game_start,true,message_buffer);
+udp_host_send_all(udp_msg.udp_game_start,true,message_buffer,false);
 udp_host_game_start();
