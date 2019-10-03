@@ -50,9 +50,19 @@ public class Client implements Runnable {
 		return this.isUdpHost;
 	}
 
+	public void setUdpIsHost(boolean isUdpHost){
+
+		this.isUdpHost = isUdpHost;
+	}
+
 	public int getUdpHostClients(){
 
 		return this.udpHostClients;
+	}
+
+	public void setUdpHostClients(int clients){
+
+		this.udpHostClients = clients;
 	}
 
 	public int getUdpHostMaxClients(){
@@ -65,9 +75,19 @@ public class Client implements Runnable {
 		return this.udpHostPort;
 	}
 
+	public void setUdpHostPort(int udpHostPort){
+
+		this.udpHostPort = udpHostPort;
+	}
+
 	public int getUdpClientPort(){
 
 		return this.udpClientPort;
+	}
+
+	public void setUdpClientPort(int udpClientPort){
+
+		this.udpClientPort = udpClientPort;
 	}
 
 	public boolean getUdpHostInProgress(){
@@ -130,7 +150,15 @@ public class Client implements Runnable {
 
 		if(packet.getMessageId() == Message.TCP_KEEP_ALIVE.getValue())
 			send(new GMSPacket(Message.TCP_KEEP_ALIVE_ACK));
-		
+
+		if(packet.getMessageId() == Message.REQUEST_ID.getValue()){
+			GMSPacket outPacket = new GMSPacket(Message.TELL_NEW_ID);
+			outPacket.writeU16(clientId);
+			send(outPacket);
+		}
+
+		if(packet.getMessageId() == Message.NEW_UDP_HOST.getValue())
+			send(new GMSPacket(Message.REQUEST_UDP_PING));
 	}
 
 	public void close(){

@@ -73,6 +73,28 @@ public class Server {
 		}
 	}
 
+	public static Client getClient(int clientId){
+
+		return clients.get(clientId);
+	}
+
+	public static  void sendToAllClients(GMSPacket packet, int excludeId){
+
+		Set<Map.Entry<Integer, Client>> entries = clients.entrySet();
+
+		Iterator<Map.Entry<Integer, Client>> iterator = entries.iterator();
+
+		while(iterator.hasNext()){
+
+			Map.Entry<Integer, Client> entry = iterator.next();
+
+			Client client = entry.getValue();
+
+			if(client.getClientId() != excludeId)
+				client.send(packet);
+		}		
+	}
+
 	private static int nextClientId(){
 
 		int id = 0;
@@ -151,19 +173,24 @@ public class Server {
 		packet.writeU16(newClient.getClientId());
 		packet.writeString(newClient.getClientIp());
 
-		Set<Map.Entry<Integer, Client>> entries = clients.entrySet();
+		sendToAllClients(packet, newClient.getClientId());
+	}
 
-		Iterator<Map.Entry<Integer, Client>> iterator = entries.iterator();
+	public static void updateClientInfo(int clientId){
 
-		while(iterator.hasNext()){
+		Client client = clients.get(clientId);
 
-			Map.Entry<Integer, Client> entry = iterator.next();
+		GMSPacket packet = new GMSPacket(Message.CLIENT_UPDATE);
+		packet.writeU16(clientId);
+		packet.writeString(client.getClientIp());
+		packet.writeBool(client.getIsUdpHost());
+		packet.writeS32(client.getUdpHostPort());
+		packet.writeU8(client.getUdpHostClients());
+		packet.writeU8(client.getUdpHostMaxClients());
+		packet.writeS32(client.getUdpClientPort());
+		packet.writeBool(client.getUdpHostInProgress());
 
-			Client client = entry.getValue();
-
-			if(newClient.getClientId() != client.getClientId())
-				client.send(packet);
-		}
+		sendToAllClients(packet, -1);
 	}
 
 	public static void disconnectClient(int clientId){
