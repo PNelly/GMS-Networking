@@ -23,7 +23,7 @@ public class GMSPacket {
 
 		// consume header
 
-		this.isUdp 			= (readNextByte() != 0);
+		this.isUdp 			= (readNextByte() == 1);
 		this.messageId 	= readU16LE();
 		this.length 		= readU16LE();
 
@@ -32,6 +32,7 @@ public class GMSPacket {
 			+isUdp+" msg id "
 			+messageId+" length "
 			+length
+			+" "+Arrays.toString(buffer)
 		);
 	}
 
@@ -77,6 +78,11 @@ public class GMSPacket {
 		return buffer[pos++];
 	}
 
+	public boolean readBool(){
+
+		return (readNextByte() == 1);
+	}
+
 	public int readU8(){
 
 		return (0xFF & (int) readNextByte());
@@ -116,7 +122,7 @@ public class GMSPacket {
 
 		buffer[pos++] = (byte) value;
 
-		System.out.println("WriteU8 input "+value+" output "+buffer[pos-1]);
+		//System.out.println("WriteU8 input "+value+" output "+buffer[pos-1]);
 	}
 
 	public void writeU16(int value){
@@ -127,7 +133,7 @@ public class GMSPacket {
 		buffer[pos++] = first;
 		buffer[pos++] = second;
 
-		System.out.println("WriteU16 input "+value+" first byte "+first+" second "+second);
+		//System.out.println("WriteU16 input "+value+" first byte "+first+" second "+second);
 	}
 
 	public void writeU32(long value){
@@ -142,7 +148,7 @@ public class GMSPacket {
 		buffer[pos++] = third;
 		buffer[pos++] = fourth;
 
-		System.out.println("WriteU32 input "+value+" bytes "+first+" "+second+" "+third+" "+fourth);
+		//System.out.println("WriteU32 input "+value+" bytes "+first+" "+second+" "+third+" "+fourth);
 	}
 
 	public void writeS32(int value){
@@ -169,7 +175,7 @@ public class GMSPacket {
 
 			buffer[pos++] = '\0';
 
-			System.out.println("WriteString input "+value+" bytes "+Arrays.toString(stringBytes));
+			//System.out.println("WriteString input "+value+" bytes "+Arrays.toString(stringBytes));
 
 		} catch (UnsupportedEncodingException e){
 
@@ -177,7 +183,7 @@ public class GMSPacket {
 		}
 	}		
 
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 
 		GMSPacket packet = new GMSPacket(Message.TELL_NEW_ID);
 
@@ -188,5 +194,5 @@ public class GMSPacket {
 		packet.writeU16(49152);
 		packet.writeU16(65535);
 		packet.writeString("dog");
-	}
+	}*/
 }

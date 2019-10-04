@@ -50,7 +50,7 @@ public class Client implements Runnable {
 		return this.isUdpHost;
 	}
 
-	public void setUdpIsHost(boolean isUdpHost){
+	public void setIsUdpHost(boolean isUdpHost){
 
 		this.isUdpHost = isUdpHost;
 	}
@@ -68,6 +68,11 @@ public class Client implements Runnable {
 	public int getUdpHostMaxClients(){
 
 		return this.udpHostMaxClients;
+	}
+
+	public void setUdpHostMaxClients(int clients){
+
+		this.udpHostMaxClients = clients;
 	}
 
 	public int getUdpHostPort(){
@@ -93,6 +98,11 @@ public class Client implements Runnable {
 	public boolean getUdpHostInProgress(){
 
 		return this.udpHostInProgress;
+	}
+
+	public void setUdpHostInProgress(boolean inProgress){
+
+		this.udpHostInProgress = inProgress;
 	}
 
 	public long getTimeCreated(){
@@ -133,6 +143,8 @@ public class Client implements Runnable {
 		int length 		= packet.getPosition();
 		byte[] buffer = packet.getBuffer();
 
+		System.out.println("Sending packet with id: "+packet.getMessageId()+" "+Arrays.toString(buffer));
+
 		try {
 
 			OutputStream stream = socket.getOutputStream();
@@ -159,6 +171,18 @@ public class Client implements Runnable {
 
 		if(packet.getMessageId() == Message.NEW_UDP_HOST.getValue())
 			send(new GMSPacket(Message.REQUEST_UDP_PING));
+
+		if(packet.getMessageId() == Message.UDP_HOST_UPDATE.getValue())
+			Server.handleHostUpdate(this, packet);
+
+		if(packet.getMessageId() == Message.UDP_HOST_CANCEL.getValue())
+			Server.handleHostCancel(this);
+
+		if(packet.getMessageId() == Message.NEW_UDP_CLIENT.getValue())
+			send(new GMSPacket(Message.REQUEST_UDP_PING));
+
+		if(packet.getMessageId() == Message.UDP_HP_REQUEST.getValue())
+			Server.handleHolePunchRequest(clientId, packet.readU16LE());
 	}
 
 	public void close(){

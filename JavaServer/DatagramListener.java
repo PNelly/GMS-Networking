@@ -63,11 +63,11 @@ public class DatagramListener implements Runnable {
 		udpSocket.close();
 	}
 
-	public void handlePacket(GMSPacket packet, InetAddress senderAddress, int senderPort){
+	public void handlePacket(GMSPacket inPacket, InetAddress senderAddress, int senderPort){
 
-		int messageId 	= packet.getMessageId();
-		int clientId 	= packet.readU16LE();
-		Client client 	= Server.getClient(clientId);
+		int messageId = inPacket.getMessageId();
+		int clientId 	= inPacket.readU16LE();
+		Client client = Server.getClient(clientId);
 
 		if(messageId == Message.UDP_PING_H_W_H.getValue()
 		|| messageId == Message.UDP_PING_C_W_H.getValue())
@@ -86,7 +86,7 @@ public class DatagramListener implements Runnable {
 
 			if(messageId == Message.UDP_PING_H_W_H.getValue()
 			|| messageId == Message.UDP_PING_H_W_C.getValue()){
-				client.setUdpIsHost(true);
+				client.setIsUdpHost(true);
 				client.setUdpHostClients(0);			
 			}
 
@@ -95,7 +95,7 @@ public class DatagramListener implements Runnable {
 			outPacket.writeS32(client.getUdpHostPort());
 			outPacket.writeS32(client.getUdpClientPort());
 
-			client.send(packet);
+			client.send(outPacket);
 
 			Server.updateClientInfo(clientId);
 		}

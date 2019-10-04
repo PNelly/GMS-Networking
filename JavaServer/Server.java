@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Server {
 
+	public static final int EPHEMERAL_MIN 	= 49152;
+	public static final int EPHEMERAL_MAX 	= 65535;
 	public static final int PORT_TCP 				= 4643;
 	public static final int PORT_UDP 				= 4644;
 	public static final int DATAGRAM_LENGTH = 256;
@@ -193,6 +195,22 @@ public class Server {
 		sendToAllClients(packet, -1);
 	}
 
+	public static void handleHostUpdate(Client client, GMSPacket packet){
+
+		client.setUdpHostClients(packet.readU8());
+		client.setUdpHostMaxClients(packet.readU8());
+		client.setUdpHostInProgress(packet.readBool());
+
+		updateClientInfo(client.getClientId());
+	}
+
+	public static void handleHostCancel(Client client){
+
+		client.setIsUdpHost(false);
+
+		updateClientInfo(client.getClientId());
+	}
+
 	public static void disconnectClient(int clientId){
 
 		Client client = clients.get(clientId);
@@ -201,6 +219,49 @@ public class Server {
 
 		clients.remove(clientId);
 
+		shareDisconnect(clientId);
+
 		System.out.println("removed client " + clientId);
+	}
+
+	public static void shareDisconnect(int clientId){
+
+		GMSPacket packet = new GMSPacket(Message.CLIENT_DISCONNECTED);
+
+		packet.writeU16(clientId);
+
+		sendToAllClients(packet, -1);
+	}
+
+	public static void handleHolePunchRequest(int clientIdFrom, int clientIdTo){
+
+		Client clientFrom = getClient(clientIdFrom);
+		Client clientTo 	= getClient(clientIdTo);
+
+		if(clientTo != null
+		&& clientTo.getIsUdpHost()
+		&& clientTo.getUdpHostPort() >= EPHEMERAL_MIN 
+		&& clientTo.getUdpHostPort() <= EPHEMERAL_MAX){
+
+			GMSPacket hostPacket = new GMSPacket(Message.UDP_HP_NOTICE);
+			hostPacket.writeU16(clientIdFrom);
+			hostPacket.writeString(clientFrom.getClientIp());
+			hostPacket.writeS32(clientFrom.getUdpClientPort());
+			clientTo.send(hostPacket);
+
+			GMSPacket joinPacket = new GMSPacket(Message.UDP_HP_NOTICE);
+			joinPacket.writeString(clientTo.getClientIp());
+			joinPacket.writeS32(clientTo.getUdpHostPort());
+			clientFrom.send(joinPacket);
+
+		} else {
+
+			rejectHolePunchRequest(clientFrom);
+		}
+	}
+
+	public static void rejectHolePunchRequest(Client client){
+
+		client.send(new GMSPacket(Message.UDP_HP_REJECTED));
 	}
 }
