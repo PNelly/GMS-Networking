@@ -11,15 +11,8 @@ public class DatagramListener implements Runnable {
 
 	public DatagramListener(int port) throws IOException {
 
-		try {
-
-			udpSocket = new DatagramSocket(port);
-			listening = true;
-
-		} catch (IOException e){
-
-			System.out.println("datagram listener startup failed");
-		}
+		udpSocket = new DatagramSocket(port);
+		listening = true;
 	}
 
 	@Override

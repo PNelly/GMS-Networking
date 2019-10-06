@@ -17,21 +17,27 @@ public class Server {
 	public static final int U16_MAX 				= 65535;
 	public static final int UDP_MAX_CLIENTS = 7;
 	public static final int IDLE_DISC_TIME 	= 1000 * 60 * 5; // five minutes
+	//public static final int IDLE_DISC_TIME_HOST = 1000 * 60 * 30; // thirty minutes
 
 	private static Listener listener 						= null;
 	private static DatagramListener udpListener = null;
 
 	private static ConcurrentHashMap<Integer,Client> clients = null;
 
+	private static Random random = null;
+
 	public static void main(String[] args){
 
-		Server.start();
-		Server.manage();
+		boolean started = Server.start();
+
+		if(started) 
+			Server.manage();
 	}
 
-	public static void start(){
+	public static boolean start(){
 
 		clients = new ConcurrentHashMap<Integer,Client>();
+		random  = new Random();
 
 		try {
 
@@ -41,11 +47,13 @@ public class Server {
 			new Thread(listener).start();
 			new Thread(udpListener).start();
 
+			return true;
+
 		} catch (IOException e){
 
 			System.out.println("startup failed");
 
-			return;
+			return false;
 		}		
 	}
 
@@ -65,9 +73,13 @@ public class Server {
 
 				// manage idle timers //
 
-				if(System.currentTimeMillis() -client.getTimeCreated() > IDLE_DISC_TIME){
+				long elapsed = System.currentTimeMillis() -client.getIdleStamp();
+
+				if(!client.getIsUdpHost() && elapsed > IDLE_DISC_TIME){
 
 					System.out.println("idle disconnect for client " + client.getClientId());
+
+					client.send(new GMSPacket(Message.IDLE_DISCONNECT));
 
 					disconnectClient(client.getClientId());
 				}
@@ -99,9 +111,12 @@ public class Server {
 
 	private static int nextClientId(){
 
-		int id = 0;
+		// bound exclusive so U16_MAX +1
 
-		for(;clients.containsKey(id);++id);
+		int id = random.nextInt(U16_MAX +1);
+
+		while(clients.containsKey(id))
+			id = random.nextInt(U16_MAX +1);
 
 		return id;
 	}
@@ -215,13 +230,15 @@ public class Server {
 
 		Client client = clients.get(clientId);
 
-		client.close();
+		if(client != null){
 
-		clients.remove(clientId);
+			client.close();
+			clients.remove(clientId);
+		}
 
 		shareDisconnect(clientId);
 
-		System.out.println("removed client " + clientId);
+		System.out.println("disconnected client " + clientId);
 	}
 
 	public static void shareDisconnect(int clientId){
@@ -263,5 +280,14 @@ public class Server {
 	public static void rejectHolePunchRequest(Client client){
 
 		client.send(new GMSPacket(Message.UDP_HP_REJECTED));
+	}
+
+	public static void handleHostHolePunchReject(GMSPacket packet){
+
+		int rejectedId = packet.readU16LE();
+
+		Client rejectedClient = clients.get(rejectedId);
+
+		rejectedClient.send(new GMSPacket(Message.UDP_HP_REJECTED));
 	}
 }

@@ -28,11 +28,9 @@ public class GMSPacket {
 		this.length 		= readU16LE();
 
 		System.out.println(
-			"new GMS Packet: isUdp "
-			+isUdp+" msg id "
-			+messageId+" length "
-			+length
-			+" "+Arrays.toString(buffer)
+			"new GMS packet with messageId "
+			+messageId+" is udp "+isUdp
+			+" length "+length
 		);
 	}
 
@@ -121,8 +119,6 @@ public class GMSPacket {
 	public void writeU8(int value){
 
 		buffer[pos++] = (byte) value;
-
-		//System.out.println("WriteU8 input "+value+" output "+buffer[pos-1]);
 	}
 
 	public void writeU16(int value){
@@ -132,8 +128,6 @@ public class GMSPacket {
 
 		buffer[pos++] = first;
 		buffer[pos++] = second;
-
-		//System.out.println("WriteU16 input "+value+" first byte "+first+" second "+second);
 	}
 
 	public void writeU32(long value){
@@ -147,8 +141,6 @@ public class GMSPacket {
 		buffer[pos++] = second;
 		buffer[pos++] = third;
 		buffer[pos++] = fourth;
-
-		//System.out.println("WriteU32 input "+value+" bytes "+first+" "+second+" "+third+" "+fourth);
 	}
 
 	public void writeS32(int value){
@@ -174,8 +166,6 @@ public class GMSPacket {
 				buffer[pos++] = stringBytes[idx];
 
 			buffer[pos++] = '\0';
-
-			//System.out.println("WriteString input "+value+" bytes "+Arrays.toString(stringBytes));
 
 		} catch (UnsupportedEncodingException e){
 

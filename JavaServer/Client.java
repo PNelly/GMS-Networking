@@ -15,7 +15,7 @@ public class Client implements Runnable {
 	private int udpHostMaxClients 		= Server.UDP_MAX_CLIENTS;
 	private boolean udpHostInProgress = false;
 	private int udpClientPort 				= -1;
-	private long createdAt 						= -1;
+	private long idleStamp 						= -1;
 
 	public Client(Socket socket, int clientId) throws IOException {
 
@@ -27,7 +27,7 @@ public class Client implements Runnable {
 
 		this.clientId  = clientId;
 		this.ip 			 = socket.getInetAddress().getHostAddress();
-		this.createdAt = System.currentTimeMillis();
+		this.idleStamp = System.currentTimeMillis();
 	}
 
 	public int 			getClientId(){return this.clientId;}
@@ -53,7 +53,8 @@ public class Client implements Runnable {
 	public boolean 	getUdpHostInProgress(){return this.udpHostInProgress;}
 	public void 		setUdpHostInProgress(boolean inProgress){this.udpHostInProgress = inProgress;}
 
-	public long 		getTimeCreated(){return this.createdAt;}
+	public long 		getIdleStamp(){return this.idleStamp;}
+	public void 		setIdleStamp(long stamp){this.idleStamp = stamp;}
 
 	@Override
 	public void run(){
@@ -72,9 +73,9 @@ public class Client implements Runnable {
 
 				System.out.println("splicer read ioexception: "+e.getMessage());
 
-				close();
-
 				Server.disconnectClient(this.clientId);
+
+				close();
 
 				break;
 			}
@@ -88,7 +89,7 @@ public class Client implements Runnable {
 		int length 		= packet.getPosition();
 		byte[] buffer = packet.getBuffer();
 
-		System.out.println("Sending packet with id: "+packet.getMessageId()+" "+Arrays.toString(buffer));
+		System.out.println("Sending packet with id: "+packet.getMessageId()+" to client "+clientId);
 
 		try {
 
@@ -105,6 +106,13 @@ public class Client implements Runnable {
 
 	private void handlePacket(GMSPacket packet){
 
+		if(packet.getMessageId() == Message.NEW_UDP_HOST.getValue()
+		|| packet.getMessageId() == Message.UDP_HOST_UPDATE.getValue()
+		|| packet.getMessageId() == Message.UDP_HOST_CANCEL.getValue()
+		|| packet.getMessageId() == Message.NEW_UDP_CLIENT.getValue()
+		|| packet.getMessageId() == Message.UDP_HP_REQUEST.getValue())
+			setIdleStamp(System.currentTimeMillis());
+
 		if(packet.getMessageId() == Message.TCP_KEEP_ALIVE.getValue())
 			send(new GMSPacket(Message.TCP_KEEP_ALIVE_ACK));
 
@@ -113,6 +121,9 @@ public class Client implements Runnable {
 			outPacket.writeU16(clientId);
 			send(outPacket);
 		}
+
+		if(packet.getMessageId() == Message.CLIENT_DISCONNECTED.getValue())
+			Server.disconnectClient(clientId);
 
 		if(packet.getMessageId() == Message.NEW_UDP_HOST.getValue())
 			send(new GMSPacket(Message.REQUEST_UDP_PING));
@@ -128,6 +139,10 @@ public class Client implements Runnable {
 
 		if(packet.getMessageId() == Message.UDP_HP_REQUEST.getValue())
 			Server.handleHolePunchRequest(clientId, packet.readU16LE());
+
+		if(packet.getMessageId() == Message.UDP_HP_REJECTED.getValue())
+			Server.handleHostHolePunchReject(packet);
+
 	}
 
 	public void close(){
