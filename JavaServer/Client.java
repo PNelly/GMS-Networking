@@ -30,85 +30,30 @@ public class Client implements Runnable {
 		this.createdAt = System.currentTimeMillis();
 	}
 
-	public void setClientId(int id){
+	public int 			getClientId(){return this.clientId;}
+	public void 		setClientId(int id){this.clientId = id;}
 
-		this.clientId = id;
-	}
+	public String 	getClientIp(){return this.ip;}
 
-	public int getClientId(){
+	public boolean 	getIsUdpHost(){return this.isUdpHost;}
+	public void 		setIsUdpHost(boolean isUdpHost){this.isUdpHost = isUdpHost;}
 
-		return this.clientId;
-	}
+	public int 			getUdpHostClients(){return this.udpHostClients;}
+	public void 		setUdpHostClients(int clients){this.udpHostClients = clients;}
 
-	public String getClientIp(){
+	public int 			getUdpHostMaxClients(){return this.udpHostMaxClients;}
+	public void 		setUdpHostMaxClients(int clients){this.udpHostMaxClients = clients;}
 
-		return this.ip;
-	}
+	public int 			getUdpHostPort(){return this.udpHostPort;}
+	public void 		setUdpHostPort(int udpHostPort){this.udpHostPort = udpHostPort;}
 
-	public boolean getIsUdpHost(){
+	public int 			getUdpClientPort(){return this.udpClientPort;}
+	public void 		setUdpClientPort(int udpClientPort){this.udpClientPort = udpClientPort;}
 
-		return this.isUdpHost;
-	}
+	public boolean 	getUdpHostInProgress(){return this.udpHostInProgress;}
+	public void 		setUdpHostInProgress(boolean inProgress){this.udpHostInProgress = inProgress;}
 
-	public void setIsUdpHost(boolean isUdpHost){
-
-		this.isUdpHost = isUdpHost;
-	}
-
-	public int getUdpHostClients(){
-
-		return this.udpHostClients;
-	}
-
-	public void setUdpHostClients(int clients){
-
-		this.udpHostClients = clients;
-	}
-
-	public int getUdpHostMaxClients(){
-
-		return this.udpHostMaxClients;
-	}
-
-	public void setUdpHostMaxClients(int clients){
-
-		this.udpHostMaxClients = clients;
-	}
-
-	public int getUdpHostPort(){
-
-		return this.udpHostPort;
-	}
-
-	public void setUdpHostPort(int udpHostPort){
-
-		this.udpHostPort = udpHostPort;
-	}
-
-	public int getUdpClientPort(){
-
-		return this.udpClientPort;
-	}
-
-	public void setUdpClientPort(int udpClientPort){
-
-		this.udpClientPort = udpClientPort;
-	}
-
-	public boolean getUdpHostInProgress(){
-
-		return this.udpHostInProgress;
-	}
-
-	public void setUdpHostInProgress(boolean inProgress){
-
-		this.udpHostInProgress = inProgress;
-	}
-
-	public long getTimeCreated(){
-
-		return this.createdAt;
-	}
+	public long 		getTimeCreated(){return this.createdAt;}
 
 	@Override
 	public void run(){
