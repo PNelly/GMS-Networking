@@ -6,7 +6,8 @@ import java.net.*;
 public class GMSPacket {
 
 	private static final int START_SIZE = 1024;
-	private static final int TCP_HEADER_SIZE = 5;
+
+	private boolean isClientHandshake = false;
 
 	private byte[] buffer = null;
 	private int pos 			= -1;
@@ -38,10 +39,22 @@ public class GMSPacket {
 
 		// outbound constructor //
 
-		pos 						= TCP_HEADER_SIZE;
+		pos 						= Server.CLIENT_HDR_LEN + Server.GMS_HDR_LEN;
 		this.buffer 		= new byte[START_SIZE];
 		this.isUdp 			= false; // server doesn't send datagrams
 		this.messageId 	= message.getValue();
+	}
+
+	public GMSPacket(Message message, boolean isClientHandshake){
+
+		this.isClientHandshake = isClientHandshake;
+
+		this(message);
+	}
+
+	public boolean getIsClientHandshake(){
+
+		return isClientHandshake;
 	}
 
 	public int getMessageId(){
@@ -51,15 +64,25 @@ public class GMSPacket {
 
 	public byte[] getBuffer(){
 
-		// write header
-
 		int startPos = pos;
 
-		pos = 0;
+		// write client header
+
+		pos = GMS_HDR_LEN;
 
 		writeBool(isUdp);
 		writeU16(messageId);
 		writeU16(startPos);
+
+		// write GMS header
+
+		pos = 0;
+
+		writeU32((long) 0xdeadc0de);
+		writeU32((long) GMS_HDR_LEN);
+		writeU32((long) startPos);
+
+		// reset write position
 
 		pos = startPos;
 

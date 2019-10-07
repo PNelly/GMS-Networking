@@ -1,6 +1,8 @@
 
 public enum Message {
 
+	HANDSHAKE(U16_MAX), // invisible to client
+
 	TELL_NEW_ID(0),
 	TCP_KEEP_ALIVE(1),
 	TCP_KEEP_ALIVE_ACK(2),

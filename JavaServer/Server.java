@@ -12,7 +12,8 @@ public class Server {
 	public static final int PORT_TCP 				= 4643;
 	public static final int PORT_UDP 				= 4644;
 	public static final int DATAGRAM_LENGTH = 256;
-	public static final int HEADER_LENGTH 	= 5;
+	public static final int CLIENT_HDR_LEN 	= 5;
+	public static final int GMS_HDR_LEN 		= 12;
 	public static final int SOCKET_TIMEOUT 	= 30000;
 	public static final int U16_MAX 				= 65535;
 	public static final int UDP_MAX_CLIENTS = 7;
@@ -121,28 +122,39 @@ public class Server {
 		return id;
 	}
 
-	public static void addClient(Socket socket){
-
-		int id = nextClientId();
+	public static void handShakeClient(Socket socket){
 
 		try {
 
-			Client client = new Client(socket, id);
+			Client client = new Client(socket);
 
 			new Thread(client).start();
 
-			clients.put(id, client);
+		} catch (IOException e){
 
-			System.out.println("added new client " + id);
+			System.out.println("io execption on client handshake (server)");
+		}
+	}
+
+	public static void integrateClient(Client client){
+
+		try {
+
+			int id = nextClientId();
+
+			client.setClientId(id);
+			client.setIdleStamp(System.currentTimeMillis());
+
+			clients.put(id, client);
 
 			bringClientUpToSpeed(client);
 			shareNewClientDetails(client);
 
 		} catch (IOException e) {
 
-			System.out.println("add client failed: "+e.getMessage());
+			System.out.println("ioexecption on client integrate");
 
-			disconnectClient(id);
+			disconnectClient(client.getClientId());
 		}
 	}
 

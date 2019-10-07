@@ -23,7 +23,7 @@ public class Listener implements Runnable {
 
 			try {
 
-				Server.addClient(serverSocket.accept());
+				Server.handShakeClient(serverSocket.accept());
 
 			} catch (IOException e){
 

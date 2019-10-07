@@ -5,6 +5,8 @@ import java.net.*;
 
 public class Client implements Runnable {
 
+	private HandShakeStatus handShakeStatus = null;
+
 	private int clientId 							= -1;
 	private Socket socket 						= null;
 	private GMSPacketSplicer splicer 	= null;
@@ -17,18 +19,22 @@ public class Client implements Runnable {
 	private int udpClientPort 				= -1;
 	private long idleStamp 						= -1;
 
-	public Client(Socket socket, int clientId) throws IOException {
+	public Client(Socket socket) throws IOException {
 
-		this.socket   = socket;
-		
+		this.socket  	= socket;
+
 		this.splicer 	= new GMSPacketSplicer(
+			this,
 			this.socket.getInputStream()
 		);
 
-		this.clientId  = clientId;
-		this.ip 			 = socket.getInetAddress().getHostAddress();
-		this.idleStamp = System.currentTimeMillis();
+		this.ip 			= socket.getInetAddress().getHostAddress();
+
+		beginHandShake();
 	}
+
+	public HandShakeStatus getHandShakeStatus(){return this.handShakeStatus;}
+	public void setHandShakeStatus(HandShakeStatus status){this.handShakeStatus = status;}
 
 	public int 			getClientId(){return this.clientId;}
 	public void 		setClientId(int id){this.clientId = id;}
@@ -104,7 +110,77 @@ public class Client implements Runnable {
 		}
 	}
 
+	private void beginHandShake(){
+
+		System.out.println("begin handshake");
+
+		try {
+
+			OutputStream stream = socket.getOutputStream();
+
+			String str = "GM:Studio-Connect";
+
+			byte[] initial 		= str.getBytes("UTF-8");
+			byte[] terminated = new byte[initial.length +1];
+
+			terminated[terminated.length -1] = '\0';
+
+			byte[] magic  = {0xde, 0xc0, 0xad, 0xde}; // 0xdeadc0de
+			byte[] hdrlen = {0x00, 0x00, 0x00, (byte) GMS_HDR_LEN};
+			byte[] length = {0x00, 0x00, 0x00, (byte) terminated.lenth};
+
+			stream.write(magic);
+			stream.write(hdrlen);
+			stream.write(length);
+			stream.write(terminated);
+			stream.flush();
+
+			handShakeStatus = HandShakeStatus.AWAITING_ACK;
+
+		} catch (IOException e){
+
+			System.out.println("io exception on handshake begin");
+
+			close();
+		}
+	}
+
+	private void completeHandShake(){
+
+		System.out.println("received handshake ack");
+
+		try {
+
+			OutputStream stream = socket.getOutputStream();
+
+			// write magic numbers in little endian
+
+			byte[] first  = {0xad, 0xbe, 0xaf, 0xde}; // 0xdeafbead
+			byte[] second = {0xeb, 0xbe, 0x0d, 0xf0}; // 0xf00dbeeb
+			byte[] third  = {0x0c, 0x00, 0x00, 0x00}; // 0x0000000c
+
+			stream.write(first);
+			stream.write(second);
+			stream.write(third);
+
+			stream.flush();
+
+			handShakeStatus = HandShakeStatus.COMPLETE;
+
+			Server.integrateClient(this);
+
+		} catch (IOException e){
+
+			System.out.println("io exception on handshake complete");
+
+			close();
+		}
+	}
+
 	private void handlePacket(GMSPacket packet){
+
+		if(packet.getMessageId() == Message.HANDSHAKE.getValue())
+			completeHandShake();
 
 		if(packet.getMessageId() == Message.NEW_UDP_HOST.getValue()
 		|| packet.getMessageId() == Message.UDP_HOST_UPDATE.getValue()
