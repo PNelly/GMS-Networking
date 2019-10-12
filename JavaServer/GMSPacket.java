@@ -22,24 +22,24 @@ public class GMSPacket {
 		pos 						= 0;
 		this.buffer 		= buffer;
 
+		// skip gms header
+
+		for(int idx = 0; idx < Server.GMS_HDR_LEN; ++idx)
+			readNextByte();
+
 		// consume header
 
 		this.isUdp 			= (readNextByte() == 1);
 		this.messageId 	= readU16LE();
-		this.length 		= readU16LE();
 
-		System.out.println(
-			"new GMS packet with messageId "
-			+messageId+" is udp "+isUdp
-			+" length "+length
-		);
+		// read position now at beginning of payload
 	}
 
 	public GMSPacket(Message message){
 
 		// outbound constructor //
 
-		pos 						= Server.CLIENT_HDR_LEN + Server.GMS_HDR_LEN;
+		pos 						= Server.GMS_HDR_LEN + Server.CLIENT_HDR_LEN;
 		this.buffer 		= new byte[START_SIZE];
 		this.isUdp 			= false; // server doesn't send datagrams
 		this.messageId 	= message.getValue();
@@ -47,9 +47,9 @@ public class GMSPacket {
 
 	public GMSPacket(Message message, boolean isClientHandshake){
 
-		this.isClientHandshake = isClientHandshake;
-
 		this(message);
+
+		this.isClientHandshake = isClientHandshake;
 	}
 
 	public boolean getIsClientHandshake(){
@@ -68,19 +68,18 @@ public class GMSPacket {
 
 		// write client header
 
-		pos = GMS_HDR_LEN;
+		pos = Server.GMS_HDR_LEN;
 
 		writeBool(isUdp);
 		writeU16(messageId);
-		writeU16(startPos);
 
 		// write GMS header
 
 		pos = 0;
 
 		writeU32((long) 0xdeadc0de);
-		writeU32((long) GMS_HDR_LEN);
-		writeU32((long) startPos);
+		writeU32((long) Server.GMS_HDR_LEN);
+		writeU32((long) startPos -Server.GMS_HDR_LEN);
 
 		// reset write position
 
@@ -195,17 +194,4 @@ public class GMSPacket {
 			System.out.println(e.getMessage());
 		}
 	}		
-
-	/*public static void main(String[] args){
-
-		GMSPacket packet = new GMSPacket(Message.TELL_NEW_ID);
-
-		packet.writeU8(64);
-		packet.writeU8(128);
-		packet.writeU8(255);
-		packet.writeU16(32768);
-		packet.writeU16(49152);
-		packet.writeU16(65535);
-		packet.writeString("dog");
-	}*/
 }

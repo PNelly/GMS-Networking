@@ -7,19 +7,32 @@ public class GMSPacketSplicer {
 
 	private Client client 			= null;
 	private InputStream stream 	= null;
-	private byte[] buffer 			= null;
+	private byte[] inBuffer 		= null;
+	private int inBufferPos 		= -1;
 
 	public GMSPacketSplicer(Client client, InputStream stream){
 
-		this.client = client;
-		this.stream = stream;
+		this.client 			= client;
+		this.stream 			= stream;
+		this.inBuffer 		= new byte[Server.IN_BUFFER_LEN];
+		this.inBufferPos 	= 0;
+	}
+
+	private void doubleInBuffer(){
+
+		byte[] newBuff = new byte[2 * inBuffer.length];
+
+		for(int idx = 0; idx < inBuffer.length; ++idx)
+			newBuff[idx] = inBuffer[idx];
+
+		inBuffer = newBuff;
 	}
 
 	private byte getNextByte() throws SocketException, IOException {
 
 		int nextByte = stream.read();
 
-		if(nextByte >= 0) 
+		if(nextByte >= 0)
 			return (byte) nextByte;
 
 		long startTime = System.currentTimeMillis();
@@ -35,45 +48,133 @@ public class GMSPacketSplicer {
 		return (byte) nextByte;
 	}
 
-	public GMSPacket splice() throws SocketException, IOException {
+	private byte[] scanToNextPacket() throws SocketException, IOException {
 
-		// check for GMS handshake
+		// scan input stream to next valid packet //
 
-		if(client.getHandShakeStatus() == HandShakeStatus.AWAITING_ACK.getValue()){
+		byte[] scanBuff = new byte[Server.GMS_HDR_LEN];
 
-			byte[] ack = new byte[4];
+		boolean newPacket = false;
+
+		while(!newPacket){
+
+			while(readU32LE(scanBuff, 0) != 0xdeadc0deL){
+
+				scanBuff = new byte[Server.GMS_HDR_LEN];
+
+				while((scanBuff[0] = getNextByte()) != (byte) 0xde);
+
+				if((scanBuff[1] = getNextByte()) != (byte) 0xc0) continue;
+				if((scanBuff[2] = getNextByte()) != (byte) 0xad) continue;
+				if((scanBuff[3] = getNextByte()) != (byte) 0xde) continue;
+			}
+
+			// read remaining header bytes
+
+			for(int idx = 4; idx < Server.GMS_HDR_LEN; ++idx)
+				scanBuff[idx] = getNextByte();
+
+			// extract gms length
+
+			byte[] lenBytes = new byte[4];
 
 			for(int idx = 0; idx < 4; ++idx)
+				lenBytes[idx] = scanBuff[Server.GMS_HDR_LEN -4 + idx];
+
+			int len = (int) readU32LE(lenBytes, 0);
+
+			if(len >= Server.CLIENT_HDR_LEN)
+				newPacket = true;
+			else
+				continue;
+		}
+
+		return scanBuff;
+	}
+
+	public GMSPacket splice() throws SocketException, IOException {
+
+		if(client.getHandShakeStatus() == HandShakeStatus.AWAITING_ACK){
+
+			// Complete Handshake
+			// ==================
+
+			int size = 8;
+
+			byte[] ack = new byte[size];
+
+			for(int idx = 0; idx < size; ++idx)
 				ack[idx] = getNextByte();
 
-			long magic = readU32LE(ack, 0);
+			long magic0 = readU32LE(ack, 0);
+			long magic1 = readU32LE(ack, 4);
 
-			if(magic == 0xcafebabe)
+			if(magic0 == 0xcafebabeL
+			&& magic1 == 0xdeadb00bL)
 				return new GMSPacket(Message.HANDSHAKE);
 			else
 				throw new IOException("handshake missing magic number");
 
-		} else if (client.getHandShakeStatus() == HandShakeStatus.COMPLETE.getValue()){
+		} else if (client.getHandShakeStatus() == HandShakeStatus.COMPLETE){
 
-			// read client header
+			// Read Packet Data
+			// ================
 
-			byte[] header = new byte[Server.HEADER_LENGTH];
+			byte[] scanBuff = scanToNextPacket();
 
-			for(int idx = 0; idx < Server.HEADER_LENGTH; ++idx)
-				header[idx] = getNextByte();
+			// copy GMS header to inBuffer
 
-			int length 		= readU16LE(header, Server.HEADER_LENGTH -2);
+			inBufferPos = 0;
+
+			for(int idx = 0; idx < Server.GMS_HDR_LEN; ++idx)
+				inBuffer[inBufferPos++] = scanBuff[idx];
+
+			// consume application header
+
+			for(int idx = 0; idx < Server.CLIENT_HDR_LEN; ++idx)
+				inBuffer[inBufferPos++] = getNextByte();
+
+			// hdr capture for debugging
+
+			int hdrSize = Server.GMS_HDR_LEN +Server.CLIENT_HDR_LEN;
+
+			byte[] hdr = new byte[hdrSize];
+
+			for(int idx = 0; idx < hdrSize; ++idx)
+				hdr[idx] = inBuffer[idx];
+
+			// extract length from GMS header
+
+			byte[] lenBytes = new byte[4];
+
+			for(int idx = 0; idx < 4; ++idx)
+				lenBytes[idx] = inBuffer[Server.GMS_HDR_LEN -4 +idx];
+
+			int payLen = (int) readU32LE(lenBytes, 0) -Server.CLIENT_HDR_LEN;
+				// application header included in GMS payload length
 
 			// read payload
 
-			byte[] buffer = new byte[length];
+			int payPos = 0;
 
-			for(int idx = 0; idx < length; ++idx)
-				buffer[idx] = (idx < Server.HEADER_LENGTH)
-										? header[idx]
-										: getNextByte();
+			while(payPos < payLen){
 
-			return new GMSPacket(buffer);
+				if(inBufferPos == inBuffer.length)
+					doubleInBuffer();
+
+				inBuffer[inBufferPos++] = getNextByte();
+
+				++payPos;
+			}
+
+			// tailor packet buffer
+
+			byte[] packetBuffer = new byte[inBufferPos];
+
+			for(int idx = 0; idx < inBufferPos; ++idx)
+				packetBuffer[idx] = inBuffer[idx];
+
+			return new GMSPacket(packetBuffer);
 
 		} else {
 

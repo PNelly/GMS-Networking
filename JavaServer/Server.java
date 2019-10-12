@@ -11,14 +11,14 @@ public class Server {
 	public static final int EPHEMERAL_MAX 	= 65535;
 	public static final int PORT_TCP 				= 4643;
 	public static final int PORT_UDP 				= 4644;
+	public static final int IN_BUFFER_LEN 	= 256;
 	public static final int DATAGRAM_LENGTH = 256;
-	public static final int CLIENT_HDR_LEN 	= 5;
+	public static final int CLIENT_HDR_LEN 	= 3;
 	public static final int GMS_HDR_LEN 		= 12;
-	public static final int SOCKET_TIMEOUT 	= 30000;
+	public static final int SOCKET_TIMEOUT 	= 1000 * 60;
 	public static final int U16_MAX 				= 65535;
 	public static final int UDP_MAX_CLIENTS = 7;
 	public static final int IDLE_DISC_TIME 	= 1000 * 60 * 5; // five minutes
-	//public static final int IDLE_DISC_TIME_HOST = 1000 * 60 * 30; // thirty minutes
 
 	private static Listener listener 						= null;
 	private static DatagramListener udpListener = null;
@@ -138,24 +138,15 @@ public class Server {
 
 	public static void integrateClient(Client client){
 
-		try {
+		int id = nextClientId();
 
-			int id = nextClientId();
+		client.setClientId(id);
+		client.setIdleStamp(System.currentTimeMillis());
 
-			client.setClientId(id);
-			client.setIdleStamp(System.currentTimeMillis());
+		clients.put(id, client);
 
-			clients.put(id, client);
-
-			bringClientUpToSpeed(client);
-			shareNewClientDetails(client);
-
-		} catch (IOException e) {
-
-			System.out.println("ioexecption on client integrate");
-
-			disconnectClient(client.getClientId());
-		}
+		bringClientUpToSpeed(client);
+		shareNewClientDetails(client);
 	}
 
 	public static void bringClientUpToSpeed(Client newClient){

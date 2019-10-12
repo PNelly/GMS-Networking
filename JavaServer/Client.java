@@ -65,7 +65,7 @@ public class Client implements Runnable {
 	@Override
 	public void run(){
 
-		System.out.println("new client connected");
+		System.out.println("starting client thread");
 
 		while(true){
 
@@ -92,16 +92,18 @@ public class Client implements Runnable {
 
 	public void send(GMSPacket packet){
 
-		int length 		= packet.getPosition();
-		byte[] buffer = packet.getBuffer();
-
-		System.out.println("Sending packet with id: "+packet.getMessageId()+" to client "+clientId);
+		System.out.println("sent message "
+			+packet.getMessageId()+" to client "
+			+clientId
+		);
 
 		try {
 
 			OutputStream stream = socket.getOutputStream();
 
-			stream.write(buffer, 0, length);
+			// use position to exclude padding
+
+			stream.write(packet.getBuffer(), 0, packet.getPosition());
 			stream.flush();
 
 		} catch (IOException e){
@@ -120,19 +122,15 @@ public class Client implements Runnable {
 
 			String str = "GM:Studio-Connect";
 
-			byte[] initial 		= str.getBytes("UTF-8");
+			byte[] initial 		= str.getBytes("US-ASCII");
 			byte[] terminated = new byte[initial.length +1];
+
+			for(int idx = 0; idx < initial.length; ++idx)
+				terminated[idx] = initial[idx];
 
 			terminated[terminated.length -1] = '\0';
 
-			byte[] magic  = {0xde, 0xc0, 0xad, 0xde}; // 0xdeadc0de
-			byte[] hdrlen = {0x00, 0x00, 0x00, (byte) GMS_HDR_LEN};
-			byte[] length = {0x00, 0x00, 0x00, (byte) terminated.lenth};
-
-			stream.write(magic);
-			stream.write(hdrlen);
-			stream.write(length);
-			stream.write(terminated);
+			stream.write(terminated, 0, terminated.length);
 			stream.flush();
 
 			handShakeStatus = HandShakeStatus.AWAITING_ACK;
@@ -155,13 +153,13 @@ public class Client implements Runnable {
 
 			// write magic numbers in little endian
 
-			byte[] first  = {0xad, 0xbe, 0xaf, 0xde}; // 0xdeafbead
-			byte[] second = {0xeb, 0xbe, 0x0d, 0xf0}; // 0xf00dbeeb
-			byte[] third  = {0x0c, 0x00, 0x00, 0x00}; // 0x0000000c
+			byte[] magic  = {
+				(byte) 0xad, (byte) 0xbe, (byte) 0xaf, (byte) 0xde, // 0xdeafbead
+				(byte) 0xeb, (byte) 0xbe, (byte) 0x0d, (byte) 0xf0, // 0xf00dbeeb
+				(byte) 0x0c, (byte) 0x00, (byte) 0x00, (byte) 0x00  // 0x0000000c
+			}; 
 
-			stream.write(first);
-			stream.write(second);
-			stream.write(third);
+			stream.write(magic);
 
 			stream.flush();
 

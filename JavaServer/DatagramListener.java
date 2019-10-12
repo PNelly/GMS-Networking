@@ -35,6 +35,8 @@ public class DatagramListener implements Runnable {
 				InetAddress senderAddress = inPacket.getAddress();
 				int senderPort 						= inPacket.getPort();
 
+				System.out.println("received datagram packet");
+				
 				handlePacket(
 					new GMSPacket(inPacket.getData()), 
 					senderAddress,
