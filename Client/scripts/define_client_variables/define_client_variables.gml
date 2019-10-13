@@ -34,7 +34,7 @@ message_buffer_size = 256;
 message_buffer = buffer_create(message_buffer_size,buffer_grow,1);
 
 // IMPLEMENTATION SPECIFIC VARIABLES
-rendevouz_ip = "192.168.1.5";
+rendevouz_ip = "198.74.50.209";
 //rendevouz_ip = "127.0.0.1";
 rendevouz_tcp_port = 4643;
 rendevouz_udp_port = 4644;

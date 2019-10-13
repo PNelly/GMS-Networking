@@ -19,6 +19,8 @@ public class Server {
 	public static final int U16_MAX 				= 65535;
 	public static final int UDP_MAX_CLIENTS = 7;
 	public static final int IDLE_DISC_TIME 	= 1000 * 60 * 5; // five minutes
+	public static final int MANAGE_INTERVAL = 1000;
+	public static final int SOCKET_INERVAL  = 100;
 
 	private static Listener listener 						= null;
 	private static DatagramListener udpListener = null;
@@ -52,6 +54,7 @@ public class Server {
 
 		} catch (IOException e){
 
+			System.out.println(e.getMessage());
 			System.out.println("startup failed");
 
 			return false;
@@ -61,6 +64,17 @@ public class Server {
 	private static void manage(){
 
 		while(true){
+
+			try {
+
+				// prevent cpu burn
+
+				Thread.sleep(MANAGE_INTERVAL);
+
+			} catch(InterruptedException e){
+
+				Thread.currentThread().interrupt();
+			}
 
 			Set<Map.Entry<Integer, Client>> entries = clients.entrySet();
 

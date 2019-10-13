@@ -39,6 +39,16 @@ public class GMSPacketSplicer {
 
 		while((nextByte = stream.read()) < 0){
 
+			try {
+
+				// prevent cpu burn
+				Thread.sleep(Server.SOCKET_INTERVAL);
+
+			} catch(InterruptedException e){
+
+				Thread.currentThread.interrupt();
+			}
+
 			long elapsed = System.currentTimeMillis() -startTime;
 
 			if(elapsed > Server.SOCKET_TIMEOUT)
